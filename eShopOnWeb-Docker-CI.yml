@@ -1,0 +1,16 @@
+trigger:
+  - none
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  - task: CmdLine@2
+    env:
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+    inputs:
+      script: |
+        docker login -u $(registryName) -p $(registryPassword) $(registryUrl)
+        docker build . -t $(registryUrl)/eshoponweb:$(Build.BuildId) --build-arg FEED_URL="$(feedUrl)" --build-arg FEED_ACCESSTOKEN="$(System.AccessToken)"
+        docker tag $(registryUrl)/eshoponweb:$(Build.BuildId) $(registryUrl)/eshoponweb:latest
+        docker push $(registryUrl)/eshoponweb

@@ -1,0 +1,66 @@
+trigger:
+  - none
+
+pool:
+  vmImage: "windows-latest"
+
+variables:
+  solution: "**/*.sln"
+  buildPlatform: "Any CPU"
+  buildConfiguration: "Release"
+
+steps:
+  - task: UseDotNet@2
+    displayName: "Use .NET COre 2.2"
+    inputs:
+      packageType: "sdk"
+      version: "2.2.x"
+
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: "restore"
+      projects: "**/*.csproj"
+      feedsToUse: "config"
+      nugetConfigPath: "NuGet.config"
+
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      projects: "**/*.csproj"
+      arguments: "--configuration $(BuildConfiguration)"
+
+  - task: DotNetCoreCLI@2
+    displayName: "Unit Tests"
+    inputs:
+      command: test
+      projects: "**/UnitTests.csproj"
+      arguments: "--configuration $(BuildConfiguration)"
+
+  - task: DotNetCoreCLI@2
+    displayName: "Integration Tests"
+    inputs:
+      command: test
+      projects: "**/IntegrationTests.csproj"
+      arguments: "--configuration $(BuildConfiguration)"
+
+  - task: DotNetCoreCLI@2
+    displayName: "Functional Tests"
+    inputs:
+      command: test
+      projects: "**/FunctionalTests.csproj"
+      arguments: "--configuration $(BuildConfiguration)"
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish
+    inputs:
+      command: publish
+      publishWebProjects: True
+      arguments: "--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)"
+      zipAfterPublish: True
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact"
+    inputs:
+      PathtoPublish: "$(build.artifactstagingdirectory)"
+    condition: succeededOrFailed()
