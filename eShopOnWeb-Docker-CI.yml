@@ -4,13 +4,86 @@ trigger:
 pool:
   vmImage: "ubuntu-latest"
 
+variables:
+  pathToDockerFile: 'Dockerfile'
+  ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
+  ACRLoginServer: 'adinermieacr.azurecr.io'
+  ACRRepository: 'eShopOnWeb'
+
 steps:
-  - task: CmdLine@2
-    env:
-      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+  # - task: CmdLine@2
+  #   env:
+  #     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+  #   inputs:
+  #     script: |
+  #       docker login -u $(registryName) -p $(registryPassword) $(registryUrl)
+  #       docker build . -t $(registryUrl)/eshoponweb:$(Build.BuildId) --build-arg FEED_URL="$(feedUrl)" --build-arg FEED_ACCESSTOKEN="$(System.AccessToken)"
+  #       docker tag $(registryUrl)/eshoponweb:$(Build.BuildId) $(registryUrl)/eshoponweb:latest
+  #       docker push $(registryUrl)/eshoponweb
+
+  - task: Docker@2
+    displayName: Build Container
     inputs:
-      script: |
-        docker login -u $(registryName) -p $(registryPassword) $(registryUrl)
-        docker build . -t $(registryUrl)/eshoponweb:$(Build.BuildId) --build-arg FEED_URL="$(feedUrl)" --build-arg FEED_ACCESSTOKEN="$(System.AccessToken)"
-        docker tag $(registryUrl)/eshoponweb:$(Build.BuildId) $(registryUrl)/eshoponweb:latest
-        docker push $(registryUrl)/eshoponweb
+      containerRegistry: $(ACRConnectionName)
+      repository: $(ACRRepository)
+      command: build
+      Dockerfile: $(pathToDockerFile)
+      tags: |
+        $(Build.BuildId)
+        latest
+
+  - task: CreateWorkItem@1
+    displayName: Create Work-Item on Build Container Failure
+    condition: failed()
+    inputs:
+      workItemType: 'Issue'
+      title: 'Build Container failed in $(Build.DefinitionName) pipeline'
+      fieldMappings: |
+        'Description=While running the Build Container task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+
+  # - task: Docker@2
+  #   displayName: Login to Aqua Registry
+  #   inputs:
+  #     containerRegistry: $(AquaServiceConnection)
+  #     command: login
+
+  # - task: Docker@1
+  #   displayName: 'Pull Aqua Scanner Image'
+  #   inputs:
+  #     command: pull
+  #     arguments: $(AquaImage)
+
+  # - task: aquasecScanner@4
+  #   displayName: 'Scan Image'
+  #   inputs:
+  #     image: '$(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)'
+  #     register: false
+  #     scanType: local
+  #     connection: $(AquaManagementConsoleServiceConnection)
+  #     caCertificates: true
+  #     scanner: '$(AquaImage)'
+
+  # - task: CreateWorkItem@1
+  #   displayName: Create Work-Item on Aqua Image Scan Failure
+  #   condition: failed()
+  #   inputs:
+  #     workItemType: 'Issue'
+  #     title: 'Aqua Image Scan failed in $(Build.DefinitionName) pipeline'
+  #     fieldMappings: |
+  #       'Description=While running the Aqua Image Scan task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+
+  - task: Docker@2
+    displayName: Login to ACR
+    inputs:
+      containerRegistry: $(ACRConnectionName)
+      command: login
+
+  - task: Docker@2
+    displayName: Push to ACR
+    inputs:
+      containerRegistry: $(ACRConnectionName)
+      repository: $(ACRRepository)
+      command: 'push'
+      tags: |
+        $(Build.BuildId)
+        latest
