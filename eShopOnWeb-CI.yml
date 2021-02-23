@@ -55,7 +55,7 @@ jobs:
 
     - task: CreatePRCommentTask@0
       inputs:
-        AzureDevOpsService: 'PAT Service Connection'
+        AzureDevOpsService: 'Create PR Comment'
         Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
   
     - task: PostAnalysis@1
@@ -92,7 +92,7 @@ jobs:
 
     - task: CreatePRCommentTask@0
       inputs:
-        AzureDevOpsService: 'PAT Service Connection'
+        AzureDevOpsService: 'Create PR Comment'
         Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
     - task: PublishSecurityAnalysisLogs@2
@@ -119,7 +119,7 @@ jobs:
 
     - task: CreatePRCommentTask@0
       inputs:
-        AzureDevOpsService: 'PAT Service Connection'
+        AzureDevOpsService: 'Create PR Comment'
         Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
     - task: SdtReport@1
@@ -157,7 +157,7 @@ jobs:
 
     - task: CreatePRCommentTask@0
       inputs:
-        AzureDevOpsService: 'PAT Service Connection'
+        AzureDevOpsService: 'Create PR Comment'
         Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
         
 - job: SonarCloudJob
@@ -243,7 +243,7 @@ jobs:
 
   - task: CreatePRCommentTask@0
     inputs:
-      AzureDevOpsService: 'PAT Service Connection'
+      AzureDevOpsService: 'Create PR Comment'
       Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
 - job: UnitTestsJob
@@ -292,7 +292,7 @@ jobs:
 
   - task: CreatePRCommentTask@0
     inputs:
-      AzureDevOpsService: 'PAT Service Connection'
+      AzureDevOpsService: 'Create PR Comment'
       Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
   
 - job: IntegrationTestsJob
@@ -341,7 +341,7 @@ jobs:
 
   - task: CreatePRCommentTask@0
     inputs:
-      AzureDevOpsService: 'PAT Service Connection'
+      AzureDevOpsService: 'Create PR Comment'
       Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
 - job: FunctionalTestsJob
@@ -390,7 +390,7 @@ jobs:
 
   - task: CreatePRCommentTask@0
     inputs:
-      AzureDevOpsService: 'PAT Service Connection'
+      AzureDevOpsService: 'Create PR Comment'
       Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
 - job: BuildAndPackageJob
