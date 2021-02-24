@@ -10,7 +10,10 @@ variables:
   ACRLoginServer: 'adinermieacr.azurecr.io'
   ACRRepository: 'eShopOnWeb'
 
-steps:
+jobs:
+- job: OWASP
+  displayName: "OWASP ZAP Job"
+  steps:
   # - task: CmdLine@2
   #   env:
   #     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
@@ -31,16 +34,99 @@ steps:
       tags: |
         $(Build.BuildId)
         latest
+  
+  - bash: | 
+      docker run -d -p 5000:8080 $(ACRLoginServer)/$(REPOSITORY):$(Build.BuildId)
+    displayName: 'Run app in docker container'
 
-  - task: CreateWorkItem@1
-    displayName: Create Work-Item on Build Container Failure
-    condition: failed()
+  - task: owaspzap@0
+    displayName: 'ZAP Scanner'
     inputs:
-      workItemType: 'Issue'
-      title: 'Build Container failed in $(Build.DefinitionName) pipeline'
-      fieldMappings: |
-        'Description=While running the Build Container task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+      aggressivemode: false
+      scantype: 'agentScan'
+      threshold: 80
+      provideCustomContext: false
+      port: 5000
 
+  - task: CopyFiles@2
+    condition: always()
+    inputs:
+      SourceFolder: 'OWASPZAP/'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    condition: always()
+    inputs:
+      ArtifactName: 'owasp_zap_reports'
+
+  - bash: |
+      sudo npm install -g handlebars-cmd
+      cat <<EOF > owaspzap/nunit-template.hbs
+      {{#each site}}
+      <test-run
+          id="2"
+          name="Owasp test"
+          start-time="{{../[@generated]}}"  >
+          <test-suite
+              id="{{@index}}"
+              type="Assembly"
+              name="{{[@name]}}"
+              result="Failed"
+              failed="{{alerts.length}}">
+              <attachments>
+                  <attachment>
+                      <filePath>$(Build.ArtifactStagingDirectory)/report.html</filePath>
+                  </attachment>
+                  <attachment>
+                      <filePath>$(Build.ArtifactStagingDirectory)/report.json</filePath>
+                    </attachment>
+              </attachments>
+          {{#each alerts}}<test-case
+              id="{{@index}}"
+              name="{{alert}}"
+              result="Failed"
+              fullname="{{alert}}"
+              time="1">
+                  <failure>
+                      <message>
+                          <![CDATA[{{{desc}}}]]>
+                      </message>
+                      <stack-trace>
+                          <![CDATA[
+      Solution:
+      {{{solution}}}
+      Reference:
+      {{{reference}}}
+      instances:{{#each instances}}
+      * {{uri}}
+          - {{method}}
+          {{#if evidence}}- {{{evidence}}}{{/if}}
+                          {{/each}}]]>
+                      </stack-trace>
+                  </failure>
+          </test-case>
+          {{/each}}
+          </test-suite>
+      </test-run>
+      {{/each}}
+      EOF
+    displayName: 'owasp nunit template'
+    condition: always()
+
+  - bash: ' handlebars owaspzap/report.json < owaspzap/nunit-template.hbs > owaspzap/test-results.xml'
+    displayName: 'Generate NUnit Type File'
+    condition: always()
+
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results **/TEST-*.xml'
+    inputs:
+      testResultsFormat: NUnit
+      testResultsFiles: 'owaspzap/test-results.xml'
+    condition: always()
+
+# - job: Aqua
+#   displayName: "Aqua Job"
+#   steps:
   # - task: Docker@2
   #   displayName: Login to Aqua Registry
   #   inputs:
@@ -63,14 +149,21 @@ steps:
   #     caCertificates: true
   #     scanner: '$(AquaImage)'
 
-  # - task: CreateWorkItem@1
-  #   displayName: Create Work-Item on Aqua Image Scan Failure
-  #   condition: failed()
-  #   inputs:
-  #     workItemType: 'Issue'
-  #     title: 'Aqua Image Scan failed in $(Build.DefinitionName) pipeline'
-  #     fieldMappings: |
-  #       'Description=While running the Aqua Image Scan task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+- job: PublishContainerImage
+  displayName: "Publish Docker Image"
+  dependsOn: OWASP
+  condition: succeeded()
+  steps:
+  - task: Docker@2
+    displayName: Build Container
+    inputs:
+      containerRegistry: $(ACRConnectionName)
+      repository: $(ACRRepository)
+      command: build
+      Dockerfile: $(pathToDockerFile)
+      tags: |
+        $(Build.BuildId)
+        latest
 
   - task: Docker@2
     displayName: Login to ACR
