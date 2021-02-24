@@ -39,24 +39,24 @@ jobs:
         outputFormat: 'sarif'
         suppressionsFile: '$(Build.Repository.LocalPath)/suppressions.json'
 
-    - task: CreateWorkItem@1
-      displayName: Create Work-Item on CredScan Failure
-      condition: failed()
-      inputs:
-        workItemType: 'Issue'
-        title: 'CredScan failed in $(Build.DefinitionName) pipeline'
-        fieldMappings: |
-          'Description=While running the CredScan task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-        linkPR: true
-        createOutputs: true
-        outputVariables: |
-          Title=System.title
-          WorkItemURL=CWI.WorkItemUrl
+    # - task: CreateWorkItem@1
+    #   displayName: Create Work-Item on CredScan Failure
+    #   condition: failed()
+    #   inputs:
+    #     workItemType: 'Issue'
+    #     title: 'CredScan failed in $(Build.DefinitionName) pipeline'
+    #     fieldMappings: |
+    #       'Description=While running the CredScan task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+    #     linkPR: true
+    #     createOutputs: true
+    #     outputVariables: |
+    #       Title=System.title
+    #       WorkItemURL=CWI.WorkItemUrl
 
-    - task: CreatePRCommentTask@0
-      inputs:
-        AzureDevOpsService: 'Create PR Comment'
-        Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+    # - task: CreatePRCommentTask@0
+    #   inputs:
+    #     AzureDevOpsService: 'Create PR Comment'
+    #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
   
     - task: PostAnalysis@1
       displayName: Post Analysis
@@ -76,24 +76,24 @@ jobs:
         TSLint: false
         ToolLogsNotFoundAction: 'Standard'
 
-    - task: CreateWorkItem@1
-      displayName: Create Work-Item on Post Analysis Failure
-      condition: failed()
-      inputs:
-        workItemType: 'Issue'
-        title: 'Post Analysis failed in $(Build.DefinitionName) pipeline'
-        fieldMappings: |
-          'Description=While running the Post Analysis task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-        linkPR: true
-        createOutputs: true
-        outputVariables: |
-          Title=System.title
-          WorkItemURL=CWI.WorkItemUrl
+    # - task: CreateWorkItem@1
+    #   displayName: Create Work-Item on Post Analysis Failure
+    #   condition: failed()
+    #   inputs:
+    #     workItemType: 'Issue'
+    #     title: 'Post Analysis failed in $(Build.DefinitionName) pipeline'
+    #     fieldMappings: |
+    #       'Description=While running the Post Analysis task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+    #     linkPR: true
+    #     createOutputs: true
+    #     outputVariables: |
+    #       Title=System.title
+    #       WorkItemURL=CWI.WorkItemUrl
 
-    - task: CreatePRCommentTask@0
-      inputs:
-        AzureDevOpsService: 'Create PR Comment'
-        Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+    # - task: CreatePRCommentTask@0
+    #   inputs:
+    #     AzureDevOpsService: 'Create PR Comment'
+    #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
     - task: PublishSecurityAnalysisLogs@2
       displayName: Publish Security Analysis Logs
@@ -103,19 +103,19 @@ jobs:
         AllTools: true
         ToolLogsNotFoundAction: 'Standard'
 
-    - task: CreateWorkItem@1
-      displayName: Create Work-Item on Publish Security Analysis Logs Failure
-      condition: failed()
-      inputs:
-        workItemType: 'Issue'
-        title: 'Publish Security Analysis Logs failed in $(Build.DefinitionName) pipeline'
-        fieldMappings: |
-          'Description=While running the Publish Security Analysis Logs task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-        linkPR: true
-        createOutputs: true
-        outputVariables: |
-          Title=System.title
-          WorkItemURL=CWI.WorkItemUrl
+    # - task: CreateWorkItem@1
+    #   displayName: Create Work-Item on Publish Security Analysis Logs Failure
+    #   condition: failed()
+    #   inputs:
+    #     workItemType: 'Issue'
+    #     title: 'Publish Security Analysis Logs failed in $(Build.DefinitionName) pipeline'
+    #     fieldMappings: |
+    #       'Description=While running the Publish Security Analysis Logs task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+    #     linkPR: true
+    #     createOutputs: true
+    #     outputVariables: |
+    #       Title=System.title
+    #       WorkItemURL=CWI.WorkItemUrl
 
     - task: CreatePRCommentTask@0
       inputs:
@@ -141,24 +141,24 @@ jobs:
         TSLint: false
         ToolLogsNotFoundAction: 'Standard'
 
-    - task: CreateWorkItem@1
-      displayName: Create Work-Item on Security Analysis Report Failure
-      condition: failed()
-      inputs:
-        workItemType: 'Issue'
-        title: 'Publish Security Analysis Report failed in $(Build.DefinitionName) pipeline'
-        fieldMappings: |
-          'Description=While running the Security Analysis Report Logs task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-        linkPR: true
-        createOutputs: true
-        outputVariables: |
-          Title=System.title
-          WorkItemURL=CWI.WorkItemUrl
+    # - task: CreateWorkItem@1
+    #   displayName: Create Work-Item on Security Analysis Report Failure
+    #   condition: failed()
+    #   inputs:
+    #     workItemType: 'Issue'
+    #     title: 'Publish Security Analysis Report failed in $(Build.DefinitionName) pipeline'
+    #     fieldMappings: |
+    #       'Description=While running the Security Analysis Report Logs task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+    #     linkPR: true
+    #     createOutputs: true
+    #     outputVariables: |
+    #       Title=System.title
+    #       WorkItemURL=CWI.WorkItemUrl
 
-    - task: CreatePRCommentTask@0
-      inputs:
-        AzureDevOpsService: 'Create PR Comment'
-        Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+    # - task: CreatePRCommentTask@0
+    #   inputs:
+    #     AzureDevOpsService: 'Create PR Comment'
+    #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
         
 - job: SonarCloudJob
   displayName: "Sonar Cloud Job"
@@ -227,24 +227,24 @@ jobs:
         java -jar wss-unified-agent.jar -c whitesource-fs-agent.config -product $(WhiteSource-ProductName) -project $(WhiteSource-ProjectName) -apiKey $(WhiteSource-APIKey)
             exit $?
 
-  - task: CreateWorkItem@1
-    displayName: Create Work-Item on WhiteSource Failure
-    condition: failed()
-    inputs:
-      workItemType: 'Issue'
-      title: 'WhiteSource failed in $(Build.DefinitionName) pipeline'
-      fieldMappings: |
-        'Description=While running the WhiteSource task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-      linkPR: true
-      createOutputs: true
-      outputVariables: |
-        Title=System.title
-        WorkItemURL=CWI.WorkItemUrl
+  # - task: CreateWorkItem@1
+  #   displayName: Create Work-Item on WhiteSource Failure
+  #   condition: failed()
+  #   inputs:
+  #     workItemType: 'Issue'
+  #     title: 'WhiteSource failed in $(Build.DefinitionName) pipeline'
+  #     fieldMappings: |
+  #       'Description=While running the WhiteSource task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+  #     linkPR: true
+  #     createOutputs: true
+  #     outputVariables: |
+  #       Title=System.title
+  #       WorkItemURL=CWI.WorkItemUrl
 
-  - task: CreatePRCommentTask@0
-    inputs:
-      AzureDevOpsService: 'Create PR Comment'
-      Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+  # - task: CreatePRCommentTask@0
+  #   inputs:
+  #     AzureDevOpsService: 'Create PR Comment'
+  #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
 - job: UnitTestsJob
   displayName: "Unit Test Jobs"
@@ -276,24 +276,24 @@ jobs:
       projects: "**/UnitTests.csproj"
       arguments: "--configuration $(BuildConfiguration)"
 
-  - task: CreateWorkItem@1
-    displayName: Create Work-Item on Unit Test Failures
-    condition: failed()
-    inputs:
-      workItemType: 'Issue'
-      title: 'Unit Test failed in $(Build.DefinitionName) pipeline'
-      fieldMappings: |
-        'Description=While running the Unit Test task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-      linkPR: true
-      createOutputs: true
-      outputVariables: |
-        Title=System.title
-        WorkItemURL=CWI.WorkItemUrl
+  # - task: CreateWorkItem@1
+  #   displayName: Create Work-Item on Unit Test Failures
+  #   condition: failed()
+  #   inputs:
+  #     workItemType: 'Issue'
+  #     title: 'Unit Test failed in $(Build.DefinitionName) pipeline'
+  #     fieldMappings: |
+  #       'Description=While running the Unit Test task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+  #     linkPR: true
+  #     createOutputs: true
+  #     outputVariables: |
+  #       Title=System.title
+  #       WorkItemURL=CWI.WorkItemUrl
 
-  - task: CreatePRCommentTask@0
-    inputs:
-      AzureDevOpsService: 'Create PR Comment'
-      Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+  # - task: CreatePRCommentTask@0
+  #   inputs:
+  #     AzureDevOpsService: 'Create PR Comment'
+  #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
   
 - job: IntegrationTestsJob
   displayName: "Integration Test Jobs"
@@ -325,24 +325,24 @@ jobs:
       projects: "**/IntegrationTests.csproj"
       arguments: "--configuration $(BuildConfiguration)"
 
-  - task: CreateWorkItem@1
-    displayName: Create Work-Item on Integration Test Failures
-    condition: failed()
-    inputs:
-      workItemType: 'Issue'
-      title: 'Integration Tests failed in $(Build.DefinitionName) pipeline'
-      fieldMappings: |
-        'Description=While running the Integration Test task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-      linkPR: true
-      createOutputs: true
-      outputVariables: |
-        Title=System.title
-        WorkItemURL=CWI.WorkItemUrl
+  # - task: CreateWorkItem@1
+  #   displayName: Create Work-Item on Integration Test Failures
+  #   condition: failed()
+  #   inputs:
+  #     workItemType: 'Issue'
+  #     title: 'Integration Tests failed in $(Build.DefinitionName) pipeline'
+  #     fieldMappings: |
+  #       'Description=While running the Integration Test task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+  #     linkPR: true
+  #     createOutputs: true
+  #     outputVariables: |
+  #       Title=System.title
+  #       WorkItemURL=CWI.WorkItemUrl
 
-  - task: CreatePRCommentTask@0
-    inputs:
-      AzureDevOpsService: 'Create PR Comment'
-      Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+  # - task: CreatePRCommentTask@0
+  #   inputs:
+  #     AzureDevOpsService: 'Create PR Comment'
+  #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
 - job: FunctionalTestsJob
   displayName: "Functional Test Jobs"
@@ -374,24 +374,24 @@ jobs:
       projects: "**/FunctionalTests.csproj"
       arguments: "--configuration $(BuildConfiguration)"
 
-  - task: CreateWorkItem@1
-    displayName: Create Work-Item on Functional Test Failures
-    condition: failed()
-    inputs:
-      workItemType: 'Issue'
-      title: 'Functional Tests failed in $(Build.DefinitionName) pipeline'
-      fieldMappings: |
-        'Description=While running the Fuhctional Tests task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-      linkPR: true
-      createOutputs: true
-      outputVariables: |
-        Title=System.title
-        WorkItemURL=CWI.WorkItemUrl
+  # - task: CreateWorkItem@1
+  #   displayName: Create Work-Item on Functional Test Failures
+  #   condition: failed()
+  #   inputs:
+  #     workItemType: 'Issue'
+  #     title: 'Functional Tests failed in $(Build.DefinitionName) pipeline'
+  #     fieldMappings: |
+  #       'Description=While running the Fuhctional Tests task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+  #     linkPR: true
+  #     createOutputs: true
+  #     outputVariables: |
+  #       Title=System.title
+  #       WorkItemURL=CWI.WorkItemUrl
 
-  - task: CreatePRCommentTask@0
-    inputs:
-      AzureDevOpsService: 'Create PR Comment'
-      Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+  # - task: CreatePRCommentTask@0
+  #   inputs:
+  #     AzureDevOpsService: 'Create PR Comment'
+  #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
 - job: BuildAndPackageJob
   displayName: "Build and Package Job"

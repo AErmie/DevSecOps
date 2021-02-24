@@ -14,8 +14,8 @@ stages:
       # to help validate your source code.
       # In particular, this will execute TFLint, and TerraScan against Terraform files.
       # Documentation: https://github.com/github/super-linter
-      - script: |
-          mkdir super-linter.report
+      - script: | 
+          mkdir GHLinterReport
           docker pull github/super-linter:latest
           docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/terraform:/tmp/lint --name outputDir github/super-linter:latest
           docker cp outputDir:/tmp/lint/super-linter.report $(System.DefaultWorkingDirectory)/GHLinterReport
