@@ -18,8 +18,8 @@ stages:
       - bash: |
           mkdir TFSecReport
           docker pull liamg/tfsec:latest
-          docker run --rm -t -v $(System.DefaultWorkingDirectory)/terraform/GHLinterFailCode/Deployments/Network-Deployment/Hub-Deploy:/src liamg/tfsec ./src --format JUnit > $(System.DefaultWorkingDirectory)/TFSecReport/TFSec-Report.xml
-          docker run --rm -t -v $(System.DefaultWorkingDirectory)/terraform:/src liamg/tfsec ./src
+          docker run --rm -v $(System.DefaultWorkingDirectory)/terraform/azure:/src liamg/tfsec ./src --format JUnit > $(System.DefaultWorkingDirectory)/TFSecReport/TFSec-Report.xml
+          docker run --rm -v $(System.DefaultWorkingDirectory)/terraform:/src liamg/tfsec ./src
         displayName: TFSec Static Code Analysis
         name: TFSecScan
         condition: always()
