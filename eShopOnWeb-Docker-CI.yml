@@ -39,7 +39,7 @@ jobs:
       docker run -d -p 5000:8080 $(ACRLoginServer)/$(REPOSITORY):$(Build.BuildId)
     displayName: 'Run app in docker container'
 
-  - task: owaspzap@0
+  - task: owaspzap@1
     displayName: 'ZAP Scanner'
     inputs:
       aggressivemode: false
