@@ -19,7 +19,7 @@ stages:
           docker pull github/super-linter:latest
           docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/terraform:/tmp/lint --name outputDir github/super-linter:latest
           docker cp outputDir:/tmp/lint/super-linter.report $(System.DefaultWorkingDirectory)/GHLinterReport
-          docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/terraform:/tmp/lint github/super-linter:latest
+          # docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/terraform:/tmp/lint github/super-linter:latest
         displayName: 'GitHub Super-Linter Code Scan'
         name: GHLintScan
         condition: always()

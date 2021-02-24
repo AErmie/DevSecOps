@@ -60,6 +60,7 @@ jobs:
   
     - task: PostAnalysis@1
       displayName: Post Analysis
+      condition: always()
       inputs:
         AllTools: false
         APIScan: false
@@ -97,6 +98,7 @@ jobs:
 
     - task: PublishSecurityAnalysisLogs@2
       displayName: Publish Security Analysis Logs
+      condition: always()
       inputs:
         ArtifactName: 'CodeAnalysisLogs'
         ArtifactType: 'Container'
@@ -117,10 +119,10 @@ jobs:
     #       Title=System.title
     #       WorkItemURL=CWI.WorkItemUrl
 
-    - task: CreatePRCommentTask@0
-      inputs:
-        AzureDevOpsService: 'Create PR Comment'
-        Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+    # - task: CreatePRCommentTask@0
+    #   inputs:
+    #     AzureDevOpsService: 'Create PR Comment'
+    #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
     - task: SdtReport@1
       displayName: Create Security Analysis Report

@@ -20,6 +20,7 @@ stages:
           mkdir CheckovReport
           docker pull bridgecrew/checkov
           docker run -v $(System.DefaultWorkingDirectory)/terraform:/tf bridgecrew/checkov --directory /tf --output junitxml > $(System.DefaultWorkingDirectory)/CheckovReport/Checkov-Report.xml
+          docker run -v $(System.DefaultWorkingDirectory)/terraform:/tf bridgecrew/checkov --directory /tf
         displayName: 'Checkov Static Code Analysis'
         name: CheckovScan
         condition: always()
