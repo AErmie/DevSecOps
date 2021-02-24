@@ -126,6 +126,7 @@ jobs:
 
     - task: SdtReport@1
       displayName: Create Security Analysis Report
+      condition: always()
       inputs:
         AllTools: false
         APIScan: false

@@ -16,6 +16,6 @@ stages:
           serviceConnectionEndpoint: 'Snyk-DevSecOps'
           testType: 'app'
           monitorOnBuild: true
-          failOnIssues: true
+          failOnIssues: false
           projectName: 'DevSecOpsDemo'
           organization: 'AErmie'
