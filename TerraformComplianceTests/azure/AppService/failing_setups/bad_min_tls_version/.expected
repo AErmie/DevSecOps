@@ -1,0 +1,1 @@
+Failure: min_tls_version property in azurerm_app_service.example resource does not match with .* case insensitive regex. It is set to 1.0.

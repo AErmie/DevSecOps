@@ -1,0 +1,2 @@
+Failure: aws_eks_cluster.example \(aws_eks_cluster\) does not have controllerManager property.
+Failure: aws_eks_cluster.example \(aws_eks_cluster\) does not have scheduler property.

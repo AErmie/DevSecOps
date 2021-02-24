@@ -1,0 +1,1 @@
+Failure: viewer_protocol_policy property in aws_cloudfront_distribution.s3_distribution resource matches with \^allow\\\-all\$ case insensitive regex. It is set to allow-all.

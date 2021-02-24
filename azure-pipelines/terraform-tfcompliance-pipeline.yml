@@ -1,0 +1,96 @@
+trigger: none
+  # branches:
+  #   include:
+  #     - master
+  #     - main
+  #   exclude:
+  #     - feature/*
+  # tags:
+  #   exclude:
+  #     - '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- name: terraformVersion
+  value: 0.14.4
+
+stages:
+- stage: QualityCheckStage
+  displayName: Quality Check Stage
+  jobs:
+    - job: TFComplianceJob
+      displayName: Run Terraform-Compliance Scan
+      steps:
+      # First, we need to install Terraform
+      # - task: TerraformInstaller@0
+      #   displayName: Installing Terraform v$(terraformVersion)
+      #   inputs:
+      #     terraformVersion: $(terraformVersion)
+      
+      # Next, we need to run Terraform INIT
+      # - task: TerraformTaskV1@0
+      #   displayName: Run Terraform INIT
+      #   inputs:
+      #     provider: 'azurerm'
+      #     command: 'init'
+      #     workingDirectory: '$(System.DefaultWorkingDirectory)/TerraformComplianceTests'
+      #     commandOptions: '-var-file="Hub.tfvars"'
+      #     backendServiceArm: 'Visual Studio Enterprise(c28db86b-8ce1-4755-aa09-fc99f6e0a667)'
+      #     backendAzureRmResourceGroupName: 'TerraformStateRG'
+      #     backendAzureRmStorageAccountName: 'terraformstatesaae'
+      #     backendAzureRmContainerName: 'tfstate'
+      #     backendAzureRmKey: 'terracompli.tfstate'
+
+      # Then we need to run Terraform PLAN (because Terraform-Compliance needs a .plan file)
+      # - task: TerraformTaskV1@0
+      #   displayName: Run Terraform PLAN
+      #   inputs:
+      #     provider: 'azurerm'
+      #     command: 'plan'
+      #     workingDirectory: '$(System.DefaultWorkingDirectory)/TerraformComplianceTests'
+      #     commandOptions: '-var-file=Hub.tfvars -out=plan.out'
+      #     environmentServiceNameAzureRM: 'Visual Studio Enterprise(1)(c28db86b-8ce1-4755-aa09-fc99f6e0a667)'
+
+      # Running Terraform-Compliance
+      # NOTE: Will have to run scan twice, once to receive the output (which does not show in terminal), and
+      # a second time for terminal display
+      - script: | 
+          mkdir TerraformComplianceReport
+          docker pull eerkunt/terraform-compliance
+          docker run --volume $(System.DefaultWorkingDirectory)/TerraformComplianceTests/azure/Storage/failing_setups/not_enable_https_traffic_only/:/target --name TFComply --interactive eerkunt/terraform-compliance --junit-xml TFCompliance-Report.xml --features git:https://github.com/terraform-compliance/user-friendly-features.git --planfile plan.out.json
+          TFCompSuccess=$?
+          docker cp TFComply:/target/TFCompliance-Report.xml $(System.DefaultWorkingDirectory)/TerraformComplianceReport
+          exit $TFCompSuccess
+        displayName: 'Terraform Compliance Check'
+        name: TerraformCompliance
+        condition: always()
+
+      # NOTE: This does not work yet, as the output is not formatted correctly
+      # Contacted Terraform-Compliance originator (Emre Erkunt) concerning outputs and formatting
+      - task: PublishTestResults@2
+        displayName: Publish TerraformCompliance Test Results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: 'JUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
+          testResultsFiles: '**/*TFCompliance-Report.xml'
+          searchFolder: '$(System.DefaultWorkingDirectory)/TerraformComplianceReport'
+          mergeTestResults: false
+          testRunTitle: TerraformCompliance Scan
+          failTaskOnFailedTests: false
+          publishRunAttachments: true
+
+      # NOTE: Nothing to publish until outputs can be received
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: TerraformCompliance Report'
+        condition: succeededOrFailed()
+        inputs:
+          PathtoPublish: '$(System.DefaultWorkingDirectory)/TerraformComplianceReport'
+          ArtifactName: TerraformComplianceReport
+
+      # Clean up any of the containers / images that were used for quality checks
+      - bash: |
+          docker rmi "eerkunt/terraform-compliance" -f | true
+        displayName: 'Remove Terraform Quality Check Docker Images'
+        condition: always()

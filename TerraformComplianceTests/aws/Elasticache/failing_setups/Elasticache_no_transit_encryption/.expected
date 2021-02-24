@@ -1,0 +1,1 @@
+Failure: Can not find true in transit_encryption_enabled property of aws_elasticache_replication_group.example.

@@ -1,0 +1,97 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: QualityCheckStage
+  displayName: Quality Check Stage
+  jobs:
+    - job: GHLintJob
+      displayName: Run GitHub Super-Linter Scan
+      steps:
+      # The GitHub Super-Linter runs a combination of various linters, written in bash, 
+      # to help validate your source code.
+      # In particular, this will execute TFLint, and TerraScan against Terraform files.
+      # Documentation: https://github.com/github/super-linter
+      - script: |
+          mkdir super-linter.report
+          docker pull github/super-linter:latest
+          docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/terraform:/tmp/lint --name outputDir github/super-linter:latest
+          docker cp outputDir:/tmp/lint/super-linter.report $(System.DefaultWorkingDirectory)/GHLinterReport
+          docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/terraform:/tmp/lint github/super-linter:latest
+        displayName: 'GitHub Super-Linter Code Scan'
+        name: GHLintScan
+        condition: always()
+
+      # Publish the GitHub Linter reports as an artifact to Azure Pipelines
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: GH Linter Report'
+        condition: succeededOrFailed()
+        inputs:
+          PathtoPublish: '$(System.DefaultWorkingDirectory)/GHLinterReport'
+          ArtifactName: GHLinterReport
+
+      # This script converts the GitHub Linter report (from TAP format), to a format that is 
+      # supported for consumption in Azure Pipelines (ie. JUnit).
+      # Referenced documentation: https://r2devops.io/jobs/static_tests/super_linter
+        # The SED commands do the following (in order):
+          # Extract message to improve report display, add real newlines (ie. from the \n), and 
+          # removes double </failure> that break the syntax in some reports
+      - script: |
+          sudo npm install -g tap-junit
+          mkdir GHLinterReport/Converted
+          cd GHLinterReport
+
+          tap-junit --pretty --suite TFLint --input super-linter-TERRAFORM.tap --output $(System.DefaultWorkingDirectory)/Converted --name TFLint-Report.xml
+          sed -i 's/<failure message="\(.\+\)" type="fail">.*/<failure message="" type="fail">\n\1\n<\/failure>/g' $(System.DefaultWorkingDirectory)/Converted/TFLint-Report.xml
+          sed -i 's/\\n/\n/g' $(System.DefaultWorkingDirectory)/Converted/TFLint-Report.xml
+          sed -i ':begin;$!N;s/<\/failure>\n<\/failure>/<\/failure>/;tbegin;P;D' $(System.DefaultWorkingDirectory)/Converted/TFLint-Report.xml
+
+          tap-junit --pretty --suite TerraScan --input super-linter-TERRAFORM_TERRASCAN.tap --output $(System.DefaultWorkingDirectory)/Converted --name TerraScan-Report.xml
+          sed -i 's/<failure message="\(.\+\)" type="fail">.*/<failure message="" type="fail">\n\1\n<\/failure>/g' $(System.DefaultWorkingDirectory)/Converted/TerraScan-Report.xml
+          sed -i 's/\\n/\n/g' $(System.DefaultWorkingDirectory)/Converted/TerraScan-Report.xml
+          sed -i ':begin;$!N;s/<\/failure>\n<\/failure>/<\/failure>/;tbegin;P;D' $(System.DefaultWorkingDirectory)/Converted/TerraScan-Report.xml
+        displayName: 'Convert GitHub Linter Report to JUnit'
+        name: GHReportConvert
+        condition: always()
+
+      # Publish the Converted GitHub Linter reports as an artifact to Azure Pipelines
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: Coverted GH Linter Report'
+        condition: succeededOrFailed()
+        inputs:
+          PathtoPublish: '$(System.DefaultWorkingDirectory)/Converted'
+          ArtifactName: GHLinterReport-Converted
+      
+      # Publish the results of the GitHub Super-Linter analysis as Test Results to the pipeline
+      - task: PublishTestResults@2
+        displayName: Publish TFLint Lint Results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: 'JUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
+          testResultsFiles: '**/*TFLint-Report.xml'
+          searchFolder: '$(System.DefaultWorkingDirectory)/Converted'
+          testRunTitle: GitHub Linter - TFLint
+          mergeTestResults: false
+          failTaskOnFailedTests: false
+          publishRunAttachments: true
+      
+      # Publish the results of the GitHub Super-Linter analysis as Test Results to the pipeline
+      - task: PublishTestResults@2
+        displayName: Publish TerraScan Lint Results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: 'JUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
+          testResultsFiles: '**/*TerraScan-Report.xml'
+          searchFolder: '$(System.DefaultWorkingDirectory)/Converted'
+          testRunTitle: GitHub Linter - TerraScan
+          mergeTestResults: false
+          failTaskOnFailedTests: false
+          publishRunAttachments: true
+
+      # Clean up any of the containers / images that were used for quality checks
+      - bash: |
+          docker rmi "github/super-linter:latest" -f | true
+        displayName: 'Remove Terraform Quality Check Docker Images'
+        condition: always()

@@ -1,0 +1,1 @@
+Failure: aws_elasticsearch_domain.example2 \(aws_elasticsearch_domain\) does not have encrypt_at_rest property.
