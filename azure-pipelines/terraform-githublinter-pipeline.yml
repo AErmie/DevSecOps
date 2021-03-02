@@ -17,7 +17,7 @@ stages:
       - script: | 
           mkdir GHLinterReport
           docker pull github/super-linter:latest
-          docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory):/tmp/lint --name outputDir github/super-linter:latest
+          docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/terraform:/tmp/lint --name outputDir github/super-linter:latest
           docker cp outputDir:/tmp/lint/super-linter.report/ $(System.DefaultWorkingDirectory)/GHLinterReport
           # docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/terraform/aws:/tmp/lint github/super-linter:latest
         displayName: 'GitHub Super-Linter Code Scan'
@@ -43,12 +43,12 @@ stages:
           mkdir GHLinterReport-Converted
           cd GHLinterReport-Converted
 
-          tap-junit --pretty --suite TFLint --input super-linter-TERRAFORM.tap --output $(System.DefaultWorkingDirectory)/GHLinterReport-Converted --name TFLint-Report.xml
+          tap-junit --pretty --suite TFLint --input $(System.DefaultWorkingDirectory)/GHLinterReport/super-linter-TERRAFORM.tap --output $(System.DefaultWorkingDirectory)/GHLinterReport-Converted --name TFLint-Report.xml
           sed -i 's/<failure message="\(.\+\)" type="fail">.*/<failure message="" type="fail">\n\1\n<\/failure>/g' $(System.DefaultWorkingDirectory)/GHLinterReport-Converted/TFLint-Report.xml
           sed -i 's/\\n/\n/g' $(System.DefaultWorkingDirectory)/GHLinterReport-Converted/TFLint-Report.xml
           sed -i ':begin;$!N;s/<\/failure>\n<\/failure>/<\/failure>/;tbegin;P;D' $(System.DefaultWorkingDirectory)/GHLinterReport-Converted/TFLint-Report.xml
 
-          tap-junit --pretty --suite TerraScan --input super-linter-TERRAFORM_TERRASCAN.tap --output $(System.DefaultWorkingDirectory)/GHLinterReport-Converted --name TerraScan-Report.xml
+          tap-junit --pretty --suite TerraScan --input $(System.DefaultWorkingDirectory)/GHLinterReport/super-linter-TERRAFORM_TERRASCAN.tap --output $(System.DefaultWorkingDirectory)/GHLinterReport-Converted --name TerraScan-Report.xml
           sed -i 's/<failure message="\(.\+\)" type="fail">.*/<failure message="" type="fail">\n\1\n<\/failure>/g' $(System.DefaultWorkingDirectory)/GHLinterReport-Converted/TerraScan-Report.xml
           sed -i 's/\\n/\n/g' $(System.DefaultWorkingDirectory)/GHLinterReport-Converted/TerraScan-Report.xml
           sed -i ':begin;$!N;s/<\/failure>\n<\/failure>/<\/failure>/;tbegin;P;D' $(System.DefaultWorkingDirectory)/GHLinterReport-Converted/TerraScan-Report.xml
@@ -97,9 +97,9 @@ stages:
           for report in *; do
             'sed -i "s/message: \*\+/message: /g" $report'
             cat $report | tap-junit -p -s "super_linter" > ../Bulk-Converted/${report}.xml
-            sed -i 's/<failure message="\(.\+\)" type="fail">.*/<failure message="" type="fail">\n\1\n<\/failure>/g' ../Bulk-Converted/${report}.xml
-            sed -i 's/\\n/\n/g' ../Bulk-Converted/${report}.xml
-            sed -i ':begin;$!N;s/<\/failure>\n<\/failure>/<\/failure>/;tbegin;P;D' ../Bulk-Converted/${report}.xml
+            # sed -i 's/<failure message="\(.\+\)" type="fail">.*/<failure message="" type="fail">\n\1\n<\/failure>/g' ../Bulk-Converted/${report}.xml
+            # sed -i 's/\\n/\n/g' ../Bulk-Converted/${report}.xml
+            # sed -i ':begin;$!N;s/<\/failure>\n<\/failure>/<\/failure>/;tbegin;P;D' ../Bulk-Converted/${report}.xml
           done
         displayName: 'Bulk Convert'
         condition: always()
