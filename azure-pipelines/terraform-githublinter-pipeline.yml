@@ -17,8 +17,10 @@ stages:
       - script: | 
           mkdir GHLinterReport
           docker pull github/super-linter:latest
-          docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/terraform/GHLinterFailCode/Hub/:/tmp/lint --name outputDir github/super-linter:latest
+          docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/TerraformComplianceTests:/tmp/lint --name outputDir github/super-linter:latest
           docker cp outputDir:/tmp/lint/super-linter.report/ $(System.DefaultWorkingDirectory)/GHLinterReport
+          cd GHLinterReport
+          ls -la
           # docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/terraform/aws:/tmp/lint github/super-linter:latest
         displayName: 'GitHub Super-Linter Code Scan'
         name: GHLintScan
@@ -65,35 +67,36 @@ stages:
           ArtifactName: GHLinterReport-Converted
       
       # Publish the results of the GitHub Super-Linter analysis as Test Results to the pipeline
-      - task: PublishTestResults@2
-        displayName: Publish TFLint Lint Results
-        condition: succeededOrFailed()
-        inputs:
-          testResultsFormat: 'JUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
-          testResultsFiles: '**/*TFLint-Report.xml'
-          searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReport-Converted'
-          testRunTitle: GitHub Linter - TFLint
-          mergeTestResults: false
-          failTaskOnFailedTests: false
-          publishRunAttachments: true
+      # - task: PublishTestResults@2
+      #   displayName: Publish TFLint Lint Results
+      #   condition: succeededOrFailed()
+      #   inputs:
+      #     testResultsFormat: 'JUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
+      #     testResultsFiles: '**/*TFLint-Report.xml'
+      #     searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReport-Converted'
+      #     testRunTitle: GitHub Linter - TFLint
+      #     mergeTestResults: false
+      #     failTaskOnFailedTests: false
+      #     publishRunAttachments: true
       
       # Publish the results of the GitHub Super-Linter analysis as Test Results to the pipeline
-      - task: PublishTestResults@2
-        displayName: Publish TerraScan Lint Results
-        condition: succeededOrFailed()
-        inputs:
-          testResultsFormat: 'JUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
-          testResultsFiles: '**/*TerraScan-Report.xml'
-          searchFolder: '$(System.DefaultWorkingDirectory)/Converted'
-          testRunTitle: GitHub Linter - TerraScan
-          mergeTestResults: false
-          failTaskOnFailedTests: false
-          publishRunAttachments: true
+      # - task: PublishTestResults@2
+      #   displayName: Publish TerraScan Lint Results
+      #   condition: succeededOrFailed()
+      #   inputs:
+      #     testResultsFormat: 'JUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
+      #     testResultsFiles: '**/*TerraScan-Report.xml'
+      #     searchFolder: '$(System.DefaultWorkingDirectory)/Converted'
+      #     testRunTitle: GitHub Linter - TerraScan
+      #     mergeTestResults: false
+      #     failTaskOnFailedTests: false
+      #     publishRunAttachments: true
 
 
       - script: | 
           mkdir Bulk-Converted
           cd GHLinterReport-Converted
+          ls -la
           for report in *; do
             'sed -i "s/message: \*\+/message: /g" $report'
             cat $report | tap-junit -p -s "super_linter" > ../Bulk-Converted/${report}.xml
