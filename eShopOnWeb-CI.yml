@@ -53,146 +53,146 @@ stages:
   displayName: Quality Checks
   jobs:
   - ${{ if eq(parameters.MSCredScan, true) }}:
-  - job: CredScanJob
-    displayName: "CredScan Job"
-    steps:
-      - task: UseDotNet@2
-        displayName: "Use .NET Core 2.2"
-        inputs:
-          packageType: "sdk"
-          version: "2.2.x"
+    - job: CredScanJob
+      displayName: "CredScan Job"
+      steps:
+        - task: UseDotNet@2
+          displayName: "Use .NET Core 2.2"
+          inputs:
+            packageType: "sdk"
+            version: "2.2.x"
 
-      - task: CredScan@2
-        displayName: Execute CredScan
-        inputs:
-          toolMajorVersion: 'V2'
-          toolVersion: 'latest'
-          outputFormat: 'sarif'
-          suppressionsFile: '$(Build.Repository.LocalPath)/suppressions.json'
+        - task: CredScan@2
+          displayName: Execute CredScan
+          inputs:
+            toolMajorVersion: 'V2'
+            toolVersion: 'latest'
+            outputFormat: 'sarif'
+            suppressionsFile: '$(Build.Repository.LocalPath)/suppressions.json'
 
-      # - task: CreateWorkItem@1
-      #   displayName: Create Work-Item on CredScan Failure
-      #   condition: failed()
-      #   inputs:
-      #     workItemType: 'Issue'
-      #     title: 'CredScan failed in $(Build.DefinitionName) pipeline'
-      #     fieldMappings: |
-      #       'Description=While running the CredScan task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-      #     linkPR: true
-      #     createOutputs: true
-      #     outputVariables: |
-      #       Title=System.title
-      #       WorkItemURL=CWI.WorkItemUrl
+        # - task: CreateWorkItem@1
+        #   displayName: Create Work-Item on CredScan Failure
+        #   condition: failed()
+        #   inputs:
+        #     workItemType: 'Issue'
+        #     title: 'CredScan failed in $(Build.DefinitionName) pipeline'
+        #     fieldMappings: |
+        #       'Description=While running the CredScan task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+        #     linkPR: true
+        #     createOutputs: true
+        #     outputVariables: |
+        #       Title=System.title
+        #       WorkItemURL=CWI.WorkItemUrl
 
-      # - task: CreatePRCommentTask@0
-      #   inputs:
-      #     AzureDevOpsService: 'Create PR Comment'
-      #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
-    
-      - task: PostAnalysis@1
-        displayName: Post Analysis
-        condition: always()
-        inputs:
-          AllTools: false
-          APIScan: false
-          BinSkim: false
-          CodesignValidation: false
-          CredScan: true
-          FortifySCA: false
-          FxCop: false
-          ModernCop: false
-          PoliCheck: false
-          RoslynAnalyzers: false
-          SDLNativeRules: false
-          Semmle: false
-          TSLint: false
-          ToolLogsNotFoundAction: 'Standard'
+        # - task: CreatePRCommentTask@0
+        #   inputs:
+        #     AzureDevOpsService: 'Create PR Comment'
+        #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+      
+        - task: PostAnalysis@1
+          displayName: Post Analysis
+          condition: always()
+          inputs:
+            AllTools: false
+            APIScan: false
+            BinSkim: false
+            CodesignValidation: false
+            CredScan: true
+            FortifySCA: false
+            FxCop: false
+            ModernCop: false
+            PoliCheck: false
+            RoslynAnalyzers: false
+            SDLNativeRules: false
+            Semmle: false
+            TSLint: false
+            ToolLogsNotFoundAction: 'Standard'
 
-      # - task: CreateWorkItem@1
-      #   displayName: Create Work-Item on Post Analysis Failure
-      #   condition: failed()
-      #   inputs:
-      #     workItemType: 'Issue'
-      #     title: 'Post Analysis failed in $(Build.DefinitionName) pipeline'
-      #     fieldMappings: |
-      #       'Description=While running the Post Analysis task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-      #     linkPR: true
-      #     createOutputs: true
-      #     outputVariables: |
-      #       Title=System.title
-      #       WorkItemURL=CWI.WorkItemUrl
+        # - task: CreateWorkItem@1
+        #   displayName: Create Work-Item on Post Analysis Failure
+        #   condition: failed()
+        #   inputs:
+        #     workItemType: 'Issue'
+        #     title: 'Post Analysis failed in $(Build.DefinitionName) pipeline'
+        #     fieldMappings: |
+        #       'Description=While running the Post Analysis task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+        #     linkPR: true
+        #     createOutputs: true
+        #     outputVariables: |
+        #       Title=System.title
+        #       WorkItemURL=CWI.WorkItemUrl
 
-      # - task: CreatePRCommentTask@0
-      #   inputs:
-      #     AzureDevOpsService: 'Create PR Comment'
-      #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+        # - task: CreatePRCommentTask@0
+        #   inputs:
+        #     AzureDevOpsService: 'Create PR Comment'
+        #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
-      - task: PublishSecurityAnalysisLogs@2
-        displayName: Publish Security Analysis Logs
-        condition: always()
-        inputs:
-          ArtifactName: 'CodeAnalysisLogs'
-          ArtifactType: 'Container'
-          AllTools: true
-          ToolLogsNotFoundAction: 'Standard'
+        - task: PublishSecurityAnalysisLogs@2
+          displayName: Publish Security Analysis Logs
+          condition: always()
+          inputs:
+            ArtifactName: 'CodeAnalysisLogs'
+            ArtifactType: 'Container'
+            AllTools: true
+            ToolLogsNotFoundAction: 'Standard'
 
-      # - task: CreateWorkItem@1
-      #   displayName: Create Work-Item on Publish Security Analysis Logs Failure
-      #   condition: failed()
-      #   inputs:
-      #     workItemType: 'Issue'
-      #     title: 'Publish Security Analysis Logs failed in $(Build.DefinitionName) pipeline'
-      #     fieldMappings: |
-      #       'Description=While running the Publish Security Analysis Logs task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-      #     linkPR: true
-      #     createOutputs: true
-      #     outputVariables: |
-      #       Title=System.title
-      #       WorkItemURL=CWI.WorkItemUrl
+        # - task: CreateWorkItem@1
+        #   displayName: Create Work-Item on Publish Security Analysis Logs Failure
+        #   condition: failed()
+        #   inputs:
+        #     workItemType: 'Issue'
+        #     title: 'Publish Security Analysis Logs failed in $(Build.DefinitionName) pipeline'
+        #     fieldMappings: |
+        #       'Description=While running the Publish Security Analysis Logs task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+        #     linkPR: true
+        #     createOutputs: true
+        #     outputVariables: |
+        #       Title=System.title
+        #       WorkItemURL=CWI.WorkItemUrl
 
-      # - task: CreatePRCommentTask@0
-      #   inputs:
-      #     AzureDevOpsService: 'Create PR Comment'
-      #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+        # - task: CreatePRCommentTask@0
+        #   inputs:
+        #     AzureDevOpsService: 'Create PR Comment'
+        #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
-      - task: SdtReport@1
-        displayName: Create Security Analysis Report
-        condition: always()
-        inputs:
-          AllTools: false
-          APIScan: false
-          BinSkim: false
-          CodesignValidation: false
-          CredScan: true
-          FortifySCA: false
-          FxCop: false
-          ModernCop: false
-          MSRD: false
-          PoliCheck: false
-          RoslynAnalyzers: false
-          SDLNativeRules: false
-          Semmle: false
-          TSLint: false
-          ToolLogsNotFoundAction: 'Standard'
+        - task: SdtReport@1
+          displayName: Create Security Analysis Report
+          condition: always()
+          inputs:
+            AllTools: false
+            APIScan: false
+            BinSkim: false
+            CodesignValidation: false
+            CredScan: true
+            FortifySCA: false
+            FxCop: false
+            ModernCop: false
+            MSRD: false
+            PoliCheck: false
+            RoslynAnalyzers: false
+            SDLNativeRules: false
+            Semmle: false
+            TSLint: false
+            ToolLogsNotFoundAction: 'Standard'
 
-      # - task: CreateWorkItem@1
-      #   displayName: Create Work-Item on Security Analysis Report Failure
-      #   condition: failed()
-      #   inputs:
-      #     workItemType: 'Issue'
-      #     title: 'Publish Security Analysis Report failed in $(Build.DefinitionName) pipeline'
-      #     fieldMappings: |
-      #       'Description=While running the Security Analysis Report Logs task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-      #     linkPR: true
-      #     createOutputs: true
-      #     outputVariables: |
-      #       Title=System.title
-      #       WorkItemURL=CWI.WorkItemUrl
+        # - task: CreateWorkItem@1
+        #   displayName: Create Work-Item on Security Analysis Report Failure
+        #   condition: failed()
+        #   inputs:
+        #     workItemType: 'Issue'
+        #     title: 'Publish Security Analysis Report failed in $(Build.DefinitionName) pipeline'
+        #     fieldMappings: |
+        #       'Description=While running the Security Analysis Report Logs task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
+        #     linkPR: true
+        #     createOutputs: true
+        #     outputVariables: |
+        #       Title=System.title
+        #       WorkItemURL=CWI.WorkItemUrl
 
-      # - task: CreatePRCommentTask@0
-      #   inputs:
-      #     AzureDevOpsService: 'Create PR Comment'
-      #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+        # - task: CreatePRCommentTask@0
+        #   inputs:
+        #     AzureDevOpsService: 'Create PR Comment'
+        #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
   - ${{ if eq(parameters.SonarCloudScan, true) }}:
   - job: SonarCloudJob
