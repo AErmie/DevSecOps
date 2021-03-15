@@ -9,6 +9,10 @@ parameters:
   displayName: Run OWASP ZAP Scanner?
   type: boolean
   default: true
+- name: AquaScan
+  displayName: Run Aqua Scanner?
+  type: boolean
+  default: false
 
 variables:
   pathToDockerFile: 'Dockerfile'
