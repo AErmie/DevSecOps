@@ -280,16 +280,14 @@ stages:
           projects: "**/FunctionalTests.csproj"
           arguments: "--configuration $(BuildConfiguration)"
 
+
+- stage: Build
+  displayName: Build and Pack
+  dependsOn: QualityCheck
+  condition: succeeded()
+  jobs:
   - job: BuildAndPackageJob
     displayName: "Build and Package Job"
-    dependsOn:
-      - CredScanJob
-      - SonarCloudJob
-      - WhiteSourceJob
-      - IntegrationTestsJob
-      - UnitTestsJob
-      - FunctionalTestsJob
-    condition: succeeded()
     steps:
     - task: UseDotNet@2
       displayName: "Use .NET Core 2.2"
