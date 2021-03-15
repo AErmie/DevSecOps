@@ -70,25 +70,6 @@ stages:
             outputFormat: 'sarif'
             suppressionsFile: '$(Build.Repository.LocalPath)/suppressions.json'
 
-        # - task: CreateWorkItem@1
-        #   displayName: Create Work-Item on CredScan Failure
-        #   condition: failed()
-        #   inputs:
-        #     workItemType: 'Issue'
-        #     title: 'CredScan failed in $(Build.DefinitionName) pipeline'
-        #     fieldMappings: |
-        #       'Description=While running the CredScan task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-        #     linkPR: true
-        #     createOutputs: true
-        #     outputVariables: |
-        #       Title=System.title
-        #       WorkItemURL=CWI.WorkItemUrl
-
-        # - task: CreatePRCommentTask@0
-        #   inputs:
-        #     AzureDevOpsService: 'Create PR Comment'
-        #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
-      
         - task: PostAnalysis@1
           displayName: Post Analysis
           condition: always()
@@ -108,25 +89,6 @@ stages:
             TSLint: false
             ToolLogsNotFoundAction: 'Standard'
 
-        # - task: CreateWorkItem@1
-        #   displayName: Create Work-Item on Post Analysis Failure
-        #   condition: failed()
-        #   inputs:
-        #     workItemType: 'Issue'
-        #     title: 'Post Analysis failed in $(Build.DefinitionName) pipeline'
-        #     fieldMappings: |
-        #       'Description=While running the Post Analysis task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-        #     linkPR: true
-        #     createOutputs: true
-        #     outputVariables: |
-        #       Title=System.title
-        #       WorkItemURL=CWI.WorkItemUrl
-
-        # - task: CreatePRCommentTask@0
-        #   inputs:
-        #     AzureDevOpsService: 'Create PR Comment'
-        #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
-
         - task: PublishSecurityAnalysisLogs@2
           displayName: Publish Security Analysis Logs
           condition: always()
@@ -135,25 +97,6 @@ stages:
             ArtifactType: 'Container'
             AllTools: true
             ToolLogsNotFoundAction: 'Standard'
-
-        # - task: CreateWorkItem@1
-        #   displayName: Create Work-Item on Publish Security Analysis Logs Failure
-        #   condition: failed()
-        #   inputs:
-        #     workItemType: 'Issue'
-        #     title: 'Publish Security Analysis Logs failed in $(Build.DefinitionName) pipeline'
-        #     fieldMappings: |
-        #       'Description=While running the Publish Security Analysis Logs task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-        #     linkPR: true
-        #     createOutputs: true
-        #     outputVariables: |
-        #       Title=System.title
-        #       WorkItemURL=CWI.WorkItemUrl
-
-        # - task: CreatePRCommentTask@0
-        #   inputs:
-        #     AzureDevOpsService: 'Create PR Comment'
-        #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
 
         - task: SdtReport@1
           displayName: Create Security Analysis Report
@@ -175,263 +118,167 @@ stages:
             TSLint: false
             ToolLogsNotFoundAction: 'Standard'
 
-        # - task: CreateWorkItem@1
-        #   displayName: Create Work-Item on Security Analysis Report Failure
-        #   condition: failed()
-        #   inputs:
-        #     workItemType: 'Issue'
-        #     title: 'Publish Security Analysis Report failed in $(Build.DefinitionName) pipeline'
-        #     fieldMappings: |
-        #       'Description=While running the Security Analysis Report Logs task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-        #     linkPR: true
-        #     createOutputs: true
-        #     outputVariables: |
-        #       Title=System.title
-        #       WorkItemURL=CWI.WorkItemUrl
-
-        # - task: CreatePRCommentTask@0
-        #   inputs:
-        #     AzureDevOpsService: 'Create PR Comment'
-        #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
-
   - ${{ if eq(parameters.SonarCloudScan, true) }}:
-  - job: SonarCloudJob
-    displayName: "Sonar Cloud Job"
-    steps:
-    - task: UseDotNet@2
-      displayName: "Use .NET Core 2.2"
-      inputs:
-        packageType: "sdk"
-        version: "2.2.x"
+    - job: SonarCloudJob
+      displayName: "Sonar Cloud Job"
+      steps:
+      - task: UseDotNet@2
+        displayName: "Use .NET Core 2.2"
+        inputs:
+          packageType: "sdk"
+          version: "2.2.x"
 
-    - task: DotNetCoreCLI@2
-      displayName: Restore
-      inputs:
-        command: "restore"
-        projects: "**/*.csproj"
-        feedsToUse: "config"
-        nugetConfigPath: "NuGet.config"
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: "restore"
+          projects: "**/*.csproj"
+          feedsToUse: "config"
+          nugetConfigPath: "NuGet.config"
 
-    - task: SonarCloudPrepare@1
-      displayName: 'Prepare analysis on SonarCloud'
-      inputs:
-        SonarCloud: 'SonarCloud-DevSecOps'
-        organization: 'adinermie'
-        scannerMode: 'MSBuild'
-        projectKey: 'randomprojectkey'
-        projectName: 'DevSecOps Demo'
-        extraProperties: |
-          sonar.exclusions=**/obj/**,**/*.dll
-          sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
-          sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx  
+      - task: SonarCloudPrepare@1
+        displayName: 'Prepare analysis on SonarCloud'
+        inputs:
+          SonarCloud: 'SonarCloud-DevSecOps'
+          organization: 'adinermie'
+          scannerMode: 'MSBuild'
+          projectKey: 'randomprojectkey'
+          projectName: 'DevSecOps Demo'
+          extraProperties: |
+            sonar.exclusions=**/obj/**,**/*.dll
+            sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
+            sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx  
 
-    - task: DotNetCoreCLI@2
-      displayName: Build
-      inputs:
-        projects: "**/*.csproj"
-        arguments: "--configuration $(BuildConfiguration)"
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          projects: "**/*.csproj"
+          arguments: "--configuration $(BuildConfiguration)"
 
-    - task: SonarCloudAnalyze@1
-      displayName: "Analyze Sonar Cloud"
+      - task: SonarCloudAnalyze@1
+        displayName: "Analyze Sonar Cloud"
 
-    - task: SonarCloudPublish@1
-      displayName: Publish Sonar Cloud Results
-      inputs:
-        pollingTimeoutSec: '300'  
+      - task: SonarCloudPublish@1
+        displayName: Publish Sonar Cloud Results
+        inputs:
+          pollingTimeoutSec: '300'  
 
-  - ${{ if eq(parameters.WhiteSourceScan, true) }}:
-  - job: WhiteSourceJob
-    displayName: "WhiteSource Scan"
-    steps:
-    - task: DotNetCoreCLI@2
-      displayName: Restore
-      inputs:
-        command: "restore"
-        projects: "**/*.csproj"
-        feedsToUse: "config"
-        nugetConfigPath: "NuGet.config"
-    
-    - task: CmdLine@2
-      displayName: "Download WS Agent"
-      inputs:
-        script: 'curl -LJO https://unified-agent.s3.amazonaws.com/wss-unified-agent.jar'
+    - ${{ if eq(parameters.WhiteSourceScan, true) }}:
+    - job: WhiteSourceJob
+      displayName: "WhiteSource Scan"
+      steps:
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: "restore"
+          projects: "**/*.csproj"
+          feedsToUse: "config"
+          nugetConfigPath: "NuGet.config"
+      
+      - task: CmdLine@2
+        displayName: "Download WS Agent"
+        inputs:
+          script: 'curl -LJO https://unified-agent.s3.amazonaws.com/wss-unified-agent.jar'
 
-    - task: CmdLine@2
-      displayName: "Run WS Agent"
-      inputs:
-        script: |
-          java -jar wss-unified-agent.jar -c whitesource-fs-agent.config -product $(WhiteSource-ProductName) -project $(WhiteSource-ProjectName) -apiKey $(WhiteSource-APIKey)
-              exit $?
-
-    # - task: CreateWorkItem@1
-    #   displayName: Create Work-Item on WhiteSource Failure
-    #   condition: failed()
-    #   inputs:
-    #     workItemType: 'Issue'
-    #     title: 'WhiteSource failed in $(Build.DefinitionName) pipeline'
-    #     fieldMappings: |
-    #       'Description=While running the WhiteSource task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-    #     linkPR: true
-    #     createOutputs: true
-    #     outputVariables: |
-    #       Title=System.title
-    #       WorkItemURL=CWI.WorkItemUrl
-
-    # - task: CreatePRCommentTask@0
-    #   inputs:
-    #     AzureDevOpsService: 'Create PR Comment'
-    #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+      - task: CmdLine@2
+        displayName: "Run WS Agent"
+        inputs:
+          script: |
+            java -jar wss-unified-agent.jar -c whitesource-fs-agent.config -product $(WhiteSource-ProductName) -project $(WhiteSource-ProjectName) -apiKey $(WhiteSource-APIKey)
+                exit $?
 
   - ${{ if eq(parameters.UnitTests, true) }}:
-  - job: UnitTestsJob
-    displayName: "Unit Test Jobs"
-    steps:
-    - task: UseDotNet@2
-      displayName: "Use .NET Core 2.2"
-      inputs:
-        packageType: "sdk"
-        version: "2.2.x"
-    
-    - task: DotNetCoreCLI@2
-      displayName: Build
-      inputs:
-        projects: "**/*.csproj"
-        arguments: "--configuration $(BuildConfiguration)"
-    
-    - task: DotNetCoreCLI@2
-      displayName: Restore
-      inputs:
-        command: "restore"
-        projects: "**/*.csproj"
-        feedsToUse: "config"
-        nugetConfigPath: "NuGet.config"
-    
-    - task: DotNetCoreCLI@2
-      displayName: "Unit Tests"
-      inputs:
-        command: test
-        projects: "**/UnitTests.csproj"
-        arguments: "--configuration $(BuildConfiguration)"
-
-    # - task: CreateWorkItem@1
-    #   displayName: Create Work-Item on Unit Test Failures
-    #   condition: failed()
-    #   inputs:
-    #     workItemType: 'Issue'
-    #     title: 'Unit Test failed in $(Build.DefinitionName) pipeline'
-    #     fieldMappings: |
-    #       'Description=While running the Unit Test task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-    #     linkPR: true
-    #     createOutputs: true
-    #     outputVariables: |
-    #       Title=System.title
-    #       WorkItemURL=CWI.WorkItemUrl
-
-    # - task: CreatePRCommentTask@0
-    #   inputs:
-    #     AzureDevOpsService: 'Create PR Comment'
-    #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+    - job: UnitTestsJob
+      displayName: "Unit Test Jobs"
+      steps:
+      - task: UseDotNet@2
+        displayName: "Use .NET Core 2.2"
+        inputs:
+          packageType: "sdk"
+          version: "2.2.x"
+      
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          projects: "**/*.csproj"
+          arguments: "--configuration $(BuildConfiguration)"
+      
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: "restore"
+          projects: "**/*.csproj"
+          feedsToUse: "config"
+          nugetConfigPath: "NuGet.config"
+      
+      - task: DotNetCoreCLI@2
+        displayName: "Unit Tests"
+        inputs:
+          command: test
+          projects: "**/UnitTests.csproj"
+          arguments: "--configuration $(BuildConfiguration)"
 
   - ${{ if eq(parameters.IntegrationTests, true) }}:
-  - job: IntegrationTestsJob
-    displayName: "Integration Test Jobs"
-    steps:
-    - task: UseDotNet@2
-      displayName: "Use .NET Core 2.2"
-      inputs:
-        packageType: "sdk"
-        version: "2.2.x"
-    
-    - task: DotNetCoreCLI@2
-      displayName: Restore
-      inputs:
-        command: "restore"
-        projects: "**/*.csproj"
-        feedsToUse: "config"
-        nugetConfigPath: "NuGet.config"
-    
-    - task: DotNetCoreCLI@2
-      displayName: Build
-      inputs:
-        projects: "**/*.csproj"
-        arguments: "--configuration $(BuildConfiguration)"
+    - job: IntegrationTestsJob
+      displayName: "Integration Test Jobs"
+      steps:
+      - task: UseDotNet@2
+        displayName: "Use .NET Core 2.2"
+        inputs:
+          packageType: "sdk"
+          version: "2.2.x"
+      
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: "restore"
+          projects: "**/*.csproj"
+          feedsToUse: "config"
+          nugetConfigPath: "NuGet.config"
+      
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          projects: "**/*.csproj"
+          arguments: "--configuration $(BuildConfiguration)"
 
-    - task: DotNetCoreCLI@2
-      displayName: "Integration Tests"
-      inputs:
-        command: test
-        projects: "**/IntegrationTests.csproj"
-        arguments: "--configuration $(BuildConfiguration)"
-
-    # - task: CreateWorkItem@1
-    #   displayName: Create Work-Item on Integration Test Failures
-    #   condition: failed()
-    #   inputs:
-    #     workItemType: 'Issue'
-    #     title: 'Integration Tests failed in $(Build.DefinitionName) pipeline'
-    #     fieldMappings: |
-    #       'Description=While running the Integration Test task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-    #     linkPR: true
-    #     createOutputs: true
-    #     outputVariables: |
-    #       Title=System.title
-    #       WorkItemURL=CWI.WorkItemUrl
-
-    # - task: CreatePRCommentTask@0
-    #   inputs:
-    #     AzureDevOpsService: 'Create PR Comment'
-    #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
+      - task: DotNetCoreCLI@2
+        displayName: "Integration Tests"
+        inputs:
+          command: test
+          projects: "**/IntegrationTests.csproj"
+          arguments: "--configuration $(BuildConfiguration)"
 
   - ${{ if eq(parameters.FunctionalTests, true) }}:
-  - job: FunctionalTestsJob
-    displayName: "Functional Test Jobs"
-    steps:
-    - task: UseDotNet@2
-      displayName: "Use .NET Core 2.2"
-      inputs:
-        packageType: "sdk"
-        version: "2.2.x"
-    
-    - task: DotNetCoreCLI@2
-      displayName: Restore
-      inputs:
-        command: "restore"
-        projects: "**/*.csproj"
-        feedsToUse: "config"
-        nugetConfigPath: "NuGet.config"
+    - job: FunctionalTestsJob
+      displayName: "Functional Test Jobs"
+      steps:
+      - task: UseDotNet@2
+        displayName: "Use .NET Core 2.2"
+        inputs:
+          packageType: "sdk"
+          version: "2.2.x"
       
-    - task: DotNetCoreCLI@2
-      displayName: Build
-      inputs:
-        projects: "**/*.csproj"
-        arguments: "--configuration $(BuildConfiguration)"
-      
-    - task: DotNetCoreCLI@2
-      displayName: "Functional Tests"
-      inputs:
-        command: test
-        projects: "**/FunctionalTests.csproj"
-        arguments: "--configuration $(BuildConfiguration)"
-
-    # - task: CreateWorkItem@1
-    #   displayName: Create Work-Item on Functional Test Failures
-    #   condition: failed()
-    #   inputs:
-    #     workItemType: 'Issue'
-    #     title: 'Functional Tests failed in $(Build.DefinitionName) pipeline'
-    #     fieldMappings: |
-    #       'Description=While running the Fuhctional Tests task, something failed. Please check the latest pipeline run summary for details. Build ID: $(Build.BuildId). Build Number: $(Build.BuildNumber). Commit ID: $(Build.SourceVersion). Commit Message: $(Build.SourceVersionMessage).'
-    #     linkPR: true
-    #     createOutputs: true
-    #     outputVariables: |
-    #       Title=System.title
-    #       WorkItemURL=CWI.WorkItemUrl
-
-    # - task: CreatePRCommentTask@0
-    #   inputs:
-    #     AzureDevOpsService: 'Create PR Comment'
-    #     Comment: Title is $(Title), Work Item URL is $(WorkItemURL)
-
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: "restore"
+          projects: "**/*.csproj"
+          feedsToUse: "config"
+          nugetConfigPath: "NuGet.config"
+        
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          projects: "**/*.csproj"
+          arguments: "--configuration $(BuildConfiguration)"
+        
+      - task: DotNetCoreCLI@2
+        displayName: "Functional Tests"
+        inputs:
+          command: test
+          projects: "**/FunctionalTests.csproj"
+          arguments: "--configuration $(BuildConfiguration)"
 
   - job: BuildAndPackageJob
     displayName: "Build and Package Job"
