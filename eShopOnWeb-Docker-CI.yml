@@ -50,7 +50,7 @@ stages:
             latest
       
       - bash: | 
-          docker run -d -p 5000:8080 $(ACRLoginServer)/$(REPOSITORY):$(Build.BuildId)
+          docker run -d -p 5000:8080 $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
         displayName: 'Run app in docker container'
 
       - task: owaspzap@1
