@@ -14,14 +14,33 @@ stages:
       # to help validate your source code.
       # In particular, this will execute TFLint, and TerraScan against Terraform files.
       # Documentation: https://github.com/github/super-linter
+      # - script: | 
+      #     mkdir GHLinterReport
+      #     docker pull github/super-linter:latest
+      #     docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/TerraformComplianceTests/azure/:/tmp/lint --name outputDir github/super-linter:latest
+      #     docker cp outputDir:/tmp/lint/super-linter.report/ $(System.DefaultWorkingDirectory)/GHLinterReport
+      #     docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)TerraformComplianceTests/azure:/tmp/lint github/super-linter:latest
+      #   displayName: 'GitHub Super-Linter Code Scan'
+      #   name: GHLintScan
+      #   condition: always()
+      
+      # The GitHub Super-Linter runs a combination of various linters, written in bash, 
+      # to help validate your source code.
+      # In particular, this will execute TFLint, and TerraScan against Terraform files.
+      # Documentation: https://github.com/github/super-linter
       - script: | 
-          mkdir GHLinterReport
-          docker pull github/super-linter:latest
-          docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/TerraformComplianceTests/azure/:/tmp/lint --name outputDir github/super-linter:latest
-          docker cp outputDir:/tmp/lint/super-linter.report/ $(System.DefaultWorkingDirectory)/GHLinterReport
-          docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)TerraformComplianceTests/azure:/tmp/lint github/super-linter:latest
+          docker run --tty --rm \
+            --entrypoint="" \
+            -e RUN_LOCAL=true \
+            -e OUTPUT_DETAILS=detailed \
+            -e OUTPUT_FORMAT=tap \
+            --volume $(System.DefaultWorkingDirectory)/TerraformComplianceTests/azure:/tmp/lint \
+            github/super-linter:latest /bin/sh -c "/action/lib/linter.sh;linterSuccess=\$?;chown -R $(id -u):$(id -g) /tmp/lint;ls -la /tmp/lint;exit \$linterSuccess"
+          linterSuccess=$?
+          mv $(System.DefaultWorkingDirectory)/TerraformComplianceTests/azure/super-linter.report $(System.DefaultWorkingDirectory)/GHLinterReports
+          ls -la $(System.DefaultWorkingDirectory)/GHLinterReports
+          exit $linterSuccess
         displayName: 'GitHub Super-Linter Code Scan'
-        name: GHLintScan
         condition: always()
 
       # Publish the GitHub Linter reports as an artifact to Azure Pipelines
