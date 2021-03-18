@@ -17,7 +17,7 @@ stages:
       - script: | 
           mkdir GHLinterReport
           docker pull github/super-linter:latest
-          docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory)/terraform/GHLinterFailCode:/tmp/lint --name outputDir github/super-linter:latest
+          docker run -e RUN_LOCAL=true -e OUTPUT_DETAILS=detailed -e OUTPUT_FORMAT=tap -v $(System.DefaultWorkingDirectory):/tmp/lint --name outputDir github/super-linter:latest
           docker cp outputDir:/tmp/lint/super-linter.report/ $(System.DefaultWorkingDirectory)/GHLinterReport
           cd GHLinterReport
           ls -la
