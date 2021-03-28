@@ -15,7 +15,7 @@ stages:
       - script: |
           mkdir TFLintReport
           docker pull wata727/tflint
-          docker run --rm --volume $(System.DefaultWorkingDirectory)/terraform:/data -t wata727/tflint --module --format junit > $(System.DefaultWorkingDirectory)/TFLintReport/TFLint-Report.xml
+          # docker run --rm --volume $(System.DefaultWorkingDirectory)/terraform:/data -t wata727/tflint --module --format junit > $(System.DefaultWorkingDirectory)/TFLintReport/TFLint-Report.xml
           docker run -v $(System.DefaultWorkingDirectory)/terraform:/data -t wata727/tflint --module
         displayName: 'TFLint Static Code Analysis'
         name: TFLintScan
