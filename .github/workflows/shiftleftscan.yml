@@ -5,10 +5,10 @@ name: ShiftLeft Scan
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
       - name: Perform Scan
         uses: ShiftLeftSecurity/scan-action@master
 #         with:
-#           type: "credscan,java,depscan"
+#           type: "credscan,python,nodejs,csharp,terraform,yaml,bash,depscan"
         env:
           WORKSPACE: https://github.com/${{ github.repository }}/blob/${{ github.sha }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
