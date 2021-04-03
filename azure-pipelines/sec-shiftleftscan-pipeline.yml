@@ -1,0 +1,28 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: QualityCheckStage
+  displayName: Quality Check Stage
+  jobs:
+    - job: ShiftLeftJob
+      displayName: Run ShiftLeft Scan
+      steps:
+      - script: |
+            docker run \
+              -v "$(Build.SourcesDirectory):/app" \
+              -v "$(Build.ArtifactStagingDirectory):/reports" \
+              shiftleft/sast-scan scan --src /app --build \
+              --out_dir /reports/CodeAnalysisLogs
+          displayName: "Perform Scan"
+          continueOnError: "true"
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish analysis logs"
+      inputs:
+        PathtoPublish: "$(Build.ArtifactStagingDirectory)/CodeAnalysisLogs"
+        ArtifactName: "CodeAnalysisLogs"
+        publishLocation: "Container"
+        
