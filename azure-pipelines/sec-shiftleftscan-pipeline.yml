@@ -12,6 +12,7 @@ stages:
     steps:
     - script: |
         docker run \
+          -e SCAN_DEBUG_MODE=debug \
           --volume "$(Build.SourcesDirectory):/app" \
           --volume "$(Build.ArtifactStagingDirectory):/reports" \
           shiftleft/sast-scan scan --src /app --build \
