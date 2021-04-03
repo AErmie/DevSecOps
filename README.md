@@ -1,4 +1,7 @@
 [![CodeQL](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis.yml)
+
+[![ShiftLeft Scan](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan.yml)
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=alert_status)](https://sonarcloud.io/dashboard?id=randomprojectkey)
 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey)
