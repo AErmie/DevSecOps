@@ -44,8 +44,11 @@ stages:
           docker pull checkmarx/kics:latest
           docker run --volume $(System.DefaultWorkingDirectory):/path checkmarx/kics:latest scan --path "/path" --output-path ./output --report-formats "json,sarif,html"
         displayName: Run Checkmarx KICKS (Container)
+        condition: always()
       
       - task: PublishPipelineArtifact@1
+        displayName: Publish Artifact
+        condition: always()
         inputs:
           targetPath: '$(System.DefaultWorkingDirectory)/ouptut'
           artifact: 'CheckmarxKICKS'
