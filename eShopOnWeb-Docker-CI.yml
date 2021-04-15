@@ -18,7 +18,7 @@ variables:
   pathToDockerFile: 'Dockerfile'
   ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
   ACRLoginServer: 'adinermieacr.azurecr.io'
-  ACRRepository: 'eShopOnWeb'
+  ACRRepository: 'eshoponweb'
 
 stages:
 - stage: QualityCheck
@@ -63,13 +63,11 @@ stages:
           port: 5000
 
       - task: CopyFiles@2
-        condition: always()
         inputs:
           SourceFolder: 'OWASPZAP/'
           TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
       - task: PublishBuildArtifacts@1
-        condition: always()
         inputs:
           ArtifactName: 'owasp_zap_reports'
 
