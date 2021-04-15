@@ -52,6 +52,7 @@ stages:
           cd $(System.DefaultWorkingDirectory)/output
           ls -la
         displayName: List DIR
+        condition: always()
 
       - task: PublishPipelineArtifact@1
         displayName: Publish Artifact
