@@ -3,6 +3,12 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  pathToDockerFile: 'Dockerfile'
+  ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
+  ACRLoginServer: 'adinermieacr.azurecr.io'
+  ACRRepository: 'eshoponweb'
+
 stages:
 - stage: QualityCheckStage
   displayName: Quality Check Stage
@@ -20,13 +26,24 @@ stages:
       #     projectName: 'DevSecOpsDemo'
       #     organization: 'AErmie'
 
+      - task: Docker@2
+        displayName: Build Container
+        inputs:
+          containerRegistry: $(ACRConnectionName)
+          repository: $(ACRRepository)
+          command: build
+          Dockerfile: $(pathToDockerFile)
+          tags: |
+            $(Build.BuildId)
+            latest
+
       - task: SnykSecurityScan@0
         inputs:
           serviceConnectionEndpoint: 'Snyk-DevSecOps'
           testType: 'container'
           dockerImageName: 'eshoponweb:latest'
-          dockerfilePath: '.\'
+          dockerfilePath: 'Dockerfile'
           monitorOnBuild: true
-          failOnIssues: true
+          failOnIssues: false
           projectName: 'DevSecOpsDemo'
           organization: 'AErmie'
