@@ -10,12 +10,23 @@ stages:
     - job: SnykJob
       displayName: Run Snyk Security Scan
       steps:
+      # - task: SnykSecurityScan@0
+      #   displayName: Snyk Security Scan
+      #   inputs:
+      #     serviceConnectionEndpoint: 'Snyk-DevSecOps'
+      #     testType: 'app'
+      #     monitorOnBuild: true
+      #     failOnIssues: false
+      #     projectName: 'DevSecOpsDemo'
+      #     organization: 'AErmie'
+
       - task: SnykSecurityScan@0
-        displayName: Snyk Security Scan
         inputs:
           serviceConnectionEndpoint: 'Snyk-DevSecOps'
-          testType: 'app'
+          testType: 'container'
+          dockerImageName: 'eshoponweb:latest'
+          dockerfilePath: '.\'
           monitorOnBuild: true
-          failOnIssues: false
+          failOnIssues: true
           projectName: 'DevSecOpsDemo'
           organization: 'AErmie'
