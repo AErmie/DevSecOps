@@ -63,13 +63,13 @@ stages:
           port: 5000
 
       - task: CopyFiles@2
-        condition: succeedOrFailed()
+        condition: succeededOrFailed()
         inputs:
           SourceFolder: 'OWASPZAP/'
           TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
       - task: PublishBuildArtifacts@1
-        condition: succeedOrFailed()
+        condition: succeededOrFailed()
         inputs:
           ArtifactName: 'owasp_zap_reports'
 
@@ -168,7 +168,7 @@ stages:
 - stage: Publish
   displayName: Publish Container
   dependsOn: QualityCheck
-  condition: succeeded()
+  condition: succeededOrFailed()
   jobs:
   - job: PublishContainerImage
     displayName: "Publish Docker Image"
