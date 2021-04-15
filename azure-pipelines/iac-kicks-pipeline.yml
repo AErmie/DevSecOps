@@ -39,3 +39,16 @@ stages:
           if [ "$SEVERITY_COUNTER_HIGH" -ge "1" ]; then
             echo "Please fix all $SEVERITY_COUNTER_HIGH HIGH SEVERITY COUNTERS" && exit 1;
           fi
+
+      - script: | 
+          docker pull checkmarx/kics:latest
+          docker run --volume $(System.DefaultWorkingDirectory):/path checkmarx/kics:latest scan --path "/path" --output-path ./output --report-formats "json,sarif,html"
+        displayName: Run Checkmarx KICKS (Container)
+      
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: '$(System.DefaultWorkingDirectory)/ouptut'
+          artifact: 'CheckmarxKICKS'
+          publishLocation: 'pipeline'
+      
+      
