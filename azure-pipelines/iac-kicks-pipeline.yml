@@ -43,7 +43,7 @@ stages:
 
       - script: | 
           docker pull checkmarx/kics:latest
-          docker run --volume $(System.DefaultWorkingDirectory):/path checkmarx/kics:latest scan --path "/path" --config kics-config.yml
+          docker run --volume $(System.DefaultWorkingDirectory):/path checkmarx/kics:latest scan --path "/path" --config ./kics-config.yml
         displayName: Run Checkmarx KICKS (Container)
 
       - script: | 
