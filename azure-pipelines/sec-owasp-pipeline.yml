@@ -1,0 +1,119 @@
+trigger:
+  - none
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+  pathToDockerFile: 'Dockerfile'
+  ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
+  ACRLoginServer: 'adinermieacr.azurecr.io'
+  ACRRepository: 'eshoponweb'
+
+stages:
+- stage: QualityCheck
+  displayName: Quality Checks
+  jobs:
+  - job: OWASPJob
+    displayName: "OWASP ZAP Job"
+    steps:
+    - task: Docker@2
+      displayName: Build Docker Container Image
+      inputs:
+        containerRegistry: $(ACRConnectionName)
+        repository: $(ACRRepository)
+        command: build
+        Dockerfile: $(pathToDockerFile)
+        tags: |
+          $(Build.BuildId)
+
+    - bash: | 
+        docker run -d -p 5000:8080 $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
+      displayName: Run Docker Container
+
+    - task: owaspzap@1
+      displayName: Running OWASP ZAP Scanner
+      inputs:
+        aggressivemode: false
+        scantype: 'agentScan'
+        threshold: 80
+        provideCustomContext: false
+        port: 5000
+
+    - bash: |
+        sudo npm install -g handlebars-cmd
+        cat <<EOF > owaspzap/nunit-template.hbs
+        {{#each site}}
+        <test-run
+            id="2"
+            name="Owasp test"
+            start-time="{{../[@generated]}}"  >
+            <test-suite
+                id="{{@index}}"
+                type="Assembly"
+                name="{{[@name]}}"
+                result="Failed"
+                failed="{{alerts.length}}">
+                <attachments>
+                    <attachment>
+                        <filePath>$(Build.ArtifactStagingDirectory)/report.html</filePath>
+                    </attachment>
+                    <attachment>
+                        <filePath>$(Build.ArtifactStagingDirectory)/report.json</filePath>
+                      </attachment>
+                </attachments>
+            {{#each alerts}}<test-case
+                id="{{@index}}"
+                name="{{alert}}"
+                result="Failed"
+                fullname="{{alert}}"
+                time="1">
+                    <failure>
+                        <message>
+                            <![CDATA[{{{desc}}}]]>
+                        </message>
+                        <stack-trace>
+                            <![CDATA[
+        Solution:
+        {{{solution}}}
+        Reference:
+        {{{reference}}}
+        instances:{{#each instances}}
+        * {{uri}}
+            - {{method}}
+            {{#if evidence}}- {{{evidence}}}{{/if}}
+                            {{/each}}]]>
+                        </stack-trace>
+                    </failure>
+            </test-case>
+            {{/each}}
+            </test-suite>
+        </test-run>
+        {{/each}}
+        EOF
+      displayName: OWASP NUnit Report Template
+      condition: always()
+
+    - bash: | 
+        handlebars owaspzap/report.json < owaspzap/nunit-template.hbs > owaspzap/test-results.xml
+      displayName: Generate NUnit Type File
+
+    - task: PublishTestResults@2
+      displayName: 'Publish OWASP ZAP Test Results'
+      inputs:
+        testResultsFormat: NUnit
+        testResultsFiles: 'owaspzap/test-results.xml'
+      condition: always()
+
+    - task: CopyFiles@2
+      displayName: Copy OWASP Files
+      condition: succeededOrFailed()
+      inputs:
+        SourceFolder: 'owaspzap/'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: Publish Build Artifact
+      condition: succeededOrFailed()
+      inputs:
+        ArtifactName: OWASP-ZAP-Reports
