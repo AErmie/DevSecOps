@@ -92,18 +92,19 @@ stages:
         {{/each}}
         EOF
       displayName: OWASP NUnit Report Template
-      condition: always()
+      condition: succeededOrFailed()
 
     - bash: | 
         handlebars owaspzap/report.json < owaspzap/nunit-template.hbs > owaspzap/test-results.xml
       displayName: Generate NUnit Type File
+      condition: succeededOrFailed()
 
     - task: PublishTestResults@2
       displayName: 'Publish OWASP ZAP Test Results'
       inputs:
         testResultsFormat: NUnit
         testResultsFiles: 'owaspzap/test-results.xml'
-      condition: always()
+      condition: succeededOrFailed()
 
     - task: CopyFiles@2
       displayName: Copy OWASP Files
