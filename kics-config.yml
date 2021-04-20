@@ -4,13 +4,13 @@
 # exclude-results: "exclude results by providing a list of similarity IDs of a result"
 log-file: true
 # (TRACE,DEBUG,INFO,WARN,ERROR,FATAL) 
-log-level: INFO
+log-level: DEBUG
 # log-path: path to the log file
 silent: false
 no-color: false
-minimal-ui: false
-no-progress: false
-output-path: "./"
+minimal-ui: true
+no-progress: true
+# output-path: "./"
 # path: "path to file or directory to scan"
 # payload-path: "file path to store source internal representation in JSON format"
 preview-lines: 30
@@ -19,10 +19,10 @@ report-formats:
   - json
   - sarif
   - html
-type:
-  - Ansible
-  - CloudFormation
-  - Dockerfile
-  - Kubernetes
-  - Terraform
+# type:
+#   - Ansible
+#   - CloudFormation
+#   - Dockerfile
+#   - Kubernetes
+#   - Terraform
 verbose: true
