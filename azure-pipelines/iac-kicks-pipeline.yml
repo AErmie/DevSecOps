@@ -7,8 +7,8 @@ stages:
 - stage: QualityCheckStage
   displayName: Quality Check Stage
   jobs:
-    - job: KICKSJob
-      displayName: Run KICKS Scan
+    - job: KICSJob
+      displayName: Run KICS Scan
       steps:
       # - script: | 
       #     get_latest_kics_release() {
@@ -42,14 +42,12 @@ stages:
       #   displayName: Run Checkmarx KICKS (CmdLine)
 
       - script: | 
-          mkdir KicsReports
+          # mkdir KicsReports
           docker pull checkmarx/kics:latest
-          docker run --volume $(System.DefaultWorkingDirectory):/path checkmarx/kics:latest scan --path "/path" --output-path ./KicsReports --report-formats "sarif"
+          docker run --volume $(System.DefaultWorkingDirectory):/path checkmarx/kics:latest scan --path "/path" --report-formats "sarif"
         displayName: Run Checkmarx KICKS (Container)
 
       - script: | 
-          ls -la
-          cd KicsReports
           ls -la
         displayName: List DIR
         condition: always()
@@ -58,8 +56,8 @@ stages:
         displayName: Publish Artifact
         condition: always()
         inputs:
-          targetPath: '$(System.DefaultWorkingDirectory)/KicsReports'
-          artifact: 'CheckmarxKICKS'
+          targetPath: '$(System.DefaultWorkingDirectory)/'
+          artifact: 'CheckmarxKICS'
           publishLocation: 'pipeline'
       
       
