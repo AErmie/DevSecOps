@@ -42,11 +42,14 @@ stages:
       #   displayName: Run Checkmarx KICKS (CmdLine)
 
       - script: | 
+          mkdir KicsReports
           docker pull checkmarx/kics:latest
-          docker run --volume $(System.DefaultWorkingDirectory):/path checkmarx/kics:latest scan --path "/path" --config ./kics-config.yml
+          docker run --volume $(System.DefaultWorkingDirectory):/path checkmarx/kics:latest scan --path "/path" --output-path ./KicsReports --report-formats "sarif"
         displayName: Run Checkmarx KICKS (Container)
 
       - script: | 
+          ls -la
+          cd KicsReports
           ls -la
         displayName: List DIR
         condition: always()
@@ -55,7 +58,7 @@ stages:
         displayName: Publish Artifact
         condition: always()
         inputs:
-          targetPath: '$(System.DefaultWorkingDirectory)/kicks-*'
+          targetPath: '$(System.DefaultWorkingDirectory)/KicsReports'
           artifact: 'CheckmarxKICKS'
           publishLocation: 'pipeline'
       
