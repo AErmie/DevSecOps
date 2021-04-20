@@ -1,0 +1,37 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  pathToDockerFile: 'Dockerfile'
+  ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
+  ACRLoginServer: 'adinermieacr.azurecr.io'
+  ACRRepository: 'eshoponweb'
+
+stages:
+- stage: QualityCheckStage
+  displayName: Quality Check Stage
+  jobs:
+    - job: TrivyJob
+      displayName: RunTrivyKICKS Scan
+      steps:      
+      - task: Docker@2
+        displayName: Build Container
+        inputs:
+          containerRegistry: $(ACRConnectionName)
+          repository: $(ACRRepository)
+          command: build
+          Dockerfile: $(pathToDockerFile)
+          tags: |
+            $(Build.BuildId)
+            latest
+      
+      - bash: | 
+          docker run -d -p 5000:8080 $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
+        displayName: 'Run App in Docker Container'
+      
+      - script: | 
+          docker pull aquasec/trivy:latest
+          trivy image $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
+        displayName: Run Checkmarx KICKS (CmdLine)
