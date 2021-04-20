@@ -14,7 +14,7 @@ stages:
   displayName: Quality Check Stage
   jobs:
     - job: TrivyJob
-      displayName: RunTrivyKICKS Scan
+      displayName: RunTrivy Scan
       steps:      
       - task: Docker@2
         displayName: Build Container
@@ -33,5 +33,6 @@ stages:
       
       - script: | 
           docker pull aquasec/trivy:latest
-          trivy image $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
+          docker run --rm --volume /var/run/docker.sock:/var/run/docker.sock \
+            -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy:0.16.0 $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
         displayName: Run Checkmarx KICKS (CmdLine)
