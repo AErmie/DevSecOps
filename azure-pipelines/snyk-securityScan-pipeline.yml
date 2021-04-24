@@ -16,16 +16,6 @@ stages:
     - job: SnykJob
       displayName: Run Snyk Security Scan
       steps:
-      # - task: SnykSecurityScan@0
-      #   displayName: Snyk Security Scan
-      #   inputs:
-      #     serviceConnectionEndpoint: 'Snyk-DevSecOps'
-      #     testType: 'app'
-      #     monitorOnBuild: true
-      #     failOnIssues: false
-      #     projectName: 'DevSecOpsDemo'
-      #     organization: 'AErmie'
-
       - task: Docker@2
         displayName: Build Container
         inputs:
@@ -35,15 +25,26 @@ stages:
           Dockerfile: $(pathToDockerFile)
           tags: |
             $(Build.BuildId)
-            latest
+
+      # - task: SnykSecurityScan@0
+      #   inputs:
+      #     serviceConnectionEndpoint: 'Snyk-DevSecOps'
+      #     testType: 'container'
+      #     dockerImageName: 'eshoponweb:latest'
+      #     dockerfilePath: 'Dockerfile'
+      #     monitorOnBuild: true
+      #     failOnIssues: false
+      #     projectName: 'DevSecOpsDemo'
+      #     organization: 'AErmie'
 
       - task: SnykSecurityScan@0
+        displayName: Run Snyk Security Scan
         inputs:
           serviceConnectionEndpoint: 'Snyk-DevSecOps'
           testType: 'container'
-          dockerImageName: 'eshoponweb:latest'
-          dockerfilePath: 'Dockerfile'
+          dockerImageName: '$(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)'
+          dockerfilePath: './'
           monitorOnBuild: true
-          failOnIssues: false
+          failOnIssues: true
           projectName: 'DevSecOpsDemo'
           organization: 'AErmie'
