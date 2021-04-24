@@ -12,11 +12,11 @@ stages:
       steps:
       - script: |
           docker pull accurics/terrascan
-          docker run --volume $(System.DefaultWorkingDirectory)/terraform:/tf accurics/terrascan scan --iac-dir ./azure --iac-type terraform --policy-type all --verbose
+          docker run --rm --volume $(System.DefaultWorkingDirectory)/terraform/azure:/iac --workdir /iac accurics/terrascan:latest scan --iac-type terraform --policy-type all --verbose
         displayName: 'Accurics TerraScan Code Analysis'
       
       - script: |
-          cd $(System.DefaultWorkingDirectory)
+          cd $(System.DefaultWorkingDirectory)/terraform/azure
           ls -la
         displayName: 'DIR Contents'
         condition: always()
