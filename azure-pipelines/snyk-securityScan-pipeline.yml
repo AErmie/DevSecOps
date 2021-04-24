@@ -43,7 +43,7 @@ stages:
           serviceConnectionEndpoint: 'Snyk-DevSecOps'
           testType: 'container'
           dockerImageName: '$(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)'
-          dockerfilePath: './'
+          dockerfilePath: 'Dockerfile'
           monitorOnBuild: true
           failOnIssues: true
           projectName: 'DevSecOpsDemo'
