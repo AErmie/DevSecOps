@@ -1,0 +1,56 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  pathToDockerFile: 'Dockerfile'
+  ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
+  ACRLoginServer: 'adinermieacr.azurecr.io'
+  ACRRepository: 'eshoponweb'
+
+
+stages:
+- stage: QualityCheckStage
+  displayName: Quality Check Stage
+  jobs:
+    - job: AnchoreJob
+      displayName: Run Anchore Scan
+      steps:
+      - task: Docker@2
+        displayName: Build Docker Container Image
+        inputs:
+          containerRegistry: $(ACRConnectionName)
+          repository: $(ACRRepository)
+          command: build
+          Dockerfile: $(pathToDockerFile)
+          tags: |
+            $(Build.BuildId)
+
+      - task: Anchore@0
+        inputs:
+          image: $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
+#           customPolicyPath: '.anchore/policy.json'
+          dockerfile: Dockerfile
+          failBuild: true
+          debug: true
+          includeAppPackages: true
+          printVulnerabilityReport: true
+
+      - script: |
+          echo $(policyStatus)
+
+          echo $(billOfMaterials)
+          cat $(billOfMaterials)
+
+          echo $(vulnerabilities)
+          cat $(vulnerabilities)
+
+      
+      # Publish the Anchore report as an artifact to Azure Pipelines
+#       - task: PublishBuildArtifacts@1
+#         displayName: 'Publish Artifact: Anchore Report'
+#         condition: succeededOrFailed()
+#         inputs:
+#           PathtoPublish: '$(System.DefaultWorkingDirectory)/AnchoreReport'
+#           ArtifactName: AnchoreReport
