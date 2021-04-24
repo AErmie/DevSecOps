@@ -28,14 +28,15 @@ stages:
             $(Build.BuildId)
 
       - task: Anchore@0
+        displayName: Run Anchore Container Image Scan
         inputs:
           image: $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
-#           customPolicyPath: '.anchore/policy.json'
+          # customPolicyPath: '.anchore/policy.json'
           dockerfile: Dockerfile
-          failBuild: true
-          debug: true
           includeAppPackages: true
           printVulnerabilityReport: true
+          failBuild: true
+          debug: true
 
       - script: |
           echo $(policyStatus)
@@ -45,12 +46,12 @@ stages:
 
           echo $(vulnerabilities)
           cat $(vulnerabilities)
+        displayName: Output Scan Results
 
-      
       # Publish the Anchore report as an artifact to Azure Pipelines
-#       - task: PublishBuildArtifacts@1
-#         displayName: 'Publish Artifact: Anchore Report'
-#         condition: succeededOrFailed()
-#         inputs:
-#           PathtoPublish: '$(System.DefaultWorkingDirectory)/AnchoreReport'
-#           ArtifactName: AnchoreReport
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: Anchore Report'
+        condition: succeededOrFailed()
+        inputs:
+          PathtoPublish: '$(System.DefaultWorkingDirectory)/anchore-reports/'
+          ArtifactName: AnchoreReport
