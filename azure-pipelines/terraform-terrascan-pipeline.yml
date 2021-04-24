@@ -12,7 +12,7 @@ stages:
       steps:
       - script: |
           docker pull accurics/terrascan
-          docker run --rm --volume $(System.DefaultWorkingDirectory)/terraform/azure:/iac --workdir /iac accurics/terrascan:latest scan --iac-type terraform --policy-type all --verbose
+          docker run --rm --volume $(System.DefaultWorkingDirectory)/terraform/azure:/iac --workdir /iac accurics/terrascan:latest scan --iac-type terraform --policy-type all --verbose --output xml
         displayName: 'Accurics TerraScan Code Analysis'
       
       - script: |
