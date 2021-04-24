@@ -12,13 +12,14 @@ stages:
       steps:
       - script: |
           docker pull accurics/terrascan
-          docker run --volume $(System.DefaultWorkingDirectory):/tf accurics/terrascan scan
+          docker run --volume $(System.DefaultWorkingDirectory)/terraform:/tf accurics/terrascan scan
         displayName: 'Accurics TerraScan Code Analysis'
       
       - script: |
           cd $(System.DefaultWorkingDirectory)
           ls -la
         displayName: 'DIR Contents'
+        condition: always()
       
       # Publish the Checkov report as an artifact to Azure Pipelines
 #       - task: PublishBuildArtifacts@1
