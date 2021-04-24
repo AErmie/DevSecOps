@@ -34,7 +34,7 @@ stages:
         displayName: Publish Terrascan Test Results
         condition: succeededOrFailed()
         inputs:
-          testResultsFormat: 'xUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
+          testResultsFormat: 'JUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
           testResultsFiles: '**/*TerraScan-Report.xml'
           searchFolder: '$(System.DefaultWorkingDirectory)/TerraScanReport'
           mergeTestResults: false
