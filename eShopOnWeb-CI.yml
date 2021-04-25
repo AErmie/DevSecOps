@@ -134,7 +134,7 @@ stages:
           command: "restore"
           projects: "**/*.csproj"
           feedsToUse: "config"
-          nugetConfigPath: "NuGet.config"
+          nugetConfigPath: "nuget.config"
 
       - task: SonarCloudPrepare@1
         displayName: 'Prepare analysis on SonarCloud'
