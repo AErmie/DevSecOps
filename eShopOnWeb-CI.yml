@@ -11,14 +11,6 @@ parameters:
   displayName: Run Microsoft Credential Scanner?
   type: boolean
   default: false
-- name: SonarCloudScan
-  displayName: Run SonarCloud Scanner?
-  type: boolean
-  default: false
-- name: WhiteSourceScan
-  displayName: Run WhiteSource Scanner?
-  type: boolean
-  default: false
 - name: UnitTests
   displayName: Run Unit Tests?
   type: boolean
@@ -35,18 +27,13 @@ parameters:
 
 variables:
   - group: SecureVariables
-
-  - name: WhiteSource-ProductName
-    value: DevSecOpsProduct
-  - name: WhiteSource-ProjectName
-    value: DevSecOpsProject
-
   - name: solution
     value: "**/*.sln"
   - name: buildPlatform
     value: "Any CPU"
   - name: buildConfiguration 
     value: "Release"
+
 
 stages:
 - stage: QualityCheck
@@ -118,75 +105,6 @@ stages:
             TSLint: false
             ToolLogsNotFoundAction: 'Standard'
 
-  - ${{ if eq(parameters.SonarCloudScan, true) }}:
-    - job: SonarCloudJob
-      displayName: "Sonar Cloud Job"
-      steps:
-      - task: UseDotNet@2
-        displayName: "Use .NET Core 2.2"
-        inputs:
-          packageType: "sdk"
-          version: "2.2.x"
-
-      - task: DotNetCoreCLI@2
-        displayName: Restore
-        inputs:
-          command: "restore"
-          projects: "**/*.csproj"
-          feedsToUse: "config"
-          nugetConfigPath: "nuget.config"
-
-      - task: SonarCloudPrepare@1
-        displayName: 'Prepare analysis on SonarCloud'
-        inputs:
-          SonarCloud: 'SonarCloud-DevSecOps'
-          organization: 'adinermie'
-          scannerMode: 'MSBuild'
-          projectKey: 'randomprojectkey'
-          projectName: 'DevSecOps Demo'
-          extraProperties: |
-            sonar.exclusions=**/obj/**,**/*.dll
-            sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
-            sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx  
-
-      - task: DotNetCoreCLI@2
-        displayName: Build
-        inputs:
-          projects: "**/*.csproj"
-          arguments: "--configuration $(BuildConfiguration)"
-
-      - task: SonarCloudAnalyze@1
-        displayName: "Analyze Sonar Cloud"
-
-      - task: SonarCloudPublish@1
-        displayName: Publish Sonar Cloud Results
-        inputs:
-          pollingTimeoutSec: '300'  
-
-  - ${{ if eq(parameters.WhiteSourceScan, true) }}:
-    - job: WhiteSourceJob
-      displayName: "WhiteSource Scan"
-      steps:
-      - task: DotNetCoreCLI@2
-        displayName: Restore
-        inputs:
-          command: "restore"
-          projects: "**/*.csproj"
-          feedsToUse: "config"
-          nugetConfigPath: "NuGet.config"
-      
-      - task: CmdLine@2
-        displayName: "Download WS Agent"
-        inputs:
-          script: 'curl -LJO https://unified-agent.s3.amazonaws.com/wss-unified-agent.jar'
-
-      - task: CmdLine@2
-        displayName: "Run WS Agent"
-        inputs:
-          script: |
-            java -jar wss-unified-agent.jar -c whitesource-fs-agent.config -product $(WhiteSource-ProductName) -project $(WhiteSource-ProjectName) -apiKey $(WhiteSource-APIKey)
-                exit $?
-
   - ${{ if eq(parameters.UnitTests, true) }}:
     - job: UnitTestsJob
       displayName: "Unit Test Jobs"
@@ -209,7 +127,7 @@ stages:
           command: "restore"
           projects: "**/*.csproj"
           feedsToUse: "config"
-          nugetConfigPath: "NuGet.config"
+          nugetConfigPath: "nuget.config"
       
       - task: DotNetCoreCLI@2
         displayName: "Unit Tests"
@@ -234,7 +152,7 @@ stages:
           command: "restore"
           projects: "**/*.csproj"
           feedsToUse: "config"
-          nugetConfigPath: "NuGet.config"
+          nugetConfigPath: "nuget.config"
       
       - task: DotNetCoreCLI@2
         displayName: Build
@@ -265,7 +183,7 @@ stages:
           command: "restore"
           projects: "**/*.csproj"
           feedsToUse: "config"
-          nugetConfigPath: "NuGet.config"
+          nugetConfigPath: "nuget.config"
         
       - task: DotNetCoreCLI@2
         displayName: Build
@@ -301,7 +219,7 @@ stages:
         command: "restore"
         projects: "**/*.csproj"
         feedsToUse: "config"
-        nugetConfigPath: "NuGet.config"
+        nugetConfigPath: "nuget.config"
       
     - task: DotNetCoreCLI@2
       displayName: Build
@@ -314,11 +232,19 @@ stages:
       inputs:
         command: publish
         publishWebProjects: True
-        arguments: "--configuration $(BuildConfiguration) --output $(build.ArtifactStagingDirectory)"
+        arguments: "--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)"
         zipAfterPublish: True
 
-    - task: PublishBuildArtifacts@1
+    # - task: PublishBuildArtifacts@1
+    #   displayName: "Publish Artifact"
+    #   inputs:
+    #     PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+    #   condition: succeededOrFailed()
+
+    - task: PublishPipelineArtifact@1
       displayName: "Publish Artifact"
-      inputs:
-        PathtoPublish: "$(build.ArtifactStagingDirectory)"
       condition: succeededOrFailed()
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: 'eShopOnWeb'
+        publishLocation: 'pipeline'
