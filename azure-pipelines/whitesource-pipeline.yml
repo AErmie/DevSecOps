@@ -20,9 +20,9 @@ stages:
       #     projectName: 'DevSecOpsProject'
 
       - script: | 
-          'curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar'
+          curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
         displayName: 'Download the latest Unified Agent'
       
       - script: | 
-          'java -jar wss-unified-agent.jar -c wss-unified-agent.config -apiKey $(WhiteSource-APIKey) -project DevSecOpsProject'
+          java -jar wss-unified-agent.jar -c wss-unified-agent.config -apiKey $(WhiteSource-APIKey) -project DevSecOpsProject
         displayName: 'Run Unified Agent Scan'
