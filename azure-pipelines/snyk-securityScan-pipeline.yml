@@ -26,17 +26,6 @@ stages:
           tags: |
             $(Build.BuildId)
 
-      # - task: SnykSecurityScan@0
-      #   inputs:
-      #     serviceConnectionEndpoint: 'Snyk-DevSecOps'
-      #     testType: 'container'
-      #     dockerImageName: 'eshoponweb:latest'
-      #     dockerfilePath: 'Dockerfile'
-      #     monitorOnBuild: true
-      #     failOnIssues: false
-      #     projectName: 'DevSecOpsDemo'
-      #     organization: 'AErmie'
-
       - task: SnykSecurityScan@0
         displayName: Run Snyk Security Scan
         inputs:
