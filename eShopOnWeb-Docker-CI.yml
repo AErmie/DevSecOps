@@ -8,7 +8,7 @@ parameters:
 - name: OWASPScan
   displayName: Run OWASP ZAP Scanner?
   type: boolean
-  default: true
+  default: false
 - name: AquaScan
   displayName: Run Aqua Scanner?
   type: boolean
