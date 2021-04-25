@@ -5,7 +5,10 @@ pool:
 
 variables:
 - group: SecureVariables
-
+- name: WhiteSource-ProductName
+  value: DevSecOpsProduct
+- name: WhiteSource-ProjectName
+  value: DevSecOpsProject
 
 stages:
 - stage: QualityCheckStage
@@ -14,19 +17,35 @@ stages:
     - job: WhiteSourceJob
       displayName: Run WhiteSource Scan
       steps:
-      # - task: WhiteSource@21
-      #   inputs:
-      #     cwd: '$(System.DefaultWorkingDirectory)'
-      #     projectName: 'DevSecOpsProject'
+      - task: DotNetCoreCLI@2
+        displayName: .NET Restore
+        inputs:
+          command: "restore"
+          projects: "**/*.csproj"
+          feedsToUse: "config"
+          nugetConfigPath: "nuget.config"
 
-      - script: | 
-          curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
-        displayName: 'Download the latest Unified Agent'
+      - task: CmdLine@2
+        displayName: "Download WhiteSource Unified Agent"
+        inputs:
+          script: curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
+
+      - task: CmdLine@2
+        displayName: "Run WhiteSource Unified Agent Scan"
+        inputs:
+          script: |
+            java -jar wss-unified-agent.jar -c whitesource-fs-agent.config -product $(WhiteSource-ProductName) -project $(WhiteSource-ProjectName) -apiKey $(WhiteSource-APIKey)
+            exit $?
+
+
+      # - script: | 
+      #     curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
+      #   displayName: 'Download the latest Unified Agent'
       
-      - script:  | 
-          ls -la
-        displayName: Root DIR Contents
+      # - script:  | 
+      #     ls -la
+      #   displayName: Root DIR Contents
 
-      - script: | 
-          java -jar wss-unified-agent.jar -c ./whitesource-fs-agent.config -apiKey $(WhiteSource-APIKey) -product DevSecOpsProduct -project DevSecOpsProject
-        displayName: 'Run Unified Agent Scan'
+      # - script: | 
+      #     java -jar wss-unified-agent.jar -c ./whitesource-fs-agent.config -apiKey $(WhiteSource-APIKey) -product DevSecOpsProduct -project DevSecOpsProject
+      #   displayName: 'Run Unified Agent Scan'
