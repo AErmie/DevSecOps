@@ -32,7 +32,7 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 
 - APP
   - [Unit, Integration, Functional Tests](https://github.com/AErmie/DevSecOps/blob/main/eShopOnWeb-CI.yml)
-  - [Docker Container](https://github.com/AErmie/DevSecOps/blob/main/eShopOnWeb-Docker-CI.yml)
+  - [Build and Publish Docker Container](https://github.com/AErmie/DevSecOps/blob/main/eShopOnWeb-Docker-CI.yml)
   - [SonarCloud](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sonar-cloud-pipeline.yml)
   - [WhiteSource](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/whitesource-pipeline.yml)
 - DATA
@@ -48,6 +48,7 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 - SEC
   - [Anchore](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/anchore-pipeline.yml)
   - [AquaSec Trivy](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sec-trivy-pipeline.yml)
+  - [Microsoft CredScan](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/msft-credscan-pipeline.yml)
   - [OWASP ZAP](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sec-owasp-pipeline.yml)
   - [Snyk](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/snyk-securityScan-pipeline.yml)
   - [YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sec-secretscan-yelpdetectsecrets.yml)
