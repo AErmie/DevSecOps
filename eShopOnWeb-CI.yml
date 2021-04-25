@@ -10,15 +10,15 @@ parameters:
 - name: MSCredScan
   displayName: Run Microsoft Credential Scanner?
   type: boolean
-  default: true
+  default: false
 - name: SonarCloudScan
   displayName: Run SonarCloud Scanner?
   type: boolean
-  default: true
+  default: false
 - name: WhiteSourceScan
   displayName: Run WhiteSource Scanner?
   type: boolean
-  default: true
+  default: false
 - name: UnitTests
   displayName: Run Unit Tests?
   type: boolean
