@@ -31,9 +31,12 @@ stages:
 - stage: QualityCheck
   displayName: Quality Checks
   jobs:
-  - script: | 
-      echo "This is a placeholder, in case no tests are selected for execution"
-    displayName: Placeholder
+  - ${{ if and(eq(parameters.UnitTests, false), eq(parameters.IntegrationTests, false), eq(parameters.FunctionalTests, false)) }}:
+    - job:
+      steps:
+      - script: | 
+          echo "No tests selected for execution!"
+        displayName: NO TESTS
 
   - ${{ if eq(parameters.UnitTests, true) }}:
     - job: UnitTestsJob
