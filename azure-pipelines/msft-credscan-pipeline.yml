@@ -1,0 +1,76 @@
+trigger: none
+
+pool:
+  vmImage: "windows-latest"
+
+variables:
+  - group: SecureVariables
+
+stages:
+- stage: QualityCheck
+  displayName: Quality Checks
+  jobs:
+  - job: CredScanJob
+    displayName: "CredScan Job"
+    steps:
+      - task: UseDotNet@2
+        displayName: "Use .NET Core 2.2"
+        inputs:
+          packageType: "sdk"
+          version: "2.2.x"
+
+      - task: CredScan@2
+        displayName: Execute CredScan
+        inputs:
+          toolMajorVersion: 'V2'
+          toolVersion: 'latest'
+          outputFormat: 'sarif'
+          suppressionsFile: '$(Build.Repository.LocalPath)/suppressions.json'
+
+      - task: PostAnalysis@1
+        displayName: Post Analysis
+        condition: always()
+        inputs:
+          AllTools: false
+          APIScan: false
+          BinSkim: false
+          CodesignValidation: false
+          CredScan: true
+          FortifySCA: false
+          FxCop: false
+          ModernCop: false
+          PoliCheck: false
+          RoslynAnalyzers: false
+          SDLNativeRules: false
+          Semmle: false
+          TSLint: false
+          ToolLogsNotFoundAction: 'Standard'
+
+      - task: PublishSecurityAnalysisLogs@2
+        displayName: Publish Security Analysis Logs
+        condition: always()
+        inputs:
+          ArtifactName: 'CodeAnalysisLogs'
+          ArtifactType: 'Container'
+          AllTools: true
+          ToolLogsNotFoundAction: 'Standard'
+
+      - task: SdtReport@1
+        displayName: Create Security Analysis Report
+        condition: always()
+        inputs:
+          AllTools: false
+          APIScan: false
+          BinSkim: false
+          CodesignValidation: false
+          CredScan: true
+          FortifySCA: false
+          FxCop: false
+          ModernCop: false
+          MSRD: false
+          PoliCheck: false
+          RoslynAnalyzers: false
+          SDLNativeRules: false
+          Semmle: false
+          TSLint: false
+          ToolLogsNotFoundAction: 'Standard'
