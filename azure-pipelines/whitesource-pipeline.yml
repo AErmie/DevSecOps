@@ -3,6 +3,10 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+- group: SecureVariables
+
+
 stages:
 - stage: QualityCheckStage
   displayName: Quality Check Stage
@@ -10,7 +14,15 @@ stages:
     - job: WhiteSourceJob
       displayName: Run WhiteSource Scan
       steps:
-      - task: WhiteSource@21
-        inputs:
-          cwd: '$(System.DefaultWorkingDirectory)'
-          projectName: 'DevSecOpsProject'
+      # - task: WhiteSource@21
+      #   inputs:
+      #     cwd: '$(System.DefaultWorkingDirectory)'
+      #     projectName: 'DevSecOpsProject'
+
+      - script: | 
+          'curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar'
+        displayName: 'Download the latest Unified Agent'
+      
+      - script: | 
+          'java -jar wss-unified-agent.jar -c wss-unified-agent.config -apiKey $(WhiteSource-APIKey) -project DevSecOpsProject'
+        displayName: 'Run Unified Agent Scan'
