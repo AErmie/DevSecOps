@@ -23,6 +23,10 @@ stages:
           curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
         displayName: 'Download the latest Unified Agent'
       
+      - script:  | 
+          ls -la
+        displayName: Root DIR Contents
+
       - script: | 
-          java -jar wss-unified-agent.jar -c wss-unified-agent.config -apiKey $(WhiteSource-APIKey) -project DevSecOpsProject
+          java -jar wss-unified-agent.jar -c ./wss-unified-agent.config -apiKey $(WhiteSource-APIKey) -product DevSecOpsProduct -project DevSecOpsProject
         displayName: 'Run Unified Agent Scan'
