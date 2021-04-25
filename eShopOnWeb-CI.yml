@@ -163,7 +163,7 @@ stages:
         inputs:
           pollingTimeoutSec: '300'  
 
-    - ${{ if eq(parameters.WhiteSourceScan, true) }}:
+  - ${{ if eq(parameters.WhiteSourceScan, true) }}:
     - job: WhiteSourceJob
       displayName: "WhiteSource Scan"
       steps:
