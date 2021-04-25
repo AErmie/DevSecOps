@@ -28,5 +28,5 @@ stages:
         displayName: Root DIR Contents
 
       - script: | 
-          java -jar wss-unified-agent.jar -c ./wss-unified-agent.config -apiKey $(WhiteSource-APIKey) -product DevSecOpsProduct -project DevSecOpsProject
+          java -jar wss-unified-agent.jar -c ./whitesource-fs-agent.config -apiKey $(WhiteSource-APIKey) -product DevSecOpsProduct -project DevSecOpsProject
         displayName: 'Run Unified Agent Scan'
