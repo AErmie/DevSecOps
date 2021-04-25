@@ -34,6 +34,7 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
   - [Unit, Integration, Functional Tests](https://github.com/AErmie/DevSecOps/blob/main/eShopOnWeb-CI.yml)
   - [Build and Publish Docker Container](https://github.com/AErmie/DevSecOps/blob/main/eShopOnWeb-Docker-CI.yml)
   - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/arm-ttk-pipeline.yml)
+  - [Azure Bicep](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/azure-bicep-pipeline.yml) (INCOMPLETE)
   - [SonarCloud](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sonar-cloud-pipeline.yml)
   - [WhiteSource](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/whitesource-pipeline.yml)
 - DATA
