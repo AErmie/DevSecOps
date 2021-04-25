@@ -19,9 +19,47 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=randomprojectkey)
 
 # DevSecOps
-This repo is used for testing DevSecOps practices and toolsets, and is used for demonstration purposes only. 
 
-# WARNING!
+This repo is used for testing DevSecOps practices and toolsets, and is used for demonstration purposes only.
+
+# WARNING
+
 This repo contains code that is purposefully vulnerable and insecure. Use at your own risk!
 
-Test change
+## Azure DevOps (ADO) Pipelines
+
+The following YAML-based Azure DevOps (ADO) pipelines have been created and tested:
+
+- APP
+  - [Unit, Integration, Functional Tests](https://github.com/AErmie/DevSecOps/blob/main/eShopOnWeb-CI.yml)
+  - [Docker Container](https://github.com/AErmie/DevSecOps/blob/main/eShopOnWeb-Docker-CI.yml)
+  - [SonarCloud](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sonar-cloud-pipeline.yml)
+  - [WhiteSource](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/whitesource-pipeline.yml)
+- DATA
+  - PENDING
+- INFRA
+  - [Accurics TerraScan](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-terrascan-pipeline.yml)
+  - [GitHub Super-Linter](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-githublinter-pipeline.yml)
+  - [Checkmarx KICS](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/iac-kicks-pipeline.yml)
+  - [Bridgecrew Checkov](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-checkov-pipeline.yml)
+  - [Terraform-Compliance](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-tfcompliance-pipeline.yml)
+  - [TFLint](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-tflint.yml)
+  - [TFSec](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-tfsec-pipeline.yml)
+- SEC
+  - [Anchore](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/anchore-pipeline.yml)
+  - [AquaSec Trivy](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sec-trivy-pipeline.yml)
+  - [OWASP ZAP](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sec-owasp-pipeline.yml)
+  - [Snyk](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/snyk-securityScan-pipeline.yml)
+  - [YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sec-secretscan-yelpdetectsecrets.yml)
+  - [TruffleHog](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/truffleHog-secretScan-pipeline.yml) (INCOMPLETE)
+  - [ShiftLeftScan](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sec-shiftleftscan-pipeline.yml)
+
+## GitHub Actions (GHA) Workflows
+
+The following YAML-based GitHub Actions (GHA) Workflows have been created and tested:
+
+- [CodeQL Analysis](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/codeql-analysis.yml)
+- [GitHub Super-Linter](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/github-superlinter.yml)
+- [Checkmarx KICS](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/iac-kicks.yml)
+- [ShiftLeftScan](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/shiftleftscan.yml)
+- [YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/yelp-secret-scan.yml)
