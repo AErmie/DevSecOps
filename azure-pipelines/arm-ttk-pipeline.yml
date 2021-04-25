@@ -12,6 +12,7 @@ stages:
       displayName: Run Azure Resource Manager (ARM) Template Tool Kit (TTK) Tests
       steps:
       - task: RunARMTTKTests@1
+        displayName: Run ARM TTK Tests
         inputs:
           templatelocation: '$(System.DefaultWorkingDirectory)\ARMTTK-TestFiles'
           resultLocation: '$(System.DefaultWorkingDirectory)\Results'
@@ -22,6 +23,7 @@ stages:
           cliOutputResults: true
 
       - task: PublishTestResults@2
+        displayName: Publish Test Results
         inputs:
           testResultsFormat: 'NUnit'
           testResultsFiles: '$(System.DefaultWorkingDirectory)\results\*-armttk.xml'
