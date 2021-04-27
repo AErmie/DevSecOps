@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: ShiftLeft Scan
+name: Checkmarx IaC KICS
 
 # Controls when the action will run. 
 on:
@@ -25,15 +25,20 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Perform Scan
-        uses: ShiftLeftSecurity/scan-action@master
-#         with:
-#           type: "credscan,python,nodejs,csharp,terraform,yaml,bash,depscan"
-        env:
-          WORKSPACE: https://github.com/${{ github.repository }}/blob/${{ github.sha }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/upload-artifact@v1
+      - name: KICS Github Action
+        uses: Checkmarx/kics-github-action@v1.0
         with:
-          name: reports
-          path: reports
+          # path to file or directory to scan
+          path: 'terraform'
+          # file path to store result in json format
+          output_path: 'results.json'
+          # file path to store source internal representation in JSON format
+#           payload_path: # optional
+          # path to directory with queries (default "./assets/queries")
+#           queries: # optional
+          # verbose scan
+          verbose: true
+
+      - name: display kics results
+        run: |
+          cat results.json
