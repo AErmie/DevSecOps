@@ -3,25 +3,25 @@ name: Workflow Template
 on:
   # Trigger the workflow on push or pull request,
   # but only for the main branch
-  push:
-    branches:
-      - main
-    # Sequence of patterns matched against refs/tags
-    tags:        
-      - v1             # Push events to v1 tag
-      - v1.*           # Push events to v1.0, v1.1, and v1.9 tags
-  schedule:
-  # * is a special character in YAML so you have to quote this string
-  - cron:  '30 5,17 * * *'
-  pull_request:
-    branches:
-      - main
-  # Also trigger on page_build, as well as release created events
-  page_build:
-  release:
-    # Only use the types keyword to narrow down the activity types that will trigger your workflow.
-    types: [published, created, edited] # This configuration does not affect the page_build event above
-      - created
+#   push:
+#     branches:
+#       - main
+#     # Sequence of patterns matched against refs/tags
+#     tags:        
+#       - v1             # Push events to v1 tag
+#       - v1.*           # Push events to v1.0, v1.1, and v1.9 tags
+#   schedule:
+#   # * is a special character in YAML so you have to quote this string
+#   - cron:  '30 5,17 * * *'
+#   pull_request:
+#     branches:
+#       - main
+#   # Also trigger on page_build, as well as release created events
+#   page_build:
+#   release:
+#     # Only use the types keyword to narrow down the activity types that will trigger your workflow.
+#     types: [published, created, edited] # This configuration does not affect the page_build event above
+#       - created
 
 
 permissions:
