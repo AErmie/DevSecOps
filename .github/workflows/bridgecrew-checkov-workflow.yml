@@ -16,38 +16,39 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  checkov_job:
-    # The type of runner that the job will run on
+   bridgecrew:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: Run Bridgecrew 
-        id: Bridgecrew
-        uses: bridgecrewio/bridgecrew-action@master
-        with:
-         directory: "terraform"
+    - uses: actions/checkout@v2
+    
+    - name: Run Bridgecrew 
+      id: Bridgecrew
+      uses: bridgecrewio/bridgecrew-action@master
+      with:        
+        directory: "terraform"
         #  check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
         #  skip_check: CKV_AWS_1 # optional: skip a specific check_id. can be comma separated list
          soft_fail: false
-         framework: terraform # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
+         framework: all # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
          output_format: sarif
          quiet: false
          external_checks_dir: ./checkov
          download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
          log_level: DEBUG # optional: set log level. Default WARNING
-
-      - name: Expose report
-        uses: actions/upload-artifact@v2
-        with:
-          name: SARIF results
-          path: results.sarif
-
-      # Uploads results.sarif to GitHub repository using the upload-sarif action
-      - uses: github/codeql-action/upload-sarif@v1
-        with:
-          # Path to SARIF file relative to the root of the repository
-          sarif_file: results.sarif
+      env:  
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_REF: ${{ github.ref }}
+        GITHUB_SHA: ${{ github.sha }}
+#         GITHUB_SERVER_URL: $GITHUB_SERVER_URL
+    
+    - name: Expose report
+      uses: actions/upload-artifact@v2
+      with:
+        name: SARIF results
+        path: results.sarif
+    
+    # Uploads results.sarif to GitHub repository using the upload-sarif action
+    - uses: github/codeql-action/upload-sarif@v1
+      with:
+        # Path to SARIF file relative to the root of the repository
+        sarif_file: results.sarif
