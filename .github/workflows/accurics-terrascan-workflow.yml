@@ -33,7 +33,7 @@ jobs:
         uses: accurics/terrascan-action@v1
         with:
           # path to a directory containing one or more IaC files (default ".")
-          iac_dir: ../../ # optional, default is .
+          iac_dir: ../../terraform # optional, default is .
           # IaC type (helm, k8s, kustomize, terraform)
           iac_type: terraform
           # IaC version (helm: v3, k8s: v1, kustomize: v3, terraform: v12, v14)
