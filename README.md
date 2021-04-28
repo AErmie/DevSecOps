@@ -61,8 +61,15 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 
 The following YAML-based GitHub Actions (GHA) Workflows have been created and tested:
 
-- [CodeQL Analysis](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/codeql-analysis.yml)
-- [GitHub Super-Linter](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/github-superlinter.yml)
-- [Checkmarx KICS](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/iac-kicks.yml)
-- [ShiftLeftScan](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/shiftleftscan.yml)
-- [YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/yelp-secret-scan.yml)
+- APP
+  - [CodeQL Analysis](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/codeql-analysis.yml)
+- DATA
+  - PENDING
+- INFRA
+  - [Accurics TerraScan](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/accurics-terrascan-workflow.yml)
+  - [Checkmarx KICS](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/iac-kicks.yml)
+  - [Bridgecrew Checkov](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/bridgecrew-checkov-workflow.yml)
+  - [GitHub Super-Linter](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/github-superlinter.yml)
+- SEC
+  - [ShiftLeftScan](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/shiftleftscan.yml)
+  - [YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/yelp-secret-scan.yml)
