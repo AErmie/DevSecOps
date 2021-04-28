@@ -39,3 +39,15 @@ jobs:
          external_checks_dir: ./checkov
          download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
          log_level: DEBUG # optional: set log level. Default WARNING
+
+      - name: Expose report
+        uses: actions/upload-artifact@v2
+        with:
+          name: SARIF results
+          path: results.sarif
+
+      # Uploads results.sarif to GitHub repository using the upload-sarif action
+      - uses: github/codeql-action/upload-sarif@v1
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: results.sarif
