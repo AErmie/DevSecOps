@@ -1,14 +1,14 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Accurics TerraScan
 
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -31,18 +31,18 @@ jobs:
         uses: accurics/terrascan-action@v1
         with:
           # path to a directory containing one or more IaC files (default ".")
-          iac_dir: . # optional, default is .
+          iac_dir: ./terraform # optional, default is .
           # IaC type (helm, k8s, kustomize, terraform)
           iac_type: terraform
           # IaC version (helm: v3, k8s: v1, kustomize: v3, terraform: v12, v14)
-#           iac_version: # optional
+          # iac_version: # optional
           # policy path directory for custom policies
-#           policy_path: # optional
+          # policy_path: # optional
           # policy type (all, aws, azure, gcp, github, k8s) (default all)
           policy_type: all # optional
           # one or more rules to skip while scanning (example: "ruleID1,ruleID2")
-#           skip_rules: # optional
+          # skip_rules: # optional
           # config file path
-#           config_path: # optional
+          # config_path: # optional
           # the action will only warn and not error when violations are found
           only_warn: false # optional
