@@ -25,5 +25,6 @@ jobs:
           verbose: true
 
       - name: Display KICS Results
+        if: ${{ always() }}
         run: |
           cat results.json
