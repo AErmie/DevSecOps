@@ -1,8 +1,8 @@
-[![CodeQL](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis.yml)
+[![GitHub CodeQL](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml)
 
-[![ShiftLeft Scan](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan.yml)
+[![ShiftLeftSecurity Scan](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml)
 
-[![YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-secret-scan.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-secret-scan.yml)
+[![YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-detectsecret-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-detectsecret-workflow.yml)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=alert_status)](https://sonarcloud.io/dashboard?id=randomprojectkey)
 
