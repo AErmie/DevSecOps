@@ -63,6 +63,7 @@ The following YAML-based GitHub Actions (GHA) Workflows have been created and te
 
 - APP
   - [CodeQL Analysis](.github/workflows/codeql-analysis.yml)
+  - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](.github/workflows/arm-ttk-workflow.yml)
 - DATA
   - PENDING
 - INFRA
