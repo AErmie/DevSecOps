@@ -71,6 +71,7 @@ The following YAML-based GitHub Actions (GHA) Workflows have been created and te
   - [Bridgecrew Checkov](.github/workflows/bridgecrew-checkov-workflow.yml)
   - [GitHub Super-Linter](.github/workflows/github-superlinter.yml)
   - [TFLint](.github/workflows/terraform-tflint-workflow.yml)
+  - [TFSec](.github/workflows/terraform-tfsec-workflow.yml)
 - SEC
   - [ShiftLeftScan](.github/workflows/shiftleftscan.yml)
   - [YELP Detect-Secrets](.github/workflows/yelp-secret-scan.yml)
