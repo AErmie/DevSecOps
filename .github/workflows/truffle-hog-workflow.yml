@@ -1,0 +1,19 @@
+name: TruffleHog
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  truffle_hog:
+    name: TruffleHog
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@master
+    - name: trufflehog-actions-scan
+      uses: edplato/trufflehog-actions-scan@master
+      with:
+        scanArguments: "--regex --entropy=False --max_depth=5"
+
+    - uses: UnicornGlobal/trufflehog-actions-scan@master
+      if: ${{ always() }}
