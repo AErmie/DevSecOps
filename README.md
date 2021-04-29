@@ -31,46 +31,46 @@ This repo contains code that is purposefully vulnerable and insecure. Use at you
 The following YAML-based Azure DevOps (ADO) pipelines have been created and tested:
 
 - APP
-  - [Unit, Integration, Functional Tests](https://github.com/AErmie/DevSecOps/blob/main/eShopOnWeb-CI.yml)
-  - [Build and Publish Docker Container](https://github.com/AErmie/DevSecOps/blob/main/eShopOnWeb-Docker-CI.yml)
-  - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/arm-ttk-pipeline.yml)
-  - [Azure Bicep](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/azure-bicep-pipeline.yml) (INCOMPLETE)
-  - [SonarCloud](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sonar-cloud-pipeline.yml)
-  - [WhiteSource](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/whitesource-pipeline.yml)
+  - [Unit, Integration, Functional Tests](eShopOnWeb-CI.yml)
+  - [Build and Publish Docker Container](eShopOnWeb-Docker-CI.yml)
+  - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](azure-pipelines/arm-ttk-pipeline.yml)
+  - [Azure Bicep](azure-pipelines/azure-bicep-pipeline.yml) (INCOMPLETE)
+  - [SonarCloud](azure-pipelines/sonar-cloud-pipeline.yml)
+  - [WhiteSource](azure-pipelines/whitesource-pipeline.yml)
 - DATA
   - PENDING
 - INFRA
-  - [Accurics TerraScan](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-terrascan-pipeline.yml)
-  - [GitHub Super-Linter](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-githublinter-pipeline.yml)
-  - [Checkmarx KICS](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/iac-kicks-pipeline.yml)
-  - [Bridgecrew Checkov](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-checkov-pipeline.yml)
-  - [Terraform-Compliance](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-tfcompliance-pipeline.yml)
-  - [TFLint](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-tflint.yml)
-  - [TFSec](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/terraform-tfsec-pipeline.yml)
+  - [Accurics TerraScan](azure-pipelines/terraform-terrascan-pipeline.yml)
+  - [GitHub Super-Linter](azure-pipelines/terraform-githublinter-pipeline.yml)
+  - [Checkmarx KICS](azure-pipelines/iac-kicks-pipeline.yml)
+  - [Bridgecrew Checkov](azure-pipelines/terraform-checkov-pipeline.yml)
+  - [Terraform-Compliance](azure-pipelines/terraform-tfcompliance-pipeline.yml)
+  - [TFLint](azure-pipelines/terraform-tflint.yml)
+  - [TFSec](azure-pipelines/terraform-tfsec-pipeline.yml)
 - SEC
-  - [Anchore](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/anchore-pipeline.yml)
-  - [AquaSec Trivy](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sec-trivy-pipeline.yml)
-  - [Microsoft CredScan](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/msft-credscan-pipeline.yml)
-  - [OWASP ZAP](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sec-owasp-pipeline.yml)
-  - [Snyk](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/snyk-securityScan-pipeline.yml)
-  - [YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sec-secretscan-yelpdetectsecrets.yml)
-  - [TruffleHog](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/truffleHog-secretScan-pipeline.yml) (INCOMPLETE)
-  - [ShiftLeftScan](https://github.com/AErmie/DevSecOps/blob/main/azure-pipelines/sec-shiftleftscan-pipeline.yml)
+  - [Anchore](azure-pipelines/anchore-pipeline.yml)
+  - [AquaSec Trivy](azure-pipelines/sec-trivy-pipeline.yml)
+  - [Microsoft CredScan](azure-pipelines/msft-credscan-pipeline.yml)
+  - [OWASP ZAP](azure-pipelines/sec-owasp-pipeline.yml)
+  - [Snyk](azure-pipelines/snyk-securityScan-pipeline.yml)
+  - [YELP Detect-Secrets](azure-pipelines/sec-secretscan-yelpdetectsecrets.yml)
+  - [TruffleHog](azure-pipelines/truffleHog-secretScan-pipeline.yml) (INCOMPLETE)
+  - [ShiftLeftScan](azure-pipelines/sec-shiftleftscan-pipeline.yml)
 
 ## GitHub Actions (GHA) Workflows
 
 The following YAML-based GitHub Actions (GHA) Workflows have been created and tested:
 
 - APP
-  - [CodeQL Analysis](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/codeql-analysis.yml)
+  - [CodeQL Analysis](.github/workflows/codeql-analysis.yml)
 - DATA
   - PENDING
 - INFRA
-  - [Accurics TerraScan](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/accurics-terrascan-workflow.yml)
-  - [Checkmarx KICS](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/iac-kicks.yml)
-  - [Bridgecrew Checkov](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/bridgecrew-checkov-workflow.yml)
-  - [GitHub Super-Linter](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/github-superlinter.yml)
+  - [Accurics TerraScan](.github/workflows/accurics-terrascan-workflow.yml)
+  - [Checkmarx KICS](.github/workflows/iac-kicks.yml)
+  - [Bridgecrew Checkov](.github/workflows/bridgecrew-checkov-workflow.yml)
+  - [GitHub Super-Linter](.github/workflows/github-superlinter.yml)
   - [TFLint](.github/workflows/terraform-tflint-workflow.yml)
 - SEC
-  - [ShiftLeftScan](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/shiftleftscan.yml)
-  - [YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/yelp-secret-scan.yml)
+  - [ShiftLeftScan](.github/workflows/shiftleftscan.yml)
+  - [YELP Detect-Secrets](.github/workflows/yelp-secret-scan.yml)
