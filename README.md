@@ -70,6 +70,7 @@ The following YAML-based GitHub Actions (GHA) Workflows have been created and te
   - [Checkmarx KICS](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/iac-kicks.yml)
   - [Bridgecrew Checkov](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/bridgecrew-checkov-workflow.yml)
   - [GitHub Super-Linter](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/github-superlinter.yml)
+  - [TFLint](.github/workflows/terraform-tflint-workflow.yml)
 - SEC
   - [ShiftLeftScan](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/shiftleftscan.yml)
   - [YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/yelp-secret-scan.yml)
