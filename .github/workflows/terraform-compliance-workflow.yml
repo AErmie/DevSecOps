@@ -10,7 +10,6 @@ jobs:
     name: TerraformCompliance-Action
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/checkout@v2
     - uses: hashicorp/setup-terraform@v1
 
     # - name: Terraform Plan
