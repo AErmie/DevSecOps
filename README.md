@@ -73,5 +73,7 @@ The following YAML-based GitHub Actions (GHA) Workflows have been created and te
   - [TFLint](.github/workflows/terraform-tflint-workflow.yml)
   - [TFSec](.github/workflows/terraform-tfsec-workflow.yml)
 - SEC
+  - [Anchore](.github/workflows/anchore-workflow.yml)
+  - [AquaSec Trivy](.github/workflows/aquasec-trivy-workflow.yml)
   - [ShiftLeftScan](.github/workflows/shiftleftscan.yml)
   - [YELP Detect-Secrets](.github/workflows/yelp-secret-scan.yml)
