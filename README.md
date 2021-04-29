@@ -76,4 +76,5 @@ The following YAML-based GitHub Actions (GHA) Workflows have been created and te
   - [Anchore](.github/workflows/anchore-workflow.yml)
   - [AquaSec Trivy](.github/workflows/aquasec-trivy-workflow.yml)
   - [ShiftLeftScan](.github/workflows/shiftleftscan.yml)
+  - [TruffleHog](.github/workflows/truffle-hog-workflow.yml)
   - [YELP Detect-Secrets](.github/workflows/yelp-secret-scan.yml)
