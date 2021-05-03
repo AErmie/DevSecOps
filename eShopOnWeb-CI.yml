@@ -181,3 +181,32 @@ stages:
         targetPath: '$(Build.ArtifactStagingDirectory)'
         artifact: 'eShopOnWeb'
         publishLocation: 'pipeline'
+
+    - task: XplatGenerateReleaseNotes@3
+      inputs:
+        outputfile: '$(Build.ArtifactStagingDirectory)/ReleaseNotes.md'
+        templateLocation: 'File'
+        templatefile: 'build-handlebars-template.md'
+        checkStage: true
+        overrideStageName: 'Build'
+        stopOnRedeploy: false
+        sortWi: false
+        showOnlyPrimary: false
+        searchCrossProjectForPRs: true
+        # gitHubPat: 'GHPAT'
+        dumpPayloadToConsole: true
+        dumpPayloadToFile: false
+        replaceFile: false
+        getParentsAndChildren: true
+        getAllParents: true
+        # tags: 'sometag'
+        getIndirectPullRequests: true
+        stopOnError: false
+    
+    - task: PublishPipelineArtifact@1
+      displayName: "Publish Release Notes Artifact"
+      condition: succeededOrFailed()
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)/ReleaseNotes.md'
+        artifact: 'ReleaseNotes'
+        publishLocation: 'pipeline'
