@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e70d0b70310d4fc3930504b1dc9a7f76)](https://app.codacy.com/gh/AErmie/DevSecOps?utm_source=github.com&utm_medium=referral&utm_content=AErmie/DevSecOps&utm_campaign=Badge_Grade_Settings)
 [![GitHub CodeQL](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml)
 
 [![ShiftLeftSecurity Scan](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml)
