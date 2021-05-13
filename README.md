@@ -1,5 +1,7 @@
 [![GitHub CodeQL](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml)
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/06a8a105132643e0ad4073eec9b85fbd)](https://www.codacy.com/gh/AErmie/DevSecOps/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AErmie/DevSecOps&amp;utm_campaign=Badge_Grade)
+
 [![ShiftLeftSecurity Scan](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml)
 
 [![YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-detectsecret-workflow.yml/badge.svg?branch=main)](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-detectsecret-workflow.yml)
@@ -62,8 +64,9 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 The following YAML-based GitHub Actions (GHA) Workflows have been created and tested:
 
 - APP
-  - [CodeQL Analysis](.github/workflows/codeql-analysis.yml)
+  - [CodeQL Analysis](.github/workflows/codeql-analysis.yml) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/06a8a105132643e0ad4073eec9b85fbd)](https://www.codacy.com/gh/AErmie/DevSecOps/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AErmie/DevSecOps&amp;utm_campaign=Badge_Grade)
   - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](.github/workflows/arm-ttk-workflow.yml)
+  - [Codacy](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/codacy-workflow.yml)
 - DATA
   - PENDING
 - INFRA
@@ -76,6 +79,6 @@ The following YAML-based GitHub Actions (GHA) Workflows have been created and te
 - SEC
   - [Anchore](.github/workflows/anchore-workflow.yml)
   - [AquaSec Trivy](.github/workflows/aquasec-trivy-workflow.yml)
-  - [ShiftLeftScan](.github/workflows/shiftleftscan.yml)
+  - [ShiftLeftScan](.github/workflows/shiftleftscan.yml) [![ShiftLeftSecurity Scan](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml)
   - [TruffleHog](.github/workflows/truffle-hog-workflow.yml)
-  - [YELP Detect-Secrets](.github/workflows/yelp-secret-scan.yml)
+  - [YELP Detect-Secrets](.github/workflows/yelp-secret-scan.yml) [![YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-detectsecret-workflow.yml/badge.svg?branch=main)](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-detectsecret-workflow.yml)
