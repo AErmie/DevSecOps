@@ -1,6 +1,8 @@
 name: Codacy Coverage Reporter
 
-on: ["push"]
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
   codacy-coverage-reporter:
