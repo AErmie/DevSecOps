@@ -25,7 +25,6 @@ stages:
           Dockerfile: $(pathToDockerFile)
           tags: |
             $(Build.BuildId)
-            latest
       
       - bash: | 
           docker run -d -p 5000:8080 $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
@@ -34,5 +33,6 @@ stages:
       - script: | 
           docker pull aquasec/trivy:latest
           docker run --rm --volume /var/run/docker.sock:/var/run/docker.sock \
-            --volume $HOME/Library/Caches:/root/.cache/ aquasec/trivy:latest $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
+            --volume $HOME/Library/Caches:/root/.cache/ aquasec/trivy:latest --format template --template "@contrib/sarif.tpl" -o report.sarif \
+             $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
         displayName: Run AquaSec Trivy
