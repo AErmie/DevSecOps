@@ -33,8 +33,9 @@ stages:
       - script: | 
           docker pull aquasec/trivy:latest
           docker run --rm --volume /var/run/docker.sock:/var/run/docker.sock \
-            --volume $HOME/Library/Caches:/root/.cache/ aquasec/trivy:latest --format template --template "@contrib/junit.tpl" -o junit-report.xml \
+            --volume $HOME/Library/Caches:/root/.cache/ aquasec/trivy:latest --name Trivy --format template --template "@contrib/junit.tpl" -o junit-report.xml \
              $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
+          docker cp Trivy:/junit-report.xml $(System.DefaultWorkingDirectory)/
           ls -la
         displayName: Run AquaSec Trivy
 
