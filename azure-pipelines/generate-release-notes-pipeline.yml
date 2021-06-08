@@ -20,9 +20,9 @@ stages:
            templateLocation: File
            templatefile: build-handlebars-template.md
            inlinetemplate: 
-           delimiter: :
+           delimiter: ':'
            fieldEquality: =
-           anyFieldContent: *
+           anyFieldContent: '*'
            dumpPayloadToConsole: false
            dumpPayloadToFile: false
            replaceFile: True
