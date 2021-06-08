@@ -28,3 +28,10 @@ stages:
            replaceFile: True
            appendToFile: True
            getParentsAndChildren: False
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish Artifact
+        inputs:
+          targetPath: '$(Build.ArtifactStagingDirectory)\ReleaseNotes.md'
+          artifact: 'ReleaseNotes'
+          publishLocation: 'pipeline'
