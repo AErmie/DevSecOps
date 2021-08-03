@@ -7,7 +7,7 @@ on:
 jobs:
   tfsec:
     name: TFSec
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v2
