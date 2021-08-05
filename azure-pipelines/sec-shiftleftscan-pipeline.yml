@@ -57,7 +57,7 @@ stages:
           displayName: Analyze with NG SAST
           inputs:
             script: |
-              $(Agent.HomeDirectory)\sl.exe analyze --force --app netfwWebapi --tag branch=$(Build.SourceBranchName) --csharp --cpg netfwWebapi/netfwWebapi.sln
+              $(Agent.HomeDirectory)\sl.exe analyze --force --app eShopOnWeb --tag branch=$(Build.SourceBranchName) --csharp --cpg ./eShopOnWeb.sln
             workingDirectory: '$(Build.SourcesDirectory)'
           env:
             SHIFTLEFT_ACCESS_TOKEN: $(SHIFTLEFT_ACCESS_TOKEN)
