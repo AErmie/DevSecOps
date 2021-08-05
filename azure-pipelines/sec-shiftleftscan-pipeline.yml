@@ -3,26 +3,61 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
+parameters:
+- name: ShiftLeftOSS
+  displayName: Run ShiftLeft Open Source?
+  type: boolean
+  default: false
+- name: ShiftLeftCI
+  displayName: Run ShiftLeft CI?
+  type: boolean
+  default: false
+
+
+variables:
+  - group: SecureVariables
+
 stages:
 - stage: QualityCheckStage
   displayName: Quality Check Stage
   jobs:
-  - job: ShiftLeftJob
-    displayName: Run ShiftLeft Scan
-    steps:
-    - script: |
-        docker run \
-          -e SCAN_DEBUG_MODE=debug \
-          --volume "$(Build.SourcesDirectory):/app" \
-          --volume "$(Build.ArtifactStagingDirectory):/reports" \
-          shiftleft/sast-scan scan --src /app --build \
-          --out_dir /reports/CodeAnalysisLogs
-      displayName: "Perform ShiftLeft Scan"
-      continueOnError: "true"
+  - ${{ if eq(parameters.ShiftLeftOSS, true) }}:
+    - job: ShiftLeftJob
+      displayName: Run ShiftLeft Scan
+      steps:
+      - script: |
+          docker run \
+            -e SCAN_DEBUG_MODE=debug \
+            --volume "$(Build.SourcesDirectory):/app" \
+            --volume "$(Build.ArtifactStagingDirectory):/reports" \
+            shiftleft/sast-scan scan --src /app --build \
+            --out_dir /reports/CodeAnalysisLogs
+        displayName: "Perform ShiftLeft Scan"
+        continueOnError: "true"
 
-    - task: PublishBuildArtifacts@1
-      displayName: "Publish Analysis Logs"
-      inputs:
-        PathtoPublish: "$(Build.ArtifactStagingDirectory)/CodeAnalysisLogs"
-        ArtifactName: "CodeAnalysisLogs"
-        publishLocation: "Container"
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Analysis Logs"
+        inputs:
+          PathtoPublish: "$(Build.ArtifactStagingDirectory)/CodeAnalysisLogs"
+          ArtifactName: "CodeAnalysisLogs"
+          publishLocation: "Container"
+
+  - ${{ if eq(parameters.ShiftLeftCI, true) }}:
+    - job: ShiftLeftCI
+      displayName: ShiftLeft CI
+      steps:
+        - task: CmdLine@2
+          displayName: Download ShiftLeft CLI
+          inputs:
+            targetType: 'inline'
+            script: |
+              curl https://cdn.shiftleft.io/download/sl > $(Agent.HomeDirectory)/sl && chmod a+rx $(Agent.HomeDirectory)/sl
+
+        - task: CmdLine@2
+          displayName: Analyze with NG SAST
+          inputs:
+            script: |
+              $(Agent.HomeDirectory)\sl.exe analyze --force --app netfwWebapi --tag branch=$(Build.SourceBranchName) --csharp --cpg netfwWebapi/netfwWebapi.sln
+            workingDirectory: '$(Build.SourcesDirectory)'
+          env:
+            SHIFTLEFT_ACCESS_TOKEN: $(SHIFTLEFT_ACCESS_TOKEN)
