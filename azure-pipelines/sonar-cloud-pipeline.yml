@@ -59,3 +59,9 @@ stages:
       displayName: Publish Sonar Cloud Results
       inputs:
         pollingTimeoutSec: '300'
+
+    - task: sonarcloud-buildbreaker@2
+      displayName: SonarCloud Break Build
+      inputs:
+        SonarCloud: 'SonarCloud-DevSecOps'
+        organization: 'adinermie'
