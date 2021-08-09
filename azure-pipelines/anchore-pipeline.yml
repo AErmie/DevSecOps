@@ -47,6 +47,7 @@ stages:
           echo $(vulnerabilities)
           cat $(vulnerabilities)
         displayName: Output Scan Results
+        condition: succeededOrFailed()
 
       # Publish the Anchore report as an artifact to Azure Pipelines
       - task: PublishBuildArtifacts@1
