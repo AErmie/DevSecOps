@@ -7,7 +7,9 @@
 #
 # RUN COMMAND
 #  docker run --name eshopweb --rm -it -p 8080:8080 web
-FROM microsoft/dotnet:2.2-sdk AS build
+# FROM microsoft/dotnet:2.2-sdk AS build
+# Changed to use the microsoft container registry (MCR), see https://github.com/dotnet/announcements/issues/197
+FROM mcr.microsoft.com/dotnet/sdk:2.2 AS build
 
 # Args
 ARG FEED_URL
@@ -31,7 +33,9 @@ WORKDIR /app/Web
 RUN dotnet restore -s "${FEED_URL}" \
     && dotnet publish -c Release -o out
 
-FROM microsoft/dotnet:2.2-aspnetcore-runtime AS runtime
+# FROM microsoft/dotnet:2.2-aspnetcore-runtime AS runtime
+# Changed to use the microsoft container registry (MCR), see https://github.com/dotnet/announcements/issues/197
+FROM mcr.microsoft.com/dotnet/aspnet:2.2 AS runtime
 WORKDIR /app
 COPY --from=build /app/Web/out .
 
