@@ -5,31 +5,53 @@ on:
   workflow_dispatch:
 
 jobs:
-  trivy:
-    name: AquaSec Trivy
-    runs-on: ubuntu-18.04
+  trivy_container:
+    name: AquaSec Trivy Container Scan
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       
       - name: Build the Container image
-        run: docker build . --file Dockerfile --tag localbuild/testimage:latest
-      
+        run: docker build . --tag localbuild/webimage:latest --file src/Web/Dockerfile
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'image'
-          image-ref: 'localbuild/testimage:latest'
-          format: 'template'
-          output: 'trivy-results.sarif'
-          template: '@/contrib/sarif.tpl'
+          image-ref: 'localbuild/webimage:latest'
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+          format: 'sarif'
+          output: 'trivy-container-results.sarif'
 
       - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
         if: ${{ always() }}
+        with:
+          sarif_file: 'trivy-container-results.sarif'
+
+  trivy_iac:
+    name: AquaSec Trivy IaC Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Trivy vulnerability scanner in IaC mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          hide-progress: false
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+          output: 'trivy-iac-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: 'trivy-iac-results.sarif'
