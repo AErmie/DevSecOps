@@ -5,14 +5,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  trivy_container:
-    name: AquaSec Trivy Container Scan
+  trivy_web_container:
+    name: AquaSec Trivy Web Container Scan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: Build the Container image
+      - name: Build the Web container image
         run: docker build . --tag localbuild/webimage:latest --file src/Web/Dockerfile
 
       - name: Run Trivy vulnerability scanner
@@ -25,13 +25,41 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
           format: 'sarif'
-          output: 'trivy-container-results.sarif'
+          output: 'trivy-web-container-results.sarif'
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         if: ${{ always() }}
         with:
-          sarif_file: 'trivy-container-results.sarif'
+          sarif_file: 'trivy-web-container-results.sarif'
+  
+  trivy_api_container:
+    name: AquaSec Trivy API Container Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Build the API container image
+        run: docker build . --tag localbuild/apiimage:latest --file src/PublicApi/Dockerfile
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'image'
+          image-ref: 'localbuild/apiimage:latest'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          format: 'sarif'
+          output: 'trivy-api-container-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        if: ${{ always() }}
+        with:
+          sarif_file: 'trivy-api-container-results.sarif'
 
   trivy_iac:
     name: AquaSec Trivy IaC Scan
@@ -44,11 +72,12 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'config'
+          scan-ref: ./terraform/azure
           hide-progress: false
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          severity: 'HIGH,CRITICAL'
           output: 'trivy-iac-results.sarif'
 
       - name: Upload Trivy scan results to GitHub Security tab
