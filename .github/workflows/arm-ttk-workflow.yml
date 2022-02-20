@@ -13,7 +13,7 @@ jobs:
       id: pathtest
       uses: aliencube/arm-ttk-actions@v0.3
       with:
-        path: ./ARMTTK-TestFiles/
+        path: ./ARMTTK-TestFiles
 
     - name: Test result - path
       shell: bash
