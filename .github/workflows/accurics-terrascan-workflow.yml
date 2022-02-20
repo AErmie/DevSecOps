@@ -9,27 +9,28 @@ jobs:
     runs-on: ubuntu-latest
     name: TerraScan-Action
     steps:
-      - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Run Terrascan IaC Scanner
-        id: terrascan
-        # You may pin to the exact commit or the version.
-        # uses: accurics/terrascan-action@2fee8bc04097dd4d4a5cf5bc5dffce47d71a34de
-        uses: accurics/terrascan-action@v1
-        with:
-          # path to a directory containing one or more IaC files (default ".")
-          iac_dir: terraform/azure/ # optional, default is .
-          # IaC type (helm, k8s, kustomize, terraform)
-          iac_type: terraform
-          # IaC version (helm: v3, k8s: v1, kustomize: v3, terraform: v12, v14)
-          # iac_version: # optional
-          # policy path directory for custom policies
-          # policy_path: # optional
-          # policy type (all, aws, azure, gcp, github, k8s) (default all)
-          policy_type: all # optional
-          # one or more rules to skip while scanning (example: "ruleID1,ruleID2")
-          # skip_rules: # optional
-          # config file path
-          # config_path: # optional
-          # the action will only warn and not error when violations are found
-          only_warn: false # optional
+    - name: Run Terrascan IaC Scanner
+      id: terrascan
+      uses: accurics/terrascan-action@main
+      with:
+        iac_type: 'terraform' #Required (helm, k8s, kustomize, terraform)
+        iac_version: 'v14' #(helm: v3, k8s: v1, kustomize: v3, terraform: v12, v14)
+        policy_type: 'all' #optional (all, aws, azure, gcp, github, k8s) (default all)
+        only_warn: true #optional (the action will only warn and not error when violations are found)
+        sarif_upload: true
+        #non_recursive:
+        iac_dir: terraform/azure/ #optional, default is .
+        #policy_path: #optional (policy path directory for custom policies)
+        #skip_rules: #optional (one or more rules to skip while scanning (example: "ruleID1,ruleID2")
+        #config_path:
+        #webhook_url:
+        #webhook_token:
+        verbose: true #optional (scan will show violations with additional details (Rule Name/ID, Resource Name/Type, Violation Category))
+
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: terrascan.sarif
