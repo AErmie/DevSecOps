@@ -1,0 +1,22 @@
+name: INFRA - IaC - ARM TTK
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  arm_ttk:
+    name: ARM Template Toolkit (ARM TTK)
+    runs-on: ubuntu-latest
+    steps:
+    - name: Test ARM Templates - path
+      id: pathtest
+      uses: aliencube/arm-ttk-actions@v0.3
+      with:
+        path: ./ARMTTK-TestFiles/
+
+    - name: Test result - path
+      shell: bash
+      continue-on-error: true
+      run: |
+        echo "${{ toJSON(fromJSON(steps.pathtest.outputs.results)) }}"

@@ -1,4 +1,4 @@
-name: ~eShopOnWeb Rich Code Navigation
+name: APP - eShopOnWeb Rich Code Navigation
 
 on: [push, pull_request, workflow_dispatch]
 
