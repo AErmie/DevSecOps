@@ -4,18 +4,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-
-
-
-
- - name: Scan image
-   uses: anchore/scan-action@v3
-   with:
-     image: "localbuild/testimage:latest"
-
-  
-
-
 jobs:
   anchore:
     name: Anchore Container Image Scan
