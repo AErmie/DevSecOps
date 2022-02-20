@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Run Checkov 
+    - name: Run Checkov IaC Scanner
       id: checkov
       uses: bridgecrewio/checkov-action@master
       with:
@@ -34,6 +34,7 @@ jobs:
     
     - name: Generate SARIF Report
       uses: bridgecrewio/checkov-action@master
+      if: ${{ success() || failure() }}
       with:
         directory: ./terraform/azure
         quiet: false # optional: display only failed checks
