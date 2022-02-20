@@ -74,7 +74,7 @@ jobs:
           scan-type: 'config'
           scan-ref: ./terraform/azure
           hide-progress: false
-          format: 'table'
+          format: 'sarif'
           exit-code: '1'
           ignore-unfixed: true
           severity: 'HIGH,CRITICAL'
