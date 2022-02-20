@@ -14,7 +14,7 @@ jobs:
       
       - name: Build the Web container image
         run: docker build . --tag localbuild/webimage:latest --file src/Web/Dockerfile
-
+      
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -23,7 +23,19 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL' #UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
+          format: 'table'
+
+      - name: Generate SARIF Report
+        uses: aquasecurity/trivy-action@master
+        if: ${{ success() || failure() }}
+        with:
+          scan-type: 'image'
+          image-ref: 'localbuild/webimage:latest'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
           format: 'sarif'
           output: 'trivy-web-container-results.sarif'
 
@@ -42,7 +54,7 @@ jobs:
       
       - name: Build the API container image
         run: docker build . --tag localbuild/apiimage:latest --file src/PublicApi/Dockerfile
-
+      
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -51,7 +63,19 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL' #UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
+          format: 'table'
+
+      - name: Generate SARIF Report
+        uses: aquasecurity/trivy-action@master
+        if: ${{ success() || failure() }}
+        with:
+          scan-type: 'image'
+          image-ref: 'localbuild/apiimage:latest'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
           format: 'sarif'
           output: 'trivy-api-container-results.sarif'
 
