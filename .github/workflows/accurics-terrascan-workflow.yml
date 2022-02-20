@@ -19,7 +19,7 @@ jobs:
         iac_type: 'terraform' #Required (helm, k8s, kustomize, terraform)
         iac_version: 'v14' #(helm: v3, k8s: v1, kustomize: v3, terraform: v12, v14)
         policy_type: 'all' #optional (all, aws, azure, gcp, github, k8s) (default all)
-        only_warn: true #optional (the action will only warn and not error when violations are found)
+        only_warn: false #optional (the action will only warn and not error when violations are found)
         sarif_upload: true
         #non_recursive:
         iac_dir: terraform/azure/ #optional, default is .
