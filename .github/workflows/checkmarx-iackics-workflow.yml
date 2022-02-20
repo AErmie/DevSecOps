@@ -20,7 +20,7 @@ jobs:
           fail_on: medium,high
           output_formats: sarif
           output_path: KICSResults
-          bom: true
+          # bom: true
           disable_full_descriptions: false
           disable_secrets: false
           enable_comments: true
