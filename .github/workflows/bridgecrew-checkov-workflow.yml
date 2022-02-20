@@ -37,7 +37,7 @@ jobs:
       if: ${{ success() || failure() }}
       with:
         directory: ./terraform/azure
-        quiet: false # optional: display only failed checks
+        quiet: true # optional: display only failed checks
         soft_fail: false # optional: do not return an error code if there are failed checks
         framework: terraform # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
         output_format: sarif # optional: the output format, one of: cli, json, junitxml, github_failed_only, or sarif. Default: sarif

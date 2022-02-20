@@ -1,7 +1,6 @@
 name: INFRA - IaC - Checkmarx IaC KICS
 
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -10,21 +9,29 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: KICS Github Action
-        uses: Checkmarx/kics-github-action@v1.0
+      - name: Create KICS Results Directory
+        run: mkdir -p KICSResults
+
+      - name: Run Checkmarx KICS Scan
+        uses: checkmarx/kics-action@v1.3
         with:
-          # path to file or directory to scan
-          path: 'terraform'
-          # file path to store result in json format
-          output_path: 'results.json'
-          # file path to store source internal representation in JSON format
-#           payload_path: # optional
-          # path to directory with queries (default "./assets/queries")
-#           queries: # optional
-          # verbose scan
+          path: ./terraform/azure
+          platform_type: terraform
+          fail_on: medium,high
+          output_format: sarif
+          output_path: KICSResults
+          bom: true
+          disable_full_descriptions: false
+          disable_secrets: false
+          enable_comments: true
           verbose: true
 
       - name: Display KICS Results
         if: ${{ always() }}
         run: |
-          cat results.json
+          cat KICSResults/results.json
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: KICSResults/results.sarif
