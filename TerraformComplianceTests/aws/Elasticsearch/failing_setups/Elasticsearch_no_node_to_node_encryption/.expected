@@ -1,0 +1,1 @@
+Failure: aws_elasticsearch_domain.example \(aws_elasticsearch_domain\) does not have node_to_node_encryption property.

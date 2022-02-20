@@ -1,0 +1,1 @@
+Failure: kms_master_key_id property in aws_sqs_queue.terraform_queue is considered to be Null. It is set to None.

@@ -1,0 +1,1 @@
+Failure: Can not find true in scan_on_push property of aws_ecr_repository.foo.

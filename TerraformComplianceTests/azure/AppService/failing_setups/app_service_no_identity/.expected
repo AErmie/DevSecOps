@@ -1,0 +1,1 @@
+Failure: azurerm_app_service.example \(azurerm_app_service\) does not have identity property.

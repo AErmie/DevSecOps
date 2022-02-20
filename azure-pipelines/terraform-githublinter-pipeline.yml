@@ -1,0 +1,416 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: QualityCheckStage
+  displayName: Quality Check Stage
+  jobs:
+  - job: GHLinterJob
+    displayName: Run GitHub Super-Linter Scan
+    steps:
+    # The GitHub Super-Linter runs a combination of various linters, written in bash, 
+    # to help validate your source code.
+    # In particular, this will execute TFLint, and TerraScan against Terraform files.
+    # Documentation: https://github.com/github/super-linter
+    - script: | 
+        mkdir GHLinterReports
+        docker run --tty --rm \
+          --entrypoint="" \
+          -e RUN_LOCAL=true \
+          -e OUTPUT_DETAILS=detailed \
+          -e OUTPUT_FORMAT=tap \
+          --volume $(System.DefaultWorkingDirectory):/tmp/lint \
+          github/super-linter:latest /bin/sh -c "/action/lib/linter.sh;linterSuccess=\$?;chown -R $(id -u):$(id -g) /tmp/lint;ls -la /tmp/lint;exit \$linterSuccess"
+        linterSuccess=$?
+        cp $(System.DefaultWorkingDirectory)/super-linter.report/*.tap $(System.DefaultWorkingDirectory)/GHLinterReports
+        ls -la $(System.DefaultWorkingDirectory)/GHLinterReports
+        exit $linterSuccess
+      displayName: 'GitHub Super-Linter Code Scan'
+      condition: always()
+      # NOTE: You can add the following ENV variable to filter the directory to scan: -e FILTER_REGEX_INCLUDE=".*terraform/.*" \
+
+    # Publish the GitHub Linter reports as an artifact to Azure Pipelines
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Pipeline Artifact: GH Linter Report'
+      condition: succeededOrFailed()
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/GHLinterReports'
+        artifact: 'GHLinter-Reports'
+        publishLocation: 'pipeline'
+    
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish GH Linter Log'
+      condition: succeededOrFailed()
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/super-linter.log'
+        artifact: 'GHLinter-Log'
+        publishLocation: 'pipeline'
+
+    # This script converts the GitHub Linter report (from TAP format), to a format that is 
+    # supported for consumption in Azure Pipelines (ie. JUnit).
+    # Referenced documentation: https://r2devops.io/jobs/static_tests/super_linter
+      # The SED commands do the following (in order):
+        # Extract the name of the report from the file (ie. "super-linter-TERRAFORM_TERRASCAN.tap" results in 'TERRAFORM_TERRASCAN')
+        # Reads the .TAP report file and pipes it to TAP-JUNIT for conversion into XML
+    - script: | 
+        sudo npm install -g tap-junit
+        mkdir GHLinterReports-Converted
+        cd super-linter.report
+        for report in *; do
+            ReportName=$(echo $report | sed -n "s/super-linter-\s*\(\S*\).tap$/\1/p")
+            # Example: echo "super-linter-TERRAFORM_TERRASCAN.tap" | sed -n "s/^.*-\s*\(\S*\).tap$/\1/p" returns 'TERRAFORM_TERRASCAN'
+            # SED command breakdown:
+              # -n      suppress printing
+              # s       substitute
+              # ^.*     anything at the beginning
+              # -       up until the dash
+              # \s*     any space characters (any whitespace character)
+              # \(      start capture group
+              # \S*     any non-space characters
+              # \)      end capture group
+              # .*$     anything at the end
+              # \1      substitute 1st capture group for everything on line
+              # p       print it
+            echo "Processing $ReportName TAP file"
+            cat $report | tap-junit --pretty --suite $ReportName --input ${report} > ../GHLinterReports-Converted/${ReportName}.xml
+        done
+        cd ../GHLinterReports-Converted
+        echo "GHLinterReports-Converted DIR Content:"
+        ls -la
+      displayName: Convert TAP to JUNIT XML
+      condition: succeededOrFailed()
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Converted Reports'
+      condition: succeededOrFailed()
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted'
+        artifact: 'GHLinter-ConvertedReports'
+        publishLocation: 'pipeline'
+
+    # Publish the results of the GitHub Super-Linter analysis as Test Results to the pipeline
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - BASH Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'BASH.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - BASH
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+    
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - BASH_EXEC Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'BASH_EXEC.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - BASH_EXEC
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - CSHARP Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'CSHARP.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - CSHARP
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+    
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - CSS Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'CSS.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - CSS
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - DOCKERFILE Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'DOCKERFILE.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - DOCKERFILE
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - DOCKERFILE_HADOLINT Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'DOCKERFILE_HADOLINT.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - DOCKERFILE_HADOLINT
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - ENV Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'ENV.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - ENV
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+    
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - GHERKIN Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'GHERKIN.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - GHERKIN
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - JAVASCRIPT_ES Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'JAVASCRIPT_ES.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - JAVASCRIPT_ES
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - JAVASCRIPT_STANDARD Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'JAVASCRIPT_STANDARD.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - JAVASCRIPT_STANDARD
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - JSCPD Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'JSCPD.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - JSCPD (Copy/Paste Detection)
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - JSON Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'JSON.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - JSON
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - MARKDOWN Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'MARKDOWN.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - MARKDOWN
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - PHP_BUILTIN Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'PHP_BUILTIN.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - PHP_BUILTIN
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - PHP_PHPCS Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'PHP_PHPCS.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - PHP_PHPCS
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - PHP_PHPSTAN Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'PHP_PHPSTAN.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - PHP_PHPSTAN
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - PHP_PSALM Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'PHP_PSALM.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - PHP_PSALM
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - POWERSHELL Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'POWERSHELL.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - POWERSHELL
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - PYTHON_BLACK Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'PYTHON_BLACK.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - PYTHON_BLACK
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - PYTHON_FLAKE8 Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'PYTHON_FLAKE8.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - PYTHON_FLAKE8
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - PYTHON_ISORT Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'PYTHON_ISORT.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - PYTHON_ISORT
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - PYTHON_MYPY Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'PYTHON_MYPY.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - PYTHON_MYPY
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - PYTHON_PYLINT Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'PYTHON_PYLINT.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - PYTHON_PYLINT
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - STATES Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'STATES.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - STATES
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - TFLINT Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'TERRAFORM.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - TFLINT
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+    
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - TERRAFORM_TERRASCAN Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'TERRAFORM_TERRASCAN.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - TERRAFORM_TERRASCAN
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+    - task: PublishTestResults@2
+      displayName: Publish GHSL - YAML Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'YAML.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)/GHLinterReports-Converted/'
+        testRunTitle: GitHub Super-Linter - YAML
+        mergeTestResults: false
+        failTaskOnFailedTests: false
+        publishRunAttachments: true

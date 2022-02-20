@@ -1,0 +1,1 @@
+Failure: enable_https_traffic_only property in azurerm_storage_account.example resource does not match with \^true\$ case insensitive regex. It is set to False.
