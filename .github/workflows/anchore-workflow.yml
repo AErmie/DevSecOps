@@ -22,7 +22,7 @@ jobs:
     #     load: true
     
     - name: Build the container image
-      run: docker build --tag localbuild/testimage:latest --file src/Web/.
+      run: docker build . --tag localbuild/testimage:latest --file src/Web/Dockerfile
     
     - name: Scan image
       uses: anchore/scan-action@v3
