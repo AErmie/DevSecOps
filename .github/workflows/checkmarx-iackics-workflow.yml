@@ -13,7 +13,7 @@ jobs:
         run: mkdir -p KICSResults
 
       - name: Run Checkmarx KICS Scan
-        uses: checkmarx/kics-action@v1.3
+        uses: Checkmarx/kics-github-action@v1.4
         with:
           path: ./terraform/azure
           platform_type: terraform
