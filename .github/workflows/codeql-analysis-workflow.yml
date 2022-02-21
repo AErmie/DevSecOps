@@ -1,4 +1,4 @@
-name: APP - GitHub CodeQL
+name: QUAL - GitHub CodeQL
 
 on:
   workflow_dispatch:

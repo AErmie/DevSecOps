@@ -1,4 +1,4 @@
-name: APP - Codacy Coverage Reporter
+name: QUAL - Codacy Coverage Reporter
 
 on:
   workflow_dispatch:
