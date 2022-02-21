@@ -1,4 +1,4 @@
-name: GitHub Super-Linter
+name: QUAL - GitHub Super-Linter
 
 on:
   # Allows you to run this workflow manually from the Actions tab
