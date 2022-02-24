@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
       name: Checkout source code
-
+    
     - uses: terraform-linters/setup-tflint@v1
       name: Setup TFLint
       with:
@@ -19,6 +19,9 @@ jobs:
 
     - name: Show version
       run: tflint --version
+
+    - name: Init TFLint
+      run: tflint --init
 
     - name: Run TFLint
       run: tflint -f compact
