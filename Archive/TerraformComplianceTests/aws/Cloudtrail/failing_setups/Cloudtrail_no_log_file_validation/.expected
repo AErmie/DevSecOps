@@ -1,0 +1,1 @@
+Failure: enable_log_file_validation property in aws_cloudtrail.foobar resource does not match with \^true\$ case insensitive regex. It is set to False.

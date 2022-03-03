@@ -1,18 +1,21 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
+﻿using Ardalis.Specification;
+using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 
-namespace Microsoft.eShopWeb.ApplicationCore.Specifications
+namespace Microsoft.eShopWeb.ApplicationCore.Specifications;
+
+public sealed class BasketWithItemsSpecification : Specification<Basket>, ISingleResultSpecification
 {
-    public sealed class BasketWithItemsSpecification : BaseSpecification<Basket>
+    public BasketWithItemsSpecification(int basketId)
     {
-        public BasketWithItemsSpecification(int basketId)
-            :base(b => b.Id == basketId)
-        {
-            AddInclude(b => b.Items);
-        }
-        public BasketWithItemsSpecification(string buyerId)
-            :base(b => b.BuyerId == buyerId)
-        {
-            AddInclude(b => b.Items);
-        }
+        Query
+            .Where(b => b.Id == basketId)
+            .Include(b => b.Items);
+    }
+
+    public BasketWithItemsSpecification(string buyerId)
+    {
+        Query
+            .Where(b => b.BuyerId == buyerId)
+            .Include(b => b.Items);
     }
 }

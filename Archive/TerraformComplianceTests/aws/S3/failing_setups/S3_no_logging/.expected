@@ -1,0 +1,1 @@
+Failure: Can not find any logging property for aws_s3_bucket resource in terraform plan.

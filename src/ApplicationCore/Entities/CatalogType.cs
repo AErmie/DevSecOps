@@ -1,7 +1,12 @@
-﻿namespace Microsoft.eShopWeb.ApplicationCore.Entities
+﻿using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+
+namespace Microsoft.eShopWeb.ApplicationCore.Entities;
+
+public class CatalogType : BaseEntity, IAggregateRoot
 {
-    public class CatalogType : BaseEntity
+    public string Type { get; private set; }
+    public CatalogType(string type)
     {
-        public string Type { get; set; }
+        Type = type;
     }
 }

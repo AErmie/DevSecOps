@@ -1,4 +1,4 @@
-name: ShiftLeftSecurity Scan
+name: SEC - ShiftLeftSecurity Scan
 
 on:
   # Allows you to run this workflow manually from the Actions tab
@@ -11,14 +11,23 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Perform Scan
-        uses: ShiftLeftSecurity/scan-action@master
-#         with:
-#           type: "credscan,python,nodejs,csharp,terraform,yaml,bash,depscan"
+        uses: ShiftLeftSecurity/scan-action@v1.3.0
+        with:
+          type: "credscan,python,nodejs,csharp,terraform,yaml,bash,depscan"
+          output: ShiftLeftReport
         env:
           WORKSPACE: https://github.com/${{ github.repository }}/blob/${{ github.sha }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SCAN_AUTO_BUILD: true
+          SCAN_DEBUG_MODE: debug
 
       - uses: actions/upload-artifact@v1
+        name: Upload Artifacts
         with:
-          name: reports
+          name: shiftleft-scan-reports
           path: reports
+
+      - name: Upload report
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ShiftLeftReport

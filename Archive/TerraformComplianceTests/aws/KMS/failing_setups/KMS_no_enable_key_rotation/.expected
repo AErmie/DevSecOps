@@ -1,0 +1,1 @@
+Failure: enable_key_rotation property in aws_kms_key.a resource does not match with \^True\$ case insensitive regex. It is set to False.

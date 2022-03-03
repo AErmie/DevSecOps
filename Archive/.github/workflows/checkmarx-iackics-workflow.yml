@@ -1,0 +1,30 @@
+name: Checkmarx IaC KICS
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  checkmarx_kics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: KICS Github Action
+        uses: Checkmarx/kics-github-action@v1.0
+        with:
+          # path to file or directory to scan
+          path: 'terraform'
+          # file path to store result in json format
+          output_path: 'results.json'
+          # file path to store source internal representation in JSON format
+#           payload_path: # optional
+          # path to directory with queries (default "./assets/queries")
+#           queries: # optional
+          # verbose scan
+          verbose: true
+
+      - name: Display KICS Results
+        if: ${{ always() }}
+        run: |
+          cat results.json

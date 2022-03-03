@@ -1,0 +1,49 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: QualityCheckStage
+  displayName: Quality Check Stage
+  jobs:
+    - job: TFLintJob
+      displayName: Run TFLint Scan
+      steps:
+      # TFLint is a framework that finds possible errors (like illegal instance types) for major cloud providers (AWS/Azure/GCP),
+      # warn about deprecated syntax, unused declarations, and enforce best practices, naming conventions.
+      - script: |
+          mkdir TFLintReport
+          docker pull wata727/tflint
+          # docker run --rm --volume $(System.DefaultWorkingDirectory)/terraform:/data -t wata727/tflint --module --format junit > $(System.DefaultWorkingDirectory)/TFLintReport/TFLint-Report.xml
+          docker run -v $(System.DefaultWorkingDirectory)/terraform:/data -t wata727/tflint --module
+        displayName: 'TFLint Static Code Analysis'
+        name: TFLintScan
+        condition: always()
+      
+      # Publish the TFLint report as an artifact to Azure Pipelines
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: TFLint Report'
+        condition: succeededOrFailed()
+        inputs:
+          PathtoPublish: '$(System.DefaultWorkingDirectory)/TFLintReport'
+          ArtifactName: TFLintReport
+
+      # Publish the results of the TFLint analysis as Test Results to the pipeline
+      - task: PublishTestResults@2
+        displayName: Publish TFLint Test Results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: 'JUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
+          testResultsFiles: '**/*TFLint-Report.xml'
+          searchFolder: '$(System.DefaultWorkingDirectory)/CheckovTFLintReportReport'
+          mergeTestResults: false
+          testRunTitle: TFLint Scan
+          failTaskOnFailedTests: false
+          publishRunAttachments: true
+
+      # Clean up any of the containers / images that were used for quality checks
+      - bash: |
+          docker rmi "wata727/tflint" -f | true
+        displayName: 'Remove Terraform Quality Check Docker Images'
+        condition: always()

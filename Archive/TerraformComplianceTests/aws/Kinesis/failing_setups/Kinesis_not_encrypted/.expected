@@ -1,0 +1,1 @@
+Failure: encryption_type property in aws_kinesis_stream.test_stream resource matches with \^NONE\$ case insensitive regex. It is set to NONE.

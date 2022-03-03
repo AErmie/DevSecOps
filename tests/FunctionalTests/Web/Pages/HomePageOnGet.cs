@@ -1,30 +1,29 @@
-﻿using Microsoft.eShopWeb.FunctionalTests.Web.Controllers;
-using Microsoft.eShopWeb.Web;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.eShopWeb.FunctionalTests.Web;
 using Xunit;
 
-namespace Microsoft.eShopWeb.FunctionalTests.WebRazorPages
+namespace Microsoft.eShopWeb.FunctionalTests.WebRazorPages;
+
+[Collection("Sequential")]
+public class HomePageOnGet : IClassFixture<TestApplication>
 {
-    public class HomePageOnGet : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public HomePageOnGet(TestApplication factory)
     {
-        public HomePageOnGet(CustomWebApplicationFactory<Startup> factory)
-        {
-            Client = factory.CreateClient();
-        }
+        Client = factory.CreateClient();
+    }
 
-        public HttpClient Client { get; }
+    public HttpClient Client { get; }
 
-        [Fact]
-        public async Task ReturnsHomePageWithProductListing()
-        {
-            // Arrange & Act
-            var response = await Client.GetAsync("/");
-            response.EnsureSuccessStatusCode();
-            var stringResponse = await response.Content.ReadAsStringAsync();
+    [Fact]
+    public async Task ReturnsHomePageWithProductListing()
+    {
+        // Arrange & Act
+        var response = await Client.GetAsync("/");
+        response.EnsureSuccessStatusCode();
+        var stringResponse = await response.Content.ReadAsStringAsync();
 
-            // Assert
-            Assert.Contains(".NET Bot Black Sweatshirt", stringResponse);
-        }
+        // Assert
+        Assert.Contains(".NET Bot Black Sweatshirt", stringResponse);
     }
 }

@@ -1,0 +1,1 @@
+Failure: aws_dynamodb_table.basic-dynamodb-table \(aws_dynamodb_table\) does not have point_in_time_recovery property.

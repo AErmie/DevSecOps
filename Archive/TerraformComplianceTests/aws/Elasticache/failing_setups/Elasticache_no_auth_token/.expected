@@ -1,0 +1,1 @@
+Failure: auth_token property in aws_elasticache_replication_group.example is considered to be Null. It is set to None.

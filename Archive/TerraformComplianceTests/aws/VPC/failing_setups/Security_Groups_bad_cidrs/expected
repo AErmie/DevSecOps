@@ -1,0 +1,4 @@
+Failure: 0.0.0.0/0 property exists in aws_security_group_rule.example_rule_22 \(aws_security_group_rule\).
+Failure: 0.0.0.0/0 property exists in aws_security_group_rule.example_rule_3389 \(aws_security_group_rule\).
+Failure: 0.0.0.0/0 property exists in {\'cidr_blocks\': \[\'0.0.0.0/0\'\], \'description\': \'TLS from VPC\', \'from_port\': 443, \'ipv6_cidr_blocks\': \[\], \'prefix_list_ids\': \[\], \'protocol\': \'tcp\', \'security_groups\': \[\], \'self\': False, \'to_port\': 22} \(aws_security_group\).
+Failure: 0.0.0.0/0 property exists in {\'cidr_blocks\': \[\'0.0.0.0/0\'\], \'description\': \'TLS from VPC\', \'from_port\': 443, \'ipv6_cidr_blocks\': \[\], \'prefix_list_ids\': \[\], \'protocol\': \'tcp\', \'security_groups\': \[\], \'self\': False, \'to_port\': 3389} \(aws_security_group\).

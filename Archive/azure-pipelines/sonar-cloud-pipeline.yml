@@ -1,0 +1,67 @@
+trigger: none
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+- group: SecureVariables
+- name: solution
+  value: "**/*.sln"
+- name: buildPlatform
+  value: "Any CPU"
+- name: buildConfiguration 
+  value: "Release"
+
+stages:
+- stage: QualityCheckStage
+  displayName: Quality Check Stage
+  jobs:
+  - job: SonarCloudJob
+    displayName: "Sonar Cloud Job"
+    steps:
+    - task: UseDotNet@2
+      displayName: "Use .NET Core 2.2"
+      inputs:
+        packageType: "sdk"
+        version: "2.2.x"
+
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: "restore"
+        projects: "**/*.csproj"
+        feedsToUse: "config"
+        nugetConfigPath: "NuGet.config"
+
+    - task: SonarCloudPrepare@1
+      displayName: 'Prepare analysis on SonarCloud'
+      inputs:
+        SonarCloud: 'SonarCloud-DevSecOps'
+        organization: 'adinermie'
+        scannerMode: 'MSBuild'
+        projectKey: $(SonarCloud-ProjectKey)
+        projectName: 'DevSecOps Demo'
+        extraProperties: |
+          sonar.exclusions=**/obj/**,**/*.dll
+          sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
+          sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx  
+
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        projects: "**/*.csproj"
+        arguments: "--configuration $(BuildConfiguration)"
+
+    - task: SonarCloudAnalyze@1
+      displayName: "Run scanner and upload results to SonarCloud"
+
+    - task: SonarCloudPublish@1
+      displayName: Publish Sonar Cloud Results
+      inputs:
+        pollingTimeoutSec: '300'
+
+    - task: sonarcloud-buildbreaker@2
+      displayName: SonarCloud Break Build
+      inputs:
+        SonarCloud: 'SonarCloud-DevSecOps'
+        organization: 'adinermie'

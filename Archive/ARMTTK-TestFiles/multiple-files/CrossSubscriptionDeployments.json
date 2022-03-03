@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "StorageAccountName1": {
+            "type": "string"
+        },
+        "StorageAccountName2": {
+            "type": "string"
+        },
+        "SecondSubID": {
+            "type": "string"
+        },
+        "SecondRGName": {
+            "type": "string"
+        }
+
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2017-05-10",
+            "name": "nestedTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('SecondRGName')]",
+            "subscriptionId": "[parameters('SecondSubID')]",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Storage/storageAccounts",
+                            "name": "[parameters('StorageAccountName2')]",
+                            "apiVersion": "2015-06-15",
+                            "location": "West Europe",
+                            "properties": {
+                                "accountType": "Standard_LRS"
+                            }
+                        }
+                    ]
+                },
+                "parameters": {}
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('StorageAccountName1')]",
+            "apiVersion": "2015-06-15",
+            "location": "West Europe",
+            "properties": {
+                "accountType": "Standard_LRS"
+            }
+        }
+    ]
+}

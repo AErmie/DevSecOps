@@ -1,0 +1,1 @@
+Failure: description property in aws_security_group_rule.example_rule is considered to be Null. It is set to None.

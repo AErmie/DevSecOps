@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 
-namespace Microsoft.eShopWeb.ApplicationCore.Interfaces
+namespace Microsoft.eShopWeb.ApplicationCore.Interfaces;
+
+public interface IBasketService
 {
-    public interface IBasketService
-    {
-        Task<int> GetBasketItemCountAsync(string userName);
-        Task TransferBasketAsync(string anonymousId, string userName);
-        Task AddItemToBasket(int basketId, int catalogItemId, decimal price, int quantity);
-        Task SetQuantities(int basketId, Dictionary<string, int> quantities);
-        Task DeleteBasketAsync(int basketId);
-    }
+    Task TransferBasketAsync(string anonymousId, string userName);
+    Task<Basket> AddItemToBasket(string username, int catalogItemId, decimal price, int quantity = 1);
+    Task<Basket> SetQuantities(int basketId, Dictionary<string, int> quantities);
+    Task DeleteBasketAsync(int basketId);
 }

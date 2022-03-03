@@ -1,4 +1,4 @@
-name: BridgeCrew Checkov
+name: INFRA - IaC - BridgeCrew Checkov
 
 on:
   # Allows you to run this workflow manually from the Actions tab
@@ -10,36 +10,53 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Run Bridgecrew 
-      id: Bridgecrew
-      uses: bridgecrewio/bridgecrew-action@master
-      with:        
-        directory: "terraform"
-        #  check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
-        #  skip_check: CKV_AWS_1 # optional: skip a specific check_id. can be comma separated list
-        soft_fail: false
-        framework: all # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
-        output_format: sarif
-        quiet: false
-        external_checks_dir: ./checkov
+    - name: Run Checkov IaC Scanner
+      id: checkov
+      uses: bridgecrewio/checkov-action@master
+      with:
+        directory: ./terraform/azure
+        # check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
+        # skip_check: CKV_AWS_2 # optional: skip a specific check_id. can be comma separated list
+        quiet: true # optional: display only failed checks
+        soft_fail: false # optional: do not return an error code if there are failed checks
+        framework: terraform # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
+        output_format: cli # optional: the output format, one of: cli, json, junitxml, github_failed_only, or sarif. Default: sarif
         download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
-        log_level: DEBUG # optional: set log level. Default WARNING
+        log_level: WARNING # optional: set log level. Default WARNING
+        # config_file: path/this_file
+        # baseline: cloudformation/.checkov.baseline # optional: Path to a generated baseline file. Will only report results not in the baseline.
+        # container_user: 1000 # optional: Define what UID and / or what GID to run the container under to prevent permission issues
       env:  
         GITHUB_REPOSITORY: ${{ github.repository }}
         GITHUB_REF: ${{ github.ref }}
         GITHUB_SHA: ${{ github.sha }}
-#         GITHUB_SERVER_URL: $GITHUB_SERVER_URL
+        #GITHUB_SERVER_URL: $GITHUB_SERVER_URL
     
-    - name: Expose report
+    - name: Generate SARIF Report
+      uses: bridgecrewio/checkov-action@master
+      if: ${{ success() || failure() }}
+      with:
+        directory: ./terraform/azure
+        quiet: true # optional: display only failed checks
+        soft_fail: false # optional: do not return an error code if there are failed checks
+        framework: terraform # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
+        output_format: sarif # optional: the output format, one of: cli, json, junitxml, github_failed_only, or sarif. Default: sarif
+        download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
+        log_level: WARNING # optional: set log level. Default WARNING
+      env:  
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_REF: ${{ github.ref }}
+        GITHUB_SHA: ${{ github.sha }}
+    
+    - name: Publish Workflow Artifact
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: SARIF results
         path: results.sarif
     
-    # Uploads results.sarif to GitHub repository using the upload-sarif action
-    - uses: github/codeql-action/upload-sarif@v1
+    - name: Upload Checkov scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v1
       if: ${{ always() }}
       with:
-        # Path to SARIF file relative to the root of the repository
         sarif_file: results.sarif

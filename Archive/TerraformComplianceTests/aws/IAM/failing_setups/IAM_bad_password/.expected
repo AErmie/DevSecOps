@@ -1,0 +1,7 @@
+Failure: for aws_iam_account_password_policy.strict on aws_iam_account_password_policy. 5 is not more than 13.
+Failure: aws_iam_account_password_policy.strict \(aws_iam_account_password_policy\) does not have require_uppercase_characters property.
+Failure: aws_iam_account_password_policy.strict \(aws_iam_account_password_policy\) does not have require_numbers property.
+Failure: aws_iam_account_password_policy.strict \(aws_iam_account_password_policy\) does not have password_reuse_prevention property.
+Failure: aws_iam_account_password_policy.strict \(aws_iam_account_password_policy\) does not have require_symbols property.
+Failure: require_lowercase_characters property in aws_iam_account_password_policy.strict resource does not match with \^true\$ case insensitive regex. It is set to False.
+Failure: for aws_iam_account_password_policy.strict on aws_iam_account_password_policy. 91 is not less than 91.

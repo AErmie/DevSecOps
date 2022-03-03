@@ -1,40 +1,34 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Exceptions;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
+using Microsoft.eShopWeb.ApplicationCore.Exceptions;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Services;
-using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 using Moq;
-using System;
 using Xunit;
 
-namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Services.BasketServiceTests
+namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Services.BasketServiceTests;
+
+public class SetQuantities
 {
-    public class SetQuantities
+    private readonly int _invalidId = -1;
+    private readonly Mock<IRepository<Basket>> _mockBasketRepo = new();
+
+    [Fact]
+    public async Task ThrowsGivenInvalidBasketId()
     {
-        private int _invalidId = -1;
-        private Mock<IAsyncRepository<Basket>> _mockBasketRepo;
+        var basketService = new BasketService(_mockBasketRepo.Object, null);
 
-        public SetQuantities()
-        {
-            _mockBasketRepo = new Mock<IAsyncRepository<Basket>>();
-        }
+        await Assert.ThrowsAsync<BasketNotFoundException>(async () =>
+            await basketService.SetQuantities(_invalidId, new System.Collections.Generic.Dictionary<string, int>()));
+    }
 
-        [Fact]
-        public async void ThrowsGivenInvalidBasketId()
-        {
-            var basketService = new BasketService(_mockBasketRepo.Object, null, null);
+    [Fact]
+    public async Task ThrowsGivenNullQuantities()
+    {
+        var basketService = new BasketService(null, null);
 
-            await Assert.ThrowsAsync<BasketNotFoundException>(async () =>
-                await basketService.SetQuantities(_invalidId, new System.Collections.Generic.Dictionary<string, int>()));
-        }
-
-        [Fact]
-        public async void ThrowsGivenNullQuantities()
-        {
-            var basketService = new BasketService(null, null, null);
-
-            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await basketService.SetQuantities(123, null));
-        }
-
+        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await basketService.SetQuantities(123, null));
     }
 }

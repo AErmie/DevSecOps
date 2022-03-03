@@ -1,0 +1,5 @@
+Prod-ResourceGroupLocation    = "CanadaEast"
+Prod-VNet-AddressSpace        = "192.168.0.0/16"
+Prod-WebSubnet-AddressPrefix  = "192.168.1.0/24"
+Prod-AppSubnet-AddressPrefix  = "192.168.2.0/24"
+Prod-DataSubnet-AddressPrefix = "192.168.3.0/24"

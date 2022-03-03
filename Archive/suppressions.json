@@ -1,0 +1,13 @@
+{
+    "tool": "Credential Scanner",
+    "suppressions": [
+    {
+        "file": "\\tests\\FunctionalTests\\Web\\Controllers\\AccountControllerSignIn.cs", 
+        "_justification": "Test Credential"
+    },
+    {
+        "file": "\\tests\\IntegrationTests\\LoginService.cs", 
+        "_justification": "Test Credential"
+    }
+  ]
+}

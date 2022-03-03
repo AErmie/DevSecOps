@@ -1,0 +1,39 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  pathToDockerFile: 'Dockerfile'
+  ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
+  ACRLoginServer: 'adinermieacr.azurecr.io'
+  ACRRepository: 'eshoponweb'
+
+stages:
+- stage: QualityCheckStage
+  displayName: Quality Check Stage
+  jobs:
+    - job: SnykJob
+      displayName: Run Snyk Security Scan
+      steps:
+      - task: Docker@2
+        displayName: Build Container
+        inputs:
+          containerRegistry: $(ACRConnectionName)
+          repository: $(ACRRepository)
+          command: build
+          Dockerfile: $(pathToDockerFile)
+          tags: |
+            $(Build.BuildId)
+
+      - task: SnykSecurityScan@0
+        displayName: Run Snyk Security Scan
+        inputs:
+          serviceConnectionEndpoint: 'Snyk-DevSecOps'
+          testType: 'container'
+          dockerImageName: '$(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)'
+          dockerfilePath: 'Dockerfile'
+          monitorOnBuild: true
+          failOnIssues: true
+          projectName: 'DevSecOpsDemo'
+          organization: 'AErmie'
