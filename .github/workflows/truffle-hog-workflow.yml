@@ -9,7 +9,11 @@ jobs:
     name: TruffleHog
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        ref: ${{ github.head_ref }} # necessary for pull request workflow trigger
+
     - name: trufflehog-actions-scan
       uses: edplato/trufflehog-actions-scan@master
       with:
