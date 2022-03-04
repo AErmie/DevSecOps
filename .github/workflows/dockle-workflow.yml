@@ -16,7 +16,7 @@ jobs:
         run: docker build . --tag localbuild/webimage:latest --file src/Web/Dockerfile
 
       - name: Run Dockle
-        uses: erzz/dockle-action@v1
+        uses: erzz/dockle-action@v1.1.1
         with:
           image: localbuild/webimage:latest
           report-format: sarif
