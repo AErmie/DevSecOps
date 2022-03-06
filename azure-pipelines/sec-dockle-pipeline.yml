@@ -1,0 +1,40 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  pathToDockerFile: 'src/Web/Dockerfile'
+  ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
+  ACRLoginServer: 'adinermieacr.azurecr.io'
+  ACRRepository: 'eshoponweb'
+
+stages:
+- stage: QualityCheckStage
+  displayName: Run Dockle Container Scan
+  jobs:
+    - job: DockleJob
+      displayName: Run Dockle Container Scan
+      steps:      
+      - task: Docker@2
+        displayName: Build Container
+        inputs:
+          containerRegistry: $(ACRConnectionName)
+          repository: $(ACRRepository)
+          command: build
+          Dockerfile: $(pathToDockerFile)
+          tags: |
+            $(Build.BuildId)
+      
+      - bash: | 
+          docker run -d -p 5000:8080 $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
+        displayName: 'Run App in Docker Container'
+      
+      - script: | 
+          docker pull goodwithtech/dockle:latest
+
+          docker run --rm \
+            --volume /var/run/docker.sock:/var/run/docker.sock \
+            goodwithtech/dockle:latest \
+            $(ACRRepository):$(Build.BuildId)
+        displayName: Run Dockle
