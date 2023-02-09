@@ -1,32 +1,13 @@
-[![GitHub CodeQL](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml)
-
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/06a8a105132643e0ad4073eec9b85fbd)](https://www.codacy.com/gh/AErmie/DevSecOps/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AErmie/DevSecOps&amp;utm_campaign=Badge_Grade)
-
-[![ShiftLeftSecurity Scan](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml)
-
-[![YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-detectsecret-workflow.yml/badge.svg?branch=main)](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-detectsecret-workflow.yml)
-
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=alert_status)](https://sonarcloud.io/dashboard?id=randomprojectkey)
-
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=security_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey)
-
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=bugs)](https://sonarcloud.io/dashboard?id=randomprojectkey)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=code_smells)](https://sonarcloud.io/dashboard?id=randomprojectkey)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=coverage)](https://sonarcloud.io/dashboard?id=randomprojectkey)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=randomprojectkey)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=ncloc)](https://sonarcloud.io/dashboard?id=randomprojectkey)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=sqale_index)](https://sonarcloud.io/dashboard?id=randomprojectkey)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=randomprojectkey)
-
 # DevSecOps
 
-This repo is used for testing DevSecOps practices and toolsets, and is used for demonstration purposes only.
+This repo is used for testing DevSecOps practices and tool sets, and is used for demonstration purposes only.
 
-# WARNING
+It contains both Azure Pipeline YAML files and GitHub Actions YAML files, for comparison purposes.
 
-This repo contains code that is purposefully vulnerable and insecure. Use at your own risk!
+The sample application code is based on the [Microsoft eShopOnWeb](https://github.com/dotnet-architecture/eShopOnWeb) sample application.
+
+> **Warning**
+> <span style="color:red">This repo contains code that is purposefully **vulnerable** and **insecure**. Use at your own risk!</span>
 
 ## Azure DevOps (ADO) Pipelines
 
@@ -37,7 +18,7 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
   - [Build and Publish Docker Container](eShopOnWeb-Docker-CI.yml)
   - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](azure-pipelines/arm-ttk-pipeline.yml)
   - [Azure Bicep](azure-pipelines/azure-bicep-pipeline.yml) (INCOMPLETE)
-  - [SonarCloud](azure-pipelines/sonar-cloud-pipeline.yml)
+  - [SonarCloud](azure-pipelines/sonar-cloud-pipeline.yml) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=security_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=bugs)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=code_smells)](https://sonarcloud.io/dashboard?id=randomprojectkey)
   - [WhiteSource](azure-pipelines/whitesource-pipeline.yml)
 - DATA
   - PENDING
@@ -64,23 +45,23 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 The following YAML-based GitHub Actions (GHA) Workflows have been created and tested:
 
 - APP
-  - [CodeQL Analysis](.github/workflows/codeql-analysis.yml) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/06a8a105132643e0ad4073eec9b85fbd)](https://www.codacy.com/gh/AErmie/DevSecOps/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AErmie/DevSecOps&amp;utm_campaign=Badge_Grade)
-  - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](.github/workflows/arm-ttk-workflow.yml)
-  - [Codacy](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/codacy-workflow.yml)
+  - [CodeQL Analysis](.github/workflows/codeql-analysis.yml) [![GitHub CodeQL](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml)
+  - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](.github/workflows/arm-ttk-workflow.yml) [![ARM TTK](https://github.com/AErmie/DevSecOps/actions/workflows/arm-ttk-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/arm-ttk-workflow.yml)
+  - [Codacy](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/codacy-workflow.yml) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/06a8a105132643e0ad4073eec9b85fbd)](https://www.codacy.com/gh/AErmie/DevSecOps/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AErmie/DevSecOps&amp;utm_campaign=Badge_Grade)
 - DATA
   - PENDING
 - INFRA
-  - [Accurics TerraScan](.github/workflows/accurics-terrascan-workflow.yml)
-  - [Checkmarx KICS](.github/workflows/iac-kicks.yml)
-  - [Bridgecrew Checkov](.github/workflows/bridgecrew-checkov-workflow.yml)
+  - [Accurics TerraScan](.github/workflows/accurics-terrascan-workflow.yml) [![Accurics TerraScan](https://github.com/AErmie/DevSecOps/actions/workflows/accurics-terrascan-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/accurics-terrascan-workflow.yml)
+  - [Checkmarx KICS](.github/workflows/iac-kicks.yml) [![Checkmarx KICS](https://github.com/AErmie/DevSecOps/actions/workflows/checkmarx-iackics-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/checkmarx-iackics-workflow.yml)
+  - [Bridgecrew Checkov](.github/workflows/bridgecrew-checkov-workflow.yml) [![BridgeCrew Checkov](https://github.com/AErmie/DevSecOps/actions/workflows/bridgecrew-checkov-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/bridgecrew-checkov-workflow.yml)
   - [GitHub Super-Linter](.github/workflows/github-superlinter.yml)
-  - [TFLint](.github/workflows/terraform-tflint-workflow.yml)
-  - [TFSec](.github/workflows/terraform-tfsec-workflow.yml)
+  - [TFLint](.github/workflows/terraform-tflint-workflow.yml) [![TFLint](https://github.com/AErmie/DevSecOps/actions/workflows/terraform-tflint-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/terraform-tflint-workflow.yml)
+  - [TFSec](.github/workflows/terraform-tfsec-workflow.yml) [![TFSec](https://github.com/AErmie/DevSecOps/actions/workflows/terraform-tfsec-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/terraform-tfsec-workflow.yml)
 - SEC
-  - [Anchore](.github/workflows/anchore-workflow.yml)
-  - [AquaSec Trivy](.github/workflows/aquasec-trivy-workflow.yml)
+  - [Anchore](.github/workflows/anchore-workflow.yml) [![Anchore Container Image Scan](https://github.com/AErmie/DevSecOps/actions/workflows/anchore-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/anchore-workflow.yml)
+  - [AquaSec Trivy](.github/workflows/aquasec-trivy-workflow.yml) [![AquaSec Trivy Container Image Scan](https://github.com/AErmie/DevSecOps/actions/workflows/aquasec-trivy-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/aquasec-trivy-workflow.yml)
   - [ShiftLeftScan](.github/workflows/shiftleftscan.yml) [![ShiftLeftSecurity Scan](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml)
-  - [TruffleHog](.github/workflows/truffle-hog-workflow.yml)
+  - [TruffleHog](.github/workflows/truffle-hog-workflow.yml) [![TruffleHog Secrets Scan](https://github.com/AErmie/DevSecOps/actions/workflows/truffle-hog-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/truffle-hog-workflow.yml)
   - [YELP Detect-Secrets](.github/workflows/yelp-secret-scan.yml) [![YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-detectsecret-workflow.yml/badge.svg?branch=main)](https://github.com/AErmie/DevSecOps/actions/workflows/yelp-detectsecret-workflow.yml)
 
 ## To-Do:
@@ -89,17 +70,3 @@ The following YAML-based GitHub Actions (GHA) Workflows have been created and te
   - Docker Bench for Security
   - DockerDive
   - DockerSlim
-
-
-
-## Threat Model Analysis
-The open-source toolkit for agile threat modeling, Threagile, was used to model and analyze potential threats.
-
-### Data-Flow Diagram (DFD)
-The following DFD was generated by Threagile during threat model analysis:
-
-![Data-Flow Diagram (DFD)](/threagile/output/data-flow-diagram.png?raw=true "Data-Flow Diagram (DFD)")
-
-### Threat Model Report
-The following report was generated by Threagile during threat model analysis:
-[Threat Model Report](/threagile/output/report.pdf?raw=true)
