@@ -12,13 +12,14 @@
 name: "CodeQL"
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ "main" ]
-  schedule:
-    - cron: '25 8 * * 0'
+  workflow_dispatch:
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   # The branches below must be a subset of the branches above
+  #   branches: [ "main" ]
+  # schedule:
+  #   - cron: '25 8 * * 0'
 
 jobs:
   analyze:
@@ -52,7 +53,7 @@ jobs:
         # Prefix the list here with "+" to use these queries and those in the config file.
 
         # Details on CodeQL's query packs refer to : https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
-        # queries: security-extended,security-and-quality
+        queries: security-extended,security-and-quality
 
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
