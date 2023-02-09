@@ -15,7 +15,7 @@ jobs:
       - name: Run Checkmarx KICS Scan
         uses: Checkmarx/kics-github-action@v1.4
         with:
-          path: ./terraform/azure
+          path: ./Infrastructure-Source-Code/terraform/azure
           platform_type: terraform
           fail_on: medium,high
           output_formats: sarif
@@ -32,7 +32,7 @@ jobs:
           cat KICSResults/results.json
 
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         if: ${{ success() || failure() }}
         with:
           sarif_file: KICSResults/results.sarif
