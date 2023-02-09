@@ -1,4 +1,4 @@
-name: INFRA - IaC - ARM TTK
+name: INFRA - IaC - ARM Template Toolkit (ARM TTK)
 
 on:
   # Allows you to run this workflow manually from the Actions tab
@@ -13,7 +13,7 @@ jobs:
       id: pathtest
       uses: aliencube/arm-ttk-actions@v0.3
       with:
-        path: ./ARMTTK-TestFiles
+        path: ./Infrastructure-Source-Code/ARMTTK-TestFiles
 
     - name: Test result - path
       shell: bash
