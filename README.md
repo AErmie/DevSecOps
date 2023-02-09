@@ -4,10 +4,18 @@ This repo is used for testing DevSecOps practices and tool sets, and is used for
 
 This repo contains both [Azure Pipeline YAML files](https://github.com/AErmie/DevSecOps/tree/main/azure-pipelines) and [GitHub Actions YAML files](https://github.com/AErmie/DevSecOps/tree/main/.github/workflows), for comparison purposes.
 
-The application code is based on the [Microsoft eShopOnWeb](https://github.com/dotnet-architecture/eShopOnWeb) sample application.
+The application code is based on the [Microsoft eShopOnWeb](https://github.com/dotnet-architecture/eShopOnWeb) sample application. This is self-contained within the `Application-Source-Code` directory.
 
 > **Warning**
 > This repo contains code that is purposefully **vulnerable** and **insecure**. Use at your own risk!
+
+## Directories
+
+There are several directorie that contain additional/other sample code, specific to **infrastructure** and **security** pipelines.
+
+For example, the Infrastructure-Source-Code directory, contains ARM templates, Bicep templates, and Terraform code, that is not specific to the application source code. The Security-Source-Code directory, contains files that include credentails and secrets.
+
+The Threat-Modeling directory contains examples of threat-modeling-as-code tools, which is not related to the application source code.
 
 ## Pipelines
 

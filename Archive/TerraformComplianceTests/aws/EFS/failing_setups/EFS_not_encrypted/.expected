@@ -1,1 +1,0 @@
-Failure: aws_efs_file_system.foo \(aws_efs_file_system\) does not have encrypted property.
