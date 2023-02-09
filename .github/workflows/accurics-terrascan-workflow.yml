@@ -22,7 +22,7 @@ jobs:
         only_warn: false #optional (the action will only warn and not error when violations are found)
         sarif_upload: true
         #non_recursive:
-        iac_dir: terraform/azure/ #optional, default is .
+        iac_dir: ./Infrastructure-Source-Code/terraform/azure/ #optional, default is .
         #policy_path: #optional (policy path directory for custom policies)
         #skip_rules: #optional (one or more rules to skip while scanning (example: "ruleID1,ruleID2")
         #config_path:
