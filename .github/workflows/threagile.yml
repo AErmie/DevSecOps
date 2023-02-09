@@ -1,4 +1,7 @@
+name: "Threagile"
+
 on:
+  workflow_dispatch: # allows to manually trigger the workflow from the Actions tab
   push:
     paths:
       - 'ThreatModeling/threagile.yaml' # useful to filter this job to execute only when the threat model changes
