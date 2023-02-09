@@ -70,7 +70,7 @@ jobs:
 
       - name: Generate SARIF Report
         uses: aquasecurity/trivy-action@master
-        if: ${{ success() || failure() }}
+        if: ${{ always() }}
         with:
           scan-type: 'image'
           image-ref: 'localbuild/apiimage:latest'
@@ -107,6 +107,7 @@ jobs:
 
       - name: Generate SARIF Report
         uses: aquasecurity/trivy-action@master
+        if: ${{ always() }}
         with:
           scan-type: 'config'
           scan-ref: ./Infrastructure-Source-Code/terraform/azure
