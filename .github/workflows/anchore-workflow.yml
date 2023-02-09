@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Build the Web container image
-      run: docker build . --tag localbuild/webimage:latest --file src/Web/Dockerfile
+      run: docker build . --tag localbuild/webimage:latest --file ./Application-Source-Code/src/Web/Dockerfile
     
     - name: Scan Web container image
       uses: anchore/scan-action@v3
@@ -37,7 +37,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Build the API container image
-      run: docker build . --tag localbuild/apiimage:latest --file src/PublicApi/Dockerfile
+      run: docker build . --tag localbuild/apiimage:latest --file ./Application-Source-Code/src/PublicApi/Dockerfile
     
     - name: Scan API container image
       uses: anchore/scan-action@v3
