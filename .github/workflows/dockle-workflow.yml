@@ -31,3 +31,4 @@ jobs:
         if: ${{ success() }} || ${{ failure() }}
         with:
           sarif_file: dockle-report.sarif
+          category: Dockle
