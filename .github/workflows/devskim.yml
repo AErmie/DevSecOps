@@ -3,7 +3,8 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: DevSkim
+name: SEC - DevSkim
+# DevSkim is security linter that highlights common security issues in source code.
 
 on:
   workflow_dispatch:
