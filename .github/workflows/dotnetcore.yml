@@ -17,7 +17,9 @@ jobs:
         include-prerelease: true
 
     - name: Build with dotnet
+      working-directory: ./Application-Source-Code
       run: dotnet build ./eShopOnWeb.sln --configuration Release
     
     - name: Test with dotnet
+      working-directory: ./Application-Source-Code
       run: dotnet test ./eShopOnWeb.sln --configuration Release
