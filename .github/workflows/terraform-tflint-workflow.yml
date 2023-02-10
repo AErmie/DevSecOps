@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v1
       name: Checkout source code
     
-    - uses: terraform-linters/setup-tflint@v1
+    - uses: terraform-linters/setup-tflint@v3
       name: Setup TFLint
       with:
         tflint_version: latest
@@ -24,4 +24,5 @@ jobs:
       run: tflint --init
 
     - name: Run TFLint
+      working-directory: ./Infrastructure-Source-Code/terraform/azure
       run: tflint -f compact
