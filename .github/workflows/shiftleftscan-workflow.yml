@@ -1,4 +1,5 @@
 name: SEC - ShiftLeftSecurity Scan
+# NOTE: Scan is now in maintenance mode. If you've just come across this project, then probably best to look at any alternatives.
 
 on:
   # Allows you to run this workflow manually from the Actions tab
