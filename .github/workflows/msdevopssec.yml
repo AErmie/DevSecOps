@@ -1,10 +1,10 @@
-name: Microsoft Security DevOps
+name: SEC - Microsoft Security DevOps (MSDO)
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -14,22 +14,20 @@ jobs:
     # macos-latest supporting coming soon
     runs-on: windows-latest
 
-  steps:
-  - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v3
 
-  - uses: actions/setup-dotnet@v1
-    with:
-      dotnet-version: |
-        5.0.x
-        6.0.x
-
-    # Run analyzers
-    - name: Run Microsoft Security DevOps Analysis
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+          5.0.x
+          6.0.x
+      
+    - name: Run Microsoft Security DevOps
       uses: microsoft/security-devops-action@preview
       id: msdo
-
-  # Upload alerts to the Security tab
-  - name: Upload alerts to Security tab
-    uses: github/codeql-action/upload-sarif@v1
-    with:
-      sarif_file: ${{ steps.msdo.outputs.sarifFile }}
+    
+    - name: Upload results to Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: ${{ steps.msdo.outputs.sarifFile }}
