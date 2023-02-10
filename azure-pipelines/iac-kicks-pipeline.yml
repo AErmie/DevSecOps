@@ -44,7 +44,7 @@ stages:
       - script: | 
           # mkdir KicsReports
           docker pull checkmarx/kics:latest
-          docker run --volume $(System.DefaultWorkingDirectory):/path checkmarx/kics:latest scan --path "/path" --report-formats "sarif"
+          docker run --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/path checkmarx/kics:latest scan --path "/path" --report-formats "sarif"
         displayName: Run Checkmarx KICKS (Container)
 
       - script: | 

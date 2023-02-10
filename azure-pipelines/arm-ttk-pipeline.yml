@@ -14,7 +14,7 @@ stages:
       - task: RunARMTTKTests@1
         displayName: Run ARM TTK Tests
         inputs:
-          templatelocation: '$(System.DefaultWorkingDirectory)\ARMTTK-TestFiles'
+          templatelocation: '$(System.DefaultWorkingDirectory)\Infrastructure-Source-Code\ARMTTK-TestFiles'
           resultLocation: '$(System.DefaultWorkingDirectory)\Results'
           # includeTests: 'VM Images Should Use Latest Version,Resources Should Have Location'
           # skipTests: 'VM Images Should Use Latest Version,Resources Should Have Location'
@@ -26,5 +26,5 @@ stages:
         displayName: Publish Test Results
         inputs:
           testResultsFormat: 'NUnit'
-          testResultsFiles: '$(System.DefaultWorkingDirectory)\results\*-armttk.xml'
+          testResultsFiles: '$(System.DefaultWorkingDirectory)\Results\*-armttk.xml'
         condition: always()

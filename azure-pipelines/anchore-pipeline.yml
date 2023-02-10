@@ -4,7 +4,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  pathToDockerFile: 'Dockerfile'
+  pathToDockerFile: './Application-Source-Code/src/Web/Dockerfile'
   ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
   ACRLoginServer: 'adinermieacr.azurecr.io'
   ACRRepository: 'eshoponweb'
