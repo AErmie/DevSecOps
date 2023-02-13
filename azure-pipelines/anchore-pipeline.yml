@@ -4,7 +4,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  pathToDockerFile: 'Dockerfile'
+  pathToDockerFile: Dockerfile
   ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
   ACRLoginServer: 'adinermieacr.azurecr.io'
   ACRRepository: 'eshoponweb'
@@ -19,8 +19,8 @@ stages:
       steps:
       - task: Docker@2
         displayName: Build Docker Container Image
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Application-Source-Code/src/Web'
         inputs:
+          buildContext: $(System.DefaultWorkingDirectory)/Application-Source-Code/src/Web/
           containerRegistry: $(ACRConnectionName)
           repository: $(ACRRepository)
           command: build
