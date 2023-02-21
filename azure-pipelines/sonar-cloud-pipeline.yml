@@ -37,7 +37,7 @@ stages:
       displayName: 'Prepare analysis on SonarCloud'
       inputs:
         SonarCloud: 'SonarCloud-DevSecOps'
-        organization: 'adinermie'
+        organization: $(SonarCloud-OrgKey)
         scannerMode: 'MSBuild'
         projectKey: $(SonarCloud-ProjectKey)
         projectName: 'DevSecOps'
