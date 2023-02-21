@@ -30,8 +30,8 @@ stages:
       inputs:
         command: "restore"
         projects: "Application-Source-Code/**/*.csproj"
-        feedsToUse: "config"
-        nugetConfigPath: "**/*NuGet.config"
+        # feedsToUse: "config"
+        # nugetConfigPath: "**/*NuGet.config"
 
     - task: SonarCloudPrepare@1
       displayName: 'Prepare analysis on SonarCloud'
