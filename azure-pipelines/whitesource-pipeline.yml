@@ -15,7 +15,7 @@ stages:
   displayName: Quality Check Stage
   jobs:
   - job: WhiteSourceJob
-    displayName: Run WhiteSource Scan
+    displayName: Run Mend (WhiteSource) Scan
     steps:
     - task: DotNetCoreCLI@2
       displayName: .NET Restore
