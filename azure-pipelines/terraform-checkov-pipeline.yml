@@ -21,7 +21,7 @@ stages:
           docker pull bridgecrew/checkov:latest
 
           docker run --tty \
-            --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform/terraform:/tf \
+            --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/tf \
             --workdir /tf \
             bridgecrew/checkov \
               --directory /tf \
