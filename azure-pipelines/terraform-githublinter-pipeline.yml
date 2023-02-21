@@ -20,9 +20,10 @@ stages:
     - script: |
         docker run \
           -e RUN_LOCAL=true \
-          --volume $(System.DefaultWorkingDirectory)/Application-Source-Code/:/tmp/lint \
+          --volume $(System.DefaultWorkingDirectory):/tmp/lint \
+          --workdir /Application-Source-Code \
           github/super-linter
-      displayName: GH Super-Linter Validation of Application Source Code
+      displayName: GH Super-Linter Validation (APP)
 
     # - script: | 
     #     mkdir GHLinterReports
