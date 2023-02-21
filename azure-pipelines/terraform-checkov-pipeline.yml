@@ -18,15 +18,18 @@ stages:
       # follows: --skip-check CKV_AWS_70,CKV_AWS_52,CKV_AWS_21,CKV_AWS_18,CKV_AWS_19
       - script: |
           mkdir CheckovReport
-          docker pull bridgecrew/checkov
-          docker run \
-            -v $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform/terraform:/tf \
+          docker pull bridgecrew/checkov:latest
+
+          docker run --tty \
+            --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform/terraform:/tf \
+            --workdir /tf
             bridgecrew/checkov \
               --directory /tf \
               --output junitxml > $(System.DefaultWorkingDirectory)/CheckovReport/Checkov-Report.xml
 
-          docker run \
-          -v $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/tf \
+          docker run --tty \
+          --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/tf \
+          --workdir /tf
           bridgecrew/checkov 
             --directory /tf
         displayName: 'Checkov Static Code Analysis'
