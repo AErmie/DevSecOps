@@ -63,6 +63,10 @@ stages:
         displayName: 'Remove Terraform Quality Check Docker Images'
         condition: always()
 
+      # IMPORTANT: The version of TFSec extension (as shown on the Visual Studio Marketplace: https://marketplace.visualstudio.com/items?itemName=AquaSecurityOfficial.tfsec-official), 
+        # is not the correct version to reference/use.
+        # Instead, please check the AquaSec TFSec Releases page: https://github.com/aquasecurity/tfsec/releases/
+        # Also, you CANNOT use "latest" as the version number, as the extension will fail to install.
       - task: tfsec@1
         displayName: TFSecScan (via Extension)
         condition: always()
