@@ -25,10 +25,11 @@ stages:
         # feedsToUse: "config"
         # nugetConfigPath: "nuget.config"
     
-    - task: mend@21
+    - task: WhiteSource@21
       displayName: Run Mend (formerly WhiteSource) scan
       inputs:
         cwd: '$(System.DefaultWorkingDirectory)/Application-Source-Code'
+        projectName: $(WhiteSource-ProjectName)
 
     # - task: CmdLine@2
     #   displayName: "Download WhiteSource Unified Agent"
