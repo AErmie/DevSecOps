@@ -68,7 +68,7 @@ stages:
         condition: always()
         inputs:
           debug: true
-          version: latest
+          version: v1.3.1
           # args: --workspace my-workspace --config-file ./tfsec.yml
           dir: $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform
           publishTestResults: true
