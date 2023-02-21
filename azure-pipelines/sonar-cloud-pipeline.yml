@@ -20,10 +20,10 @@ stages:
     displayName: "Sonar Cloud Job"
     steps:
     - task: UseDotNet@2
-      displayName: "Use .NET Core 2.2"
+      displayName: "Use .NET Core 7.0"
       inputs:
         packageType: "sdk"
-        version: "2.2.x"
+        version: "7.0.x"
 
     - task: DotNetCoreCLI@2
       displayName: Restore
@@ -31,7 +31,7 @@ stages:
         command: "restore"
         projects: "Application-Source-Code/**/*.csproj"
         feedsToUse: "config"
-        nugetConfigPath: "NuGet.config"
+        nugetConfigPath: "**/*NuGet.config"
 
     - task: SonarCloudPrepare@1
       displayName: 'Prepare analysis on SonarCloud'
