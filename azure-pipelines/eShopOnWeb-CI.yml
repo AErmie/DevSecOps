@@ -178,10 +178,11 @@ stages:
         publishLocation: 'pipeline'
 
     - task: XplatGenerateReleaseNotes@3
+      displayName: "Generate Release Notes"
       inputs:
         outputfile: '$(Build.ArtifactStagingDirectory)/ReleaseNotes.md'
         templateLocation: 'File'
-        templatefile: 'build-handlebars-template.md'
+        templatefile: 'azure-pipelines/build-handlebars-template.md'
         checkStage: true
         overrideStageName: 'Build'
         stopOnRedeploy: false
