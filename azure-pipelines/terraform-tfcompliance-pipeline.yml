@@ -1,13 +1,4 @@
 trigger: none
-  # branches:
-  #   include:
-  #     - master
-  #     - main
-  #   exclude:
-  #     - feature/*
-  # tags:
-  #   exclude:
-  #     - '*'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -59,9 +50,19 @@ stages:
       - script: | 
           mkdir TerraformComplianceReport
           docker pull eerkunt/terraform-compliance
-          docker run --volume $(System.DefaultWorkingDirectory)/TerraformComplianceTests/azure/Storage/failing_setups/not_enable_https_traffic_only/:/target --name TFComply --interactive eerkunt/terraform-compliance --junit-xml TFCompliance-Report.xml --features git:https://github.com/terraform-compliance/user-friendly-features.git --planfile plan.out.json
+
+          docker run \
+            --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/TerraformComplianceTests/azure/Storage/failing_setups/not_enable_https_traffic_only/:/target \
+            --name TFComply \
+            --interactive eerkunt/terraform-compliance \
+              --junit-xml TFCompliance-Report.xml 
+              --features git:https://github.com/terraform-compliance/user-friendly-features.git \
+              --planfile plan.out.json
+
           TFCompSuccess=$?
+
           docker cp TFComply:/target/TFCompliance-Report.xml $(System.DefaultWorkingDirectory)/TerraformComplianceReport
+          
           exit $TFCompSuccess
         displayName: 'Terraform Compliance Check'
         name: TerraformCompliance
