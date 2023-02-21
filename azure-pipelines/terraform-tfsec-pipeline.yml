@@ -22,7 +22,6 @@ stages:
 
           docker run \
             --rm \
-            -it \
             --volume "$(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/src" \
             aquasec/tfsec \
               /src \
@@ -30,7 +29,6 @@ stages:
 
           docker run \
             --rm \
-            -it \
             --volume "$(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/src" \
             aquasec/tfsec \
               /src
@@ -67,6 +65,7 @@ stages:
 
       - task: tfsec@1
         displayName: TFSecScan (via Extension)
+        condition: always()
         inputs:
           debug: true
           version: latest
