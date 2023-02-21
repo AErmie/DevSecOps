@@ -17,12 +17,10 @@ parameters:
   type: boolean
   default: true
 
-
 variables:
   - group: SecureVariables
   - name: buildConfiguration 
     value: "Release"
-
 
 stages:
 - stage: QualityCheck
@@ -40,30 +38,30 @@ stages:
       displayName: "Unit Test Jobs"
       steps:
       - task: UseDotNet@2
-        displayName: "Use .NET Core 2.2"
+        displayName: "Use .NET Core 7.0"
         inputs:
           packageType: "sdk"
-          version: "2.2.x"
+          version: "7.0.x"
       
       - task: DotNetCoreCLI@2
         displayName: Build
         inputs:
-          projects: "**/*.csproj"
+          projects: "Application-Source-Code/**/*.csproj"
           arguments: "--configuration $(BuildConfiguration)"
       
       - task: DotNetCoreCLI@2
         displayName: Restore
         inputs:
           command: "restore"
-          projects: "**/*.csproj"
-          feedsToUse: "config"
-          nugetConfigPath: "nuget.config"
+          projects: "Application-Source-Code/**/*.csproj"
+          # feedsToUse: "config"
+          # nugetConfigPath: "nuget.config"
       
       - task: DotNetCoreCLI@2
         displayName: "Unit Tests"
         inputs:
           command: test
-          projects: "**/UnitTests.csproj"
+          projects: "Application-Source-Code/**/UnitTests.csproj"
           arguments: "--configuration $(BuildConfiguration)"
 
   - ${{ if eq(parameters.IntegrationTests, true) }}:
@@ -71,30 +69,30 @@ stages:
       displayName: "Integration Test Jobs"
       steps:
       - task: UseDotNet@2
-        displayName: "Use .NET Core 2.2"
+        displayName: "Use .NET Core 7.0"
         inputs:
           packageType: "sdk"
-          version: "2.2.x"
+          version: "7.0.x"
       
       - task: DotNetCoreCLI@2
         displayName: Restore
         inputs:
           command: "restore"
-          projects: "**/*.csproj"
-          feedsToUse: "config"
-          nugetConfigPath: "nuget.config"
+          projects: "Application-Source-Code/**/*.csproj"
+          # feedsToUse: "config"
+          # nugetConfigPath: "nuget.config"
       
       - task: DotNetCoreCLI@2
         displayName: Build
         inputs:
-          projects: "**/*.csproj"
+          projects: "Application-Source-Code/**/*.csproj"
           arguments: "--configuration $(BuildConfiguration)"
 
       - task: DotNetCoreCLI@2
         displayName: "Integration Tests"
         inputs:
           command: test
-          projects: "**/IntegrationTests.csproj"
+          projects: "Application-Source-Code/**/IntegrationTests.csproj"
           arguments: "--configuration $(BuildConfiguration)"
 
   - ${{ if eq(parameters.FunctionalTests, true) }}:
@@ -102,30 +100,30 @@ stages:
       displayName: "Functional Test Jobs"
       steps:
       - task: UseDotNet@2
-        displayName: "Use .NET Core 2.2"
+        displayName: "Use .NET Core 7.0"
         inputs:
           packageType: "sdk"
-          version: "2.2.x"
+          version: "7.0.x"
       
       - task: DotNetCoreCLI@2
         displayName: Restore
         inputs:
           command: "restore"
-          projects: "**/*.csproj"
-          feedsToUse: "config"
-          nugetConfigPath: "nuget.config"
+          projects: "Application-Source-Code/**/*.csproj"
+          # feedsToUse: "config"
+          # nugetConfigPath: "nuget.config"
         
       - task: DotNetCoreCLI@2
         displayName: Build
         inputs:
-          projects: "**/*.csproj"
+          projects: "Application-Source-Code/**/*.csproj"
           arguments: "--configuration $(BuildConfiguration)"
         
       - task: DotNetCoreCLI@2
         displayName: "Functional Tests"
         inputs:
           command: test
-          projects: "**/FunctionalTests.csproj"
+          projects: "Application-Source-Code/**/FunctionalTests.csproj"
           arguments: "--configuration $(BuildConfiguration)"
 
 
@@ -138,23 +136,23 @@ stages:
     displayName: "Build and Package Job"
     steps:
     - task: UseDotNet@2
-      displayName: "Use .NET Core 2.2"
+      displayName: "Use .NET Core 7.0"
       inputs:
         packageType: "sdk"
-        version: "2.2.x"
+        version: "7.0.x"
     
     - task: DotNetCoreCLI@2
       displayName: Restore
       inputs:
         command: "restore"
-        projects: "**/*.csproj"
+        projects: "Application-Source-Code/**/*.csproj"
         feedsToUse: "config"
         nugetConfigPath: "nuget.config"
       
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
-        projects: "**/*.csproj"
+        projects: "Application-Source-Code/**/*.csproj"
         arguments: "--configuration $(BuildConfiguration)"
 
     - task: DotNetCoreCLI@2
