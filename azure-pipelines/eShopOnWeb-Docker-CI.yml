@@ -4,7 +4,8 @@ pool:
   vmImage: "ubuntu-latest"
 
 variables:
-  pathToDockerFile: 'Dockerfile'
+  pathToDockerFile: $(System.DefaultWorkingDirectory)/Application-Source-Code/src/Web
+  dockerfileName: 'Dockerfile'
   ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
   ACRRepository: 'eshoponweb'
 
@@ -21,7 +22,7 @@ stages:
         containerRegistry: $(ACRConnectionName)
         repository: $(ACRRepository)
         command: build
-        Dockerfile: $(pathToDockerFile)
+        Dockerfile: $(pathToDockerFile)/$(dockerfileName)
         tags: |
           $(Build.BuildId)
           latest
