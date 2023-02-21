@@ -17,12 +17,27 @@ stages:
       # Documentation: https://github.com/tfsec/tfsec
       - bash: |
           mkdir TFSecReport
-          docker pull liamg/tfsec:latest
-          docker run --rm -v $(System.DefaultWorkingDirectory)/terraform/azure:/src liamg/tfsec ./src --format JUnit > $(System.DefaultWorkingDirectory)/TFSecReport/TFSec-Report.xml
-          docker run --rm -v $(System.DefaultWorkingDirectory)/terraform:/src liamg/tfsec ./src
+
+          docker pull aquasec/tfsec:latest
+
+          docker run \
+            --rm \
+            -it \
+            --volume "$(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/src" \
+            aquasec/tfsec \
+              /src \
+              --format JUnit > $(System.DefaultWorkingDirectory)/TFSecReport/TFSec-Report.xml
+
+          docker run \
+            --rm \
+            -it \
+            --volume "$(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/src" \
+            aquasec/tfsec \
+              /src
         displayName: TFSec Static Code Analysis
-        name: TFSecScan
+        name: TFSecScan (via Docker Image)
         condition: always()
+
       # Publish the TFSec report as an artifact to Azure Pipelines
       - task: PublishBuildArtifacts@1
         displayName: 'Publish Artifact: TFSec Report'
@@ -39,13 +54,21 @@ stages:
           testResultsFormat: 'JUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
           testResultsFiles: '**/*TFSec-Report.xml'
           searchFolder: '$(System.DefaultWorkingDirectory)/TFSecReport'
-          testRunTitle: TFSec Scan
+          testRunTitle: TFSecScan(via Docker Image)
           mergeTestResults: false
           failTaskOnFailedTests: false
           publishRunAttachments: true
 
       # Clean up any of the containers / images that were used for quality checks
       - bash: |
-          docker rmi "liamg/tfsec:latest" -f | true
+          docker rmi "aquasec/tfsec:latest" -f | true
         displayName: 'Remove Terraform Quality Check Docker Images'
         condition: always()
+
+      - task: tfsec@1
+        inputs:
+          debug: true
+          version: latest
+          # args: --workspace my-workspace --config-file ./tfsec.yml
+          dir: $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform
+          publishTestResults: true
