@@ -29,7 +29,7 @@ stages:
       displayName: Restore
       inputs:
         command: "restore"
-        projects: "**/*.csproj"
+        projects: "Application-Source-Code/**/*.csproj"
         feedsToUse: "config"
         nugetConfigPath: "NuGet.config"
 
@@ -40,7 +40,7 @@ stages:
         organization: 'adinermie'
         scannerMode: 'MSBuild'
         projectKey: $(SonarCloud-ProjectKey)
-        projectName: 'DevSecOps Demo'
+        projectName: 'DevSecOps'
         extraProperties: |
           sonar.exclusions=**/obj/**,**/*.dll
           sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
@@ -49,7 +49,7 @@ stages:
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
-        projects: "**/*.csproj"
+        projects: "Application-Source-Code/**/*.csproj"
         arguments: "--configuration $(BuildConfiguration)"
 
     - task: SonarCloudAnalyze@1
@@ -64,4 +64,4 @@ stages:
       displayName: SonarCloud Break Build
       inputs:
         SonarCloud: 'SonarCloud-DevSecOps'
-        organization: 'adinermie'
+        organization: $(SonarCloud-OrgKey)
