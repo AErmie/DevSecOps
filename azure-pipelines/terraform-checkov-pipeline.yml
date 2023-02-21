@@ -22,15 +22,15 @@ stages:
 
           docker run --tty \
             --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform/terraform:/tf \
-            --workdir /tf
+            --workdir /tf \
             bridgecrew/checkov \
               --directory /tf \
               --output junitxml > $(System.DefaultWorkingDirectory)/CheckovReport/Checkov-Report.xml
 
           docker run --tty \
           --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/tf \
-          --workdir /tf
-          bridgecrew/checkov 
+          --workdir /tf \
+          bridgecrew/checkov \
             --directory /tf
         displayName: 'Checkov Static Code Analysis'
         name: CheckovScan
