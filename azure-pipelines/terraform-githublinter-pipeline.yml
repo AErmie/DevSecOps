@@ -24,6 +24,9 @@ stages:
           --workdir /Application-Source-Code \
           github/super-linter
       displayName: GH Super-Linter Validation (APP)
+      ENV:
+        VALIDATE_ALL_CODEBASE: true
+        DEFAULT_WORKSPACE: /tmp/lint/Application-Source-Code
 
     # - script: | 
     #     mkdir GHLinterReports
