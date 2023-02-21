@@ -55,7 +55,7 @@ stages:
             --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/TerraformComplianceTests/azure/Storage/failing_setups/not_enable_https_traffic_only/:/target \
             --name TFComply \
             --interactive eerkunt/terraform-compliance \
-              --junit-xml TFCompliance-Report.xml 
+              --junit-xml TFCompliance-Report.xml \
               --features git:https://github.com/terraform-compliance/user-friendly-features.git \
               --planfile plan.out.json
 
