@@ -22,7 +22,7 @@ stages:
         action: 'Build services'
         containerregistrytype: 'Container Registry'
         dockerRegistryEndpoint: 'AzureContainerRegistry-DevSecOps'
-        dockerComposeFile: '$(System.DefaultWorkingDirectory)/Application-Source-Code/src/docker-compose.yml'
+        dockerComposeFile: '$(System.DefaultWorkingDirectory)/Application-Source-Code/docker-compose.yml'
         # additionalDockerComposeFiles: 'NA'
         # dockerComposeFileArgs: 'NA'        
         # additionalImageTags: 'TAG'
