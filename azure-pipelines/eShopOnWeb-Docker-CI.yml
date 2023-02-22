@@ -16,6 +16,10 @@ stages:
   - job: PublishContainerImage
     displayName: "Publish Docker Image"
     steps:
+    - script: |
+        docker images
+      displayName: List Docker Images (PRE)
+
     - task: DockerCompose@0
       displayName: Build services
       inputs:
@@ -27,4 +31,4 @@ stages:
 
     - script: |
         docker images
-      displayName: List Docker Images
+      displayName: List Docker Images (POST)
