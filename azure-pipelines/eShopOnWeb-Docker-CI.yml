@@ -3,12 +3,6 @@ trigger: none
 pool:
   vmImage: "ubuntu-latest"
 
-variables:
-  pathToDockerFile: $(System.DefaultWorkingDirectory)/Application-Source-Code/src/Web
-  dockerfileName: 'Dockerfile'
-  ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
-  ACRRepository: 'eshoponweb'
-
 stages:
 - stage: Publish
   displayName: Publish Container
