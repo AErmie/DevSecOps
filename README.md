@@ -34,18 +34,22 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 
 ### Application Pipelines
 
-- [Unit, Integration, Functional Tests](eShopOnWeb-CI.yml)
-- [Build and Publish Docker Container](eShopOnWeb-Docker-CI.yml)
+- [Unit, Integration, Functional Tests](./azure-pipelines/eShopOnWeb-CI.yml)
+- [Build Docker Containers](./azure-pipelines/eShopOnWeb-Docker-CI.yml) (using Docker Compose)
 - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](azure-pipelines/arm-ttk-pipeline.yml)
 - [Azure Bicep](azure-pipelines/azure-bicep-pipeline.yml) (INCOMPLETE)
 - [SonarCloud](azure-pipelines/sonar-cloud-pipeline.yml) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=security_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=bugs)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=code_smells)](https://sonarcloud.io/dashboard?id=randomprojectkey)
 - [WhiteSource](azure-pipelines/whitesource-pipeline.yml)
+  - Note: This pipeline is no longer working since WhiteSource has been acquired by Mend.
 
 ### Data Pipelines
 
-- PENDING EXAMPLES/SAMPLE CODE
+- PENDING EXAMPLES / SAMPLE CODE
+  - If you would like to contribute, and have some example data pipelines (ie. data quality tests, data migrations, ETLs, etc.), please submit a [Feature Request Issue](https://github.com/AErmie/DevSecOps/issues/new/choose) with the details.
 
 ### Infrastructure Pipelines
+
+> Note: The majority of these are based on Terraform code
 
 - [Accurics TerraScan](azure-pipelines/terraform-terrascan-pipeline.yml)
 - [GitHub Super-Linter](azure-pipelines/terraform-githublinter-pipeline.yml)
