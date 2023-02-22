@@ -17,22 +17,37 @@ stages:
     displayName: "Publish Docker Image"
     steps:
     - task: DockerCompose@0
-      displayName: Container registry login
-      inputs:
-        containerregistrytype: Container Registry
-        dockerRegistryEndpoint: AzureContainerRegistry-DevSecOps
-
-
-    - task: DockerCompose@0
       displayName: Build services
       inputs:
-        action: Build services
-        # azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-        azureContainerRegistry: $(ACRConnectionName)
+        action: 'Build services'
+        containerregistrytype: 'Container Registry'
+        dockerRegistryEndpoint: 'AzureContainerRegistry-DevSecOps'
         dockerComposeFile: '$(System.DefaultWorkingDirectory)/Application-Source-Code/src/docker-compose.yml'
-        projectName: $(Build.Repository.Name)
-        qualifyImageNames: true
-        additionalImageTags: $(Build.BuildId)
+        # additionalDockerComposeFiles: 'NA'
+        # dockerComposeFileArgs: 'NA'        
+        # additionalImageTags: 'TAG'
+        includeLatestTag: true
+        # arguments: 'ARG'
+
+
+
+    # - task: DockerCompose@0
+    #   displayName: Container registry login
+    #   inputs:
+    #     containerregistrytype: Container Registry
+    #     dockerRegistryEndpoint: AzureContainerRegistry-DevSecOps
+
+
+    # - task: DockerCompose@0
+    #   displayName: Build services
+    #   inputs:
+    #     action: Build services
+    #     # azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    #     azureContainerRegistry: $(ACRConnectionName)
+    #     dockerComposeFile: '$(System.DefaultWorkingDirectory)/Application-Source-Code/src/docker-compose.yml'
+    #     projectName: $(Build.Repository.Name)
+    #     qualifyImageNames: true
+    #     additionalImageTags: $(Build.BuildId)
         # dockerComposeFileArgs: |
         #   firstArg=$(firstArg)
         #   secondArg=$(secondArg)
