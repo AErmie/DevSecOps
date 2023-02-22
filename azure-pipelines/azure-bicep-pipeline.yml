@@ -1,33 +1,53 @@
-name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
- 
 trigger: none
- 
-# Don't run against PRs
-pr: none
- 
-stages :
-  - stage: deployBicep
-    jobs:
-      - job: "BicepConfigure"
-        steps:
 
-          - task: Bash@3
-            displayName: 'Install Bicep'
-            inputs:
-              targetType: inline
-              script: |
-                curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
-                chmod +x ./bicep
-                ./bicep build $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/AzureBicep-Examples/000/01-hello-world/main.bicep
- 
-          - task: AzureCLI@2
-            displayName: 'Deploy Bicep Configuration'
-            inputs:
-              azureSubscription: 'tamopstf'
-              scriptType: bash
-              scriptLocation: inlineScript
-              addSpnToEnvironment: true
-              inlineScript: |
-                #!/bin/bash
-                az group create -l uksouth -n bicep-rg 
-                az deployment group create -f $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/AzureBicep-Examples/000/01-hello-world/main.json -g bicep-rg
+name: Deploy Bicep files
+
+variables:
+  vmImageName: 'ubuntu-latest'
+  azureServiceConnection: 'Azure Subscription (VSENT)'
+  resourceGroupName: 'DevSecOpsDemo'
+  location: 'Canada Central'
+  templateFile: '$(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/AzureBicep-Examples/000/01-hello-world/main.bicep'
+
+pool:
+  vmImage: $(vmImageName)
+
+stages :
+- stage: deployBicep
+  jobs:
+  - job: "BicepConfigure"
+    steps:
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: '$(azureServiceConnection)'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: '$(resourceGroupName)'
+        location: '$(location)'
+        templateLocation: 'Linked artifact'
+        csmFile: '$(templateFile)'
+        # overrideParameters: '-storageAccountType Standard_LRS'
+        deploymentMode: 'Incremental'
+        deploymentName: 'DeployPipelineTemplate'
+
+
+    # - task: Bash@3
+    #   displayName: 'Install Bicep'
+    #   inputs:
+    #     targetType: inline
+    #     script: |
+    #       curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+    #       chmod +x ./bicep
+    #       ./bicep build $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/AzureBicep-Examples/000/01-hello-world/main.bicep
+
+    # - task: AzureCLI@2
+    #   displayName: 'Deploy Bicep Configuration'
+    #   inputs:
+    #     azureSubscription: 'tamopstf'
+    #     scriptType: bash
+    #     scriptLocation: inlineScript
+    #     addSpnToEnvironment: true
+    #     inlineScript: |
+    #       #!/bin/bash
+    #       az group create -l uksouth -n bicep-rg 
+    #       az deployment group create -f $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/AzureBicep-Examples/000/01-hello-world/main.json -g bicep-rg
