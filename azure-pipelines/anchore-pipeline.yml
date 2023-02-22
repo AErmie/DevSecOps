@@ -21,7 +21,7 @@ stages:
     - task: Anchore@0
       displayName: Run Anchore Container Image Scan
       inputs:
-        image: $(dockerRegistryEndpoint)/$(WebContainerImageName):$(Build.BuildId)
+        image: $(WebContainerImageName):latest
         # customPolicyPath: '.anchore/policy.json'
         dockerfile: $(WebContainerDockerfile)
         includeAppPackages: true
@@ -29,21 +29,21 @@ stages:
         failBuild: true
         debug: true
 
-    - script: |
-        echo $(policyStatus)
+    # - script: |
+    #     echo $(policyStatus)
 
-        echo $(billOfMaterials)
-        cat $(billOfMaterials)
+    #     echo $(billOfMaterials)
+    #     cat $(billOfMaterials)
 
-        echo $(vulnerabilities)
-        cat $(vulnerabilities)
-      displayName: Output Scan Results
-      condition: succeededOrFailed()
+    #     echo $(vulnerabilities)
+    #     cat $(vulnerabilities)
+    #   displayName: Output Scan Results
+    #   condition: succeededOrFailed()
 
-    # Publish the Anchore report as an artifact to Azure Pipelines
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: Anchore Report'
-      condition: succeededOrFailed()
-      inputs:
-        PathtoPublish: '$(System.DefaultWorkingDirectory)/anchore-reports/'
-        ArtifactName: AnchoreReport
+    # # Publish the Anchore report as an artifact to Azure Pipelines
+    # - task: PublishBuildArtifacts@1
+    #   displayName: 'Publish Artifact: Anchore Report'
+    #   condition: succeededOrFailed()
+    #   inputs:
+    #     PathtoPublish: '$(System.DefaultWorkingDirectory)/anchore-reports/'
+    #     ArtifactName: AnchoreReport
