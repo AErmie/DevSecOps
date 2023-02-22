@@ -23,58 +23,8 @@ stages:
         containerregistrytype: 'Container Registry'
         dockerRegistryEndpoint: 'AzureContainerRegistry-DevSecOps'
         dockerComposeFile: '$(System.DefaultWorkingDirectory)/Application-Source-Code/docker-compose.yml'
-        # additionalDockerComposeFiles: 'NA'
-        # dockerComposeFileArgs: 'NA'        
-        # additionalImageTags: 'TAG'
         includeLatestTag: true
-        # arguments: 'ARG'
 
-
-
-    # - task: DockerCompose@0
-    #   displayName: Container registry login
-    #   inputs:
-    #     containerregistrytype: Container Registry
-    #     dockerRegistryEndpoint: AzureContainerRegistry-DevSecOps
-
-
-    # - task: DockerCompose@0
-    #   displayName: Build services
-    #   inputs:
-    #     action: Build services
-    #     # azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-    #     azureContainerRegistry: $(ACRConnectionName)
-    #     dockerComposeFile: '$(System.DefaultWorkingDirectory)/Application-Source-Code/src/docker-compose.yml'
-    #     projectName: $(Build.Repository.Name)
-    #     qualifyImageNames: true
-    #     additionalImageTags: $(Build.BuildId)
-        # dockerComposeFileArgs: |
-        #   firstArg=$(firstArg)
-        #   secondArg=$(secondArg)
-
-    # - task: Docker@2
-    #   displayName: Build Container
-    #   inputs:
-    #     containerRegistry: $(ACRConnectionName)
-    #     repository: $(ACRRepository)
-    #     command: build
-    #     Dockerfile: $(pathToDockerFile)/$(dockerfileName)
-    #     tags: |
-    #       $(Build.BuildId)
-    #       latest
-
-    # - task: Docker@2
-    #   displayName: Login to ACR
-    #   inputs:
-    #     containerRegistry: $(ACRConnectionName)
-    #     command: login
-
-    # - task: Docker@2
-    #   displayName: Push to ACR
-    #   inputs:
-    #     containerRegistry: $(ACRConnectionName)
-    #     repository: $(ACRRepository)
-    #     command: 'push'
-    #     tags: |
-    #       $(Build.BuildId)
-    #       latest
+    - script: |
+        docker images
+      displayName: List Docker Images
