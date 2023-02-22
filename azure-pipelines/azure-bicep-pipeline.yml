@@ -29,7 +29,7 @@ stages :
         location: '$(location)'
         templateLocation: 'Linked artifact'
         csmFile: '$(templateFile)'
-        overrideParameters: '--parameters yourName=Adin'  #'-storageAccountType Standard_LRS'
+        overrideParameters: 'yourName=Adin'  #'-storageAccountType Standard_LRS'
         deploymentMode: 'Incremental'
         deploymentName: 'DeployPipelineTemplate'
 
