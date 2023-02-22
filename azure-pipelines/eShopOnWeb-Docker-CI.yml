@@ -16,29 +16,68 @@ stages:
   - job: PublishContainerImage
     displayName: "Publish Docker Image"
     steps:
-    - task: Docker@2
-      displayName: Build Container
+    # Docker Compose v0
+    # Build, push or run multi-container Docker applications. Task can be used with Docker or Azure Container registry.
+    - task: DockerCompose@0
       inputs:
-        containerRegistry: $(ACRConnectionName)
-        repository: $(ACRRepository)
-        command: build
-        Dockerfile: $(pathToDockerFile)/$(dockerfileName)
-        tags: |
-          $(Build.BuildId)
-          latest
+        containerregistrytype: 'Azure Container Registry' # 'Azure Container Registry' | 'Container Registry'. Required. Container Registry Type. Default: Azure Container Registry.
+        #dockerRegistryEndpoint: # string. Optional. Use when containerregistrytype = Container Registry. Docker Registry Service Connection. 
+        azureSubscription: # string. Alias: azureSubscriptionEndpoint. Optional. Use when containerregistrytype = Azure Container Registry. Azure subscription. 
+        azureContainerRegistry: $(ACRConnectionName) # string. Optional. Use when containerregistrytype = Azure Container Registry. Azure Container Registry. 
+        dockerComposeFile: '$(System.DefaultWorkingDirectory)/Application-Source-Code/**/docker-compose.yml' # string. Required. Docker Compose File. Default: **/docker-compose.yml.
+        #additionalDockerComposeFiles: # string. Additional Docker Compose Files. 
+        #dockerComposeFileArgs: # string. Environment Variables. 
+        projectName: '$(Build.Repository.Name)' # string. Project Name. Default: $(Build.Repository.Name).
+        #qualifyImageNames: true # boolean. Qualify Image Names. Default: true.
+        action: 'Run a Docker Compose command' # 'Build services' | 'Push services' | 'Run services' | 'Run a specific service' | 'Lock services' | 'Write service image digests' | 'Combine configuration' | 'Run a Docker Compose command'. Required. Action. Default: Run a Docker Compose command.
+        #additionalImageTags: # string. Optional. Use when action = Build services || action = Push services. Additional Image Tags. 
+        #includeSourceTags: false # boolean. Optional. Use when action = Build services || action = Push services. Include Source Tags. Default: false.
+        #includeLatestTag: false # boolean. Optional. Use when action = Build services || action = Push services. Include Latest Tag. Default: false.
+        #buildImages: true # boolean. Optional. Use when action = Run services. Build Images. Default: true.
+        #serviceName: # string. Required when action = Run a specific service. Service Name. 
+        #containerName: # string. Optional. Use when action = Run a specific service. Container Name. 
+        #ports: # string. Optional. Use when action = Run a specific service. Ports. 
+        #workingDirectory: # string. Alias: workDir. Optional. Use when action = Run a specific service. Working Directory. 
+        #entrypoint: # string. Optional. Use when action = Run a specific service. Entry Point Override. 
+        #containerCommand: # string. Optional. Use when action = Run a specific service. Command. 
+        #detached: true # boolean. Optional. Use when action = Run services || action = Run a specific service. Run in Background. Default: true.
+        #abortOnContainerExit: true # boolean. Optional. Use when action = Run services && detached == false. Abort on Container Exit. Default: true.
+        #imageDigestComposeFile: '$(Build.StagingDirectory)/docker-compose.images.yml' # string. Required when action = Write service image digests. Image Digest Compose File. Default: $(Build.StagingDirectory)/docker-compose.images.yml.
+        #removeBuildOptions: false # boolean. Optional. Use when action = Lock services || action = Combine configuration. Remove Build Options. Default: false.
+        #baseResolveDirectory: # string. Optional. Use when action = Lock services || action = Combine configuration. Base Resolve Directory. 
+        #outputDockerComposeFile: '$(Build.StagingDirectory)/docker-compose.yml' # string. Required when action = Lock services || action = Combine configuration. Output Docker Compose File. Default: $(Build.StagingDirectory)/docker-compose.yml.
+        #dockerComposeCommand: # string. Required when action = Run a Docker Compose command. Command. 
+        #arguments: # string. Optional. Use when action != Lock services && action != Combine configuration && action != Write service image digests. Arguments. 
+      # Advanced Options
+        #dockerHostEndpoint: # string. Docker Host Service Connection. 
+        #nopIfNoDockerComposeFile: false # boolean. No-op if no Docker Compose File. Default: false.
+        #requireAdditionalDockerComposeFiles: false # boolean. Require Additional Docker Compose Files. Default: false.
+        #currentWorkingDirectory: '$(System.DefaultWorkingDirectory)' # string. Alias: cwd. Working Directory. Default: $(System.DefaultWorkingDirectory).
+        #dockerComposePath: # string. Docker Compose executable Path.
 
-    - task: Docker@2
-      displayName: Login to ACR
-      inputs:
-        containerRegistry: $(ACRConnectionName)
-        command: login
+    # - task: Docker@2
+    #   displayName: Build Container
+    #   inputs:
+    #     containerRegistry: $(ACRConnectionName)
+    #     repository: $(ACRRepository)
+    #     command: build
+    #     Dockerfile: $(pathToDockerFile)/$(dockerfileName)
+    #     tags: |
+    #       $(Build.BuildId)
+    #       latest
 
-    - task: Docker@2
-      displayName: Push to ACR
-      inputs:
-        containerRegistry: $(ACRConnectionName)
-        repository: $(ACRRepository)
-        command: 'push'
-        tags: |
-          $(Build.BuildId)
-          latest
+    # - task: Docker@2
+    #   displayName: Login to ACR
+    #   inputs:
+    #     containerRegistry: $(ACRConnectionName)
+    #     command: login
+
+    # - task: Docker@2
+    #   displayName: Push to ACR
+    #   inputs:
+    #     containerRegistry: $(ACRConnectionName)
+    #     repository: $(ACRRepository)
+    #     command: 'push'
+    #     tags: |
+    #       $(Build.BuildId)
+    #       latest

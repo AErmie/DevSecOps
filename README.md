@@ -11,11 +11,11 @@ The application code is based on the [Microsoft eShopOnWeb](https://github.com/d
 
 ## Directories
 
-There are several directorie that contain additional/other sample code, specific to **infrastructure** and **security** pipelines.
+There are several directories that contain additional/other sample code, specific to **infrastructure** and **security** pipelines.
 
-For example, the Infrastructure-Source-Code directory, contains ARM templates, Bicep templates, and Terraform code, that is not specific to the application source code. The Security-Source-Code directory, contains files that include credentails and secrets.
+For example, the `Infrastructure-Source-Code` directory, contains ARM templates, Bicep templates, and Terraform code, that is not specific to the application source code itself. The `Security-Source-Code` directory, contains files that include credentials and secrets, again, not specific to the application source code itself.
 
-The Threat-Modeling directory contains examples of threat-modeling-as-code tools, which is not related to the application source code.
+The `Threat-Modeling` directory contains examples of threat-modeling-as-code tools, which is not related to the application source code.
 
 ## Pipelines
 
