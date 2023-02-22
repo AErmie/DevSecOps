@@ -1,6 +1,6 @@
 trigger: none
 
-name: Deploy Bicep files
+name: Deploy Bicep Files
 
 variables:
   vmImageName: 'ubuntu-latest'
@@ -14,10 +14,13 @@ pool:
 
 stages :
 - stage: deployBicep
+  displayName: Deploy Bicep Files
   jobs:
-  - job: "BicepConfigure"
+  - job: BicepConfigure
+    displayName: "Bicep Deployment (Resource Group Level)"
     steps:
     - task: AzureResourceManagerTemplateDeployment@3
+      displayName: 'Deploy Bicep Template'
       inputs:
         deploymentScope: 'Resource Group'
         azureResourceManagerConnection: '$(azureServiceConnection)'
@@ -26,7 +29,7 @@ stages :
         location: '$(location)'
         templateLocation: 'Linked artifact'
         csmFile: '$(templateFile)'
-        # overrideParameters: '-storageAccountType Standard_LRS'
+        overrideParameters: '--parameters yourName=Adin'  #'-storageAccountType Standard_LRS'
         deploymentMode: 'Incremental'
         deploymentName: 'DeployPipelineTemplate'
 
