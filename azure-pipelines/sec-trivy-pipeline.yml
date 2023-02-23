@@ -23,10 +23,11 @@ stages:
       inputs:
         version: 'latest'
         debug: true
-        path: $(System.DefaultWorkingDirectory)/Application-Source-Code/src
+        path: $(System.DefaultWorkingDirectory)/Application-Source-Code
 
     - task: securedevelopmentteam.vss-secure-development-tools.build-task-trivy.Trivy@1
       displayName: Run AquaSec Trivy Container Image Scan
+      condition: succeededOrFailed()
       inputs:
         version: 'latest'
         debug: true
