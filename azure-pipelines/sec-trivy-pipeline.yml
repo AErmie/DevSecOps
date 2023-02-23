@@ -53,12 +53,18 @@ stages:
         docker run --rm \
           --volume /var/run/docker.sock:/var/run/docker.sock \
           aquasec/trivy:latest image \
+            --format table \
+            docker.io/library/node:19
+
+        docker run --rm \
+          --volume /var/run/docker.sock:/var/run/docker.sock \
+          aquasec/trivy:latest image \
             --format template \
             --template "@contrib/junit.tpl" \
             --output junit-report.xml \
             docker.io/library/node:19
         # --volume $HOME/Library/Caches:/root/.cache/ \
-        
+
         # docker cp $HOME/Library/Caches/junit-report.xml $(System.DefaultWorkingDirectory)/
         # echo "Trivy DIR Content"
         # cd $HOME/Library/Caches/trivy
