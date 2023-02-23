@@ -30,26 +30,36 @@ stages:
       condition: succeededOrFailed()
       inputs:
         version: 'latest'
-        debug: true
-        image: $(WebContainerImageName):latest
+        debug: false
+        image: $(dockerRegistryEndpoint)/$(WebContainerImageName):latest
       
       # - bash: | 
       #     docker run -d -p 5000:8080 $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
       #   displayName: 'Run App in Docker Container'
       
-      # - script: | 
-      #     docker pull aquasec/trivy:latest
-      #     docker run --rm --volume /var/run/docker.sock:/var/run/docker.sock \
-      #       --volume $HOME/Library/Caches:/root/.cache/ --name Trivy aquasec/trivy:latest --format template --template "@contrib/junit.tpl" --output junit-report.xml \
-      #        $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
-      #     docker cp $HOME/Library/Caches/junit-report.xml $(System.DefaultWorkingDirectory)/
-      #     echo "Trivy DIR Content"
-      #     cd $HOME/Library/Caches/trivy
-      #     ls -la
-      #     echo "Default Working DIR Content"
-      #     cd $(System.DefaultWorkingDirectory)
-      #     ls -la
-      #   displayName: Run AquaSec Trivy
+    - script: |
+        docker pull aquasec/trivy:latest
+
+        docker run --rm \
+          --volume /var/run/docker.sock:/var/run/docker.sock \
+          --volume $HOME/Library/Caches:/root/.cache/ \
+          --name Trivy aquasec/trivy:latest \
+          --format template \
+          --template "@contrib/junit.tpl" \
+          --output junit-report.xml \
+          $(dockerRegistryEndpoint)/$(WebContainerImageName):latest
+
+          # $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
+        
+        docker cp $HOME/Library/Caches/junit-report.xml $(System.DefaultWorkingDirectory)/
+        echo "Trivy DIR Content"
+        cd $HOME/Library/Caches/trivy
+        ls -la
+        echo "Default Working DIR Content"
+        cd $(System.DefaultWorkingDirectory)
+        ls -la
+      displayName: Run AquaSec Trivy
+      condition: succeededOrFailed()
 
       # - task: PublishTestResults@2
       #   displayName: Publish Test Results

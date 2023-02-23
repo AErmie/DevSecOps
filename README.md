@@ -38,7 +38,7 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 - [Build Docker Containers](./azure-pipelines/eShopOnWeb-Docker-CI.yml) (using Docker Compose)
 - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](azure-pipelines/arm-ttk-pipeline.yml)
 - [Azure Bicep](azure-pipelines/azure-bicep-pipeline.yml)
-- [SonarCloud](azure-pipelines/sonar-cloud-pipeline.yml) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=security_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=bugs)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=code_smells)](https://sonarcloud.io/dashboard?id=randomprojectkey)
+- [SonarCloud](azure-pipelines/sonar-cloud-pipeline.yml)
 - [WhiteSource](azure-pipelines/whitesource-pipeline.yml)
   - Note: This pipeline is no longer working since WhiteSource has been acquired by Mend.
 
