@@ -53,7 +53,7 @@ stages:
         docker run --rm \
           --volume /var/run/docker.sock:/var/run/docker.sock \
           # --volume $HOME/Library/Caches:/root/.cache/ \
-          --name Trivy aquasec/trivy:latest image \
+          aquasec/trivy:latest image \
             --format template \
             --template "@contrib/junit.tpl" \
             --output junit-report.xml \
