@@ -18,14 +18,14 @@ stages:
     steps:
     - template: templates/docker-compose-build.yml
 
-    - task: trivy@1
+    - task: AquaSecurityOfficial.trivy-official.custom-build-release-task.trivy@1
       displayName: Run AquaSec Trivy Filesystem Scan
       inputs:
         version: 'latest'
         debug: true
         path: $(System.DefaultWorkingDirectory)/Application-Source-Code/src
 
-    - task: trivy@1
+    - task: securedevelopmentteam.vss-secure-development-tools.build-task-trivy.Trivy@1
       displayName: Run AquaSec Trivy Container Image Scan
       inputs:
         version: 'latest'
