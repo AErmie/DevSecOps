@@ -30,7 +30,7 @@ stages:
         debug: true
         path: $(System.DefaultWorkingDirectory)/Application-Source-Code/src/Web/
 
-    - task: AquaSecurityOfficial.trivy-official.custom-build-release-task.trivy@1
+    - task: trivy@1
       displayName: Run AquaSec Trivy Container Image Scan
       condition: succeededOrFailed()
       inputs:
