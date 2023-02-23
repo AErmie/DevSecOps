@@ -16,14 +16,18 @@ stages:
   - job: AnchoreJob
     displayName: Run Anchore Scan
     steps:
-    - template: templates/docker-compose-build.yml
+    # - template: templates/docker-compose-build.yml
+
+    - script: |
+        docker image pull node:19
+      displayName: Pull Node Docker Image
 
     - task: Anchore@0
       displayName: Run Anchore Container Image Scan
       inputs:
-        image: $(WebContainerImageName):latest
+        image: docker.io/library/node:19
         # customPolicyPath: '.anchore/policy.json'
-        dockerfile: $(WebContainerDockerfile)
+        # dockerfile: $(WebContainerDockerfile)
         includeAppPackages: true
         printVulnerabilityReport: true
         failBuild: true
