@@ -1,8 +1,10 @@
+# Documentation: https://github.com/actions/dependency-review-action
 name: 'Dependency Review'
 on: [pull_request]
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   dependency-review:
@@ -13,3 +15,12 @@ jobs:
 
       - name: 'Dependency Review'
         uses: actions/dependency-review-action@v3
+        with:
+          fail-on-severity: low
+          fail-on-scopes: runtime
+          license-check: true
+          vulnerability-check: true
+          comment-summary-in-pr: true
+
+          # Use comma-separated names to pass list arguments:
+          deny-licenses: LGPL-2.0, BSD-2-Clause
