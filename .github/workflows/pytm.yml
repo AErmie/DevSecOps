@@ -32,17 +32,17 @@ jobs:
       
       - name: Generate Data Flow Diagram
         run: |
-          python ./ThreatModeling/pytm/pytm.py --dfd | dot -Tpng -o sample.png
+          python ./ThreatModeling/pytm/pytm.py --dfd | dot -Tpng -o DataFlowDiagram.png
 
       - name: Generate List of Threats
         if: always()
         run: |
-          python ./ThreatModeling/pytm/pytm.py --json sample.json
+          python ./ThreatModeling/pytm/pytm.py --json ListOfThreats.json
 
       - name: Generate Threat Model Reports
         if: always()
         run: |
-          python ./ThreatModeling/pytm/pytm.py --report docs/basic_template.md | pandoc -f markdown -t html > sample.html
+          python ./ThreatModeling/pytm/pytm.py --report docs/basic_template.md | pandoc -f markdown -t html > ThreatModelReports.html
 
       # Archive resulting files as artifacts
       - name: Archive Results
