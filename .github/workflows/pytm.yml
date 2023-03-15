@@ -16,31 +16,38 @@ jobs:
       # Checkout the repo
       - name: Checkout Workspace
         uses: actions/checkout@v2
-
-      - name: Install GraphViz and PanDoc
-        run: |
-          sudo apt update && apt install graphviz pandoc -y
+      
+      - name: Setup GraphViz
+        uses: ts-graphviz/setup-graphviz@v1
+      
+      - name: Setup PanDoc
+        uses: r-lib/actions/setup-pandoc@v2
+        # with:
+        #   pandoc-version: '2.7.3' # The pandoc version to download (if necessary) and use.
 
       - name: Download pytm source code 
         run: |
           git clone https://github.com/izar/pytm.git && cd pytm
-          sudo pip3 install -r requirements.txt
+          pip3 install -r requirements.txt
       
       - name: Generate Data Flow Diagram
         run: |
-          python ./ThreatModeling/pytm/pytm.py --dfd | dot -Tpng -o sample.png
+          python ./ThreatModeling/pytm/pytm.py --dfd | dot -Tpng -o DataFlowDiagram.png
 
       - name: Generate List of Threats
+        if: always()
         run: |
-          python ./ThreatModeling/pytm/pytm.py --json sample.json
+          python ./ThreatModeling/pytm/pytm.py --json ListOfThreats.json
 
       - name: Generate Threat Model Reports
+        if: always()
         run: |
-          python ./ThreatModeling/pytm/pytm.py --report docs/basic_template.md | pandoc -f markdown -t html > sample.html
+          python ./ThreatModeling/pytm/pytm.py --report docs/basic_template.md | pandoc -f markdown -t html > ThreatModelReports.html
 
       # Archive resulting files as artifacts
       - name: Archive Results
         uses: actions/upload-artifact@v2
+        if: always()
         with:
           name: pyTM-report
           path: pytm
