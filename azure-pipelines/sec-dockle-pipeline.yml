@@ -13,9 +13,9 @@ stages:
 - stage: QualityCheckStage
   displayName: Run Dockle Container Scan
   jobs:
-    # - job: DockleJob
-    #   displayName: Run Dockle Container Scan
-    #   steps:      
+  - job: DockleJob
+    displayName: Run Dockle Container Scan
+    steps:      
     #   - task: Docker@2
     #     displayName: Build Container
     #     inputs:
@@ -30,15 +30,15 @@ stages:
     #       docker run -d -p 5000:8080 $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
     #     displayName: 'Run App in Docker Container'
       
-      - script: |
-          docker image pull node:19
-        displayName: Pull Node Docker Image
+    - script: |
+        docker image pull node:19
+      displayName: Pull Node Docker Image
 
-      - script: | 
-          docker pull goodwithtech/dockle:latest
+    - script: | 
+        docker pull goodwithtech/dockle:latest
 
-          docker run --rm \
-            --volume /var/run/docker.sock:/var/run/docker.sock \
-            goodwithtech/dockle:latest \
-            docker.io/library/node:19
-        displayName: Run Dockle
+        docker run --rm \
+          --volume /var/run/docker.sock:/var/run/docker.sock \
+          goodwithtech/dockle:latest \
+          docker.io/library/node:19
+      displayName: Run Dockle
