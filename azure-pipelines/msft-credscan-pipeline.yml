@@ -1,3 +1,4 @@
+# NOTE: CredScan is deprecated in favour of the Microsoft Security DevOps extension
 trigger: none
 
 pool:
@@ -14,10 +15,10 @@ stages:
     displayName: "CredScan Job"
     steps:
       - task: UseDotNet@2
-        displayName: "Use .NET Core 2.2"
+        displayName: "Use .NET Core 7.0"
         inputs:
           packageType: "sdk"
-          version: "2.2.x"
+          version: "7.0.x"
 
       - task: CredScan@2
         displayName: Execute CredScan
