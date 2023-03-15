@@ -76,7 +76,7 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            curl https://cdn.shiftleft.io/download/sl > $(Agent.HomeDirectory) && chmod a+rx $(Agent.HomeDirectory)
+            curl https://cdn.shiftleft.io/download/sl > $(Agent.HomeDirectory)/sl && chmod a+rx $(Agent.HomeDirectory)/sl
 
       - task: CmdLine@2
         displayName: Analyze with Inspect
