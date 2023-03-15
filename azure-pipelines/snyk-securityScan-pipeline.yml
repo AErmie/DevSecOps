@@ -40,4 +40,4 @@ stages:
           monitorWhen: 'always'
           failOnIssues: true
           projectName: 'DevSecOpsDemo'
-          organization: 'AErmie'
+          organization: 'aermie'
