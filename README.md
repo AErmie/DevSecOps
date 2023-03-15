@@ -70,7 +70,7 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 - [OWASP ZAP](azure-pipelines/sec-owasp-pipeline.yml)
 - [Snyk](azure-pipelines/snyk-securityScan-pipeline.yml)
 - [YELP Detect-Secrets](azure-pipelines/sec-secretscan-yelpdetectsecrets.yml)
-- [TruffleHog](azure-pipelines/truffleHog-secretScan-pipeline.yml) (INCOMPLETE)
+- [TruffleHog](azure-pipelines/truffleHog-secretScan-pipeline.yml)
 - [ShiftLeftScan](azure-pipelines/sec-shiftleftscan-pipeline.yml)
 
 ## GitHub Actions (GHA) Workflows
