@@ -1,0 +1,34 @@
+name: "PlantUML"
+
+on:
+  workflow_dispatch: # allows to manually trigger the workflow from the Actions tab
+  push:
+    paths:
+      - 'ThreatModeling/plantUML/plantUML.xml' # useful to filter this job to execute only when the threat model changes
+
+jobs:
+
+  plantuml_job:
+    runs-on: ubuntu-latest
+    name: PlantUML
+    steps:
+      
+      # Checkout the repo
+      - name: Checkout Workspace
+        uses: actions/checkout@v2
+
+      - name: PlantUML
+        id: plantuml
+        uses: grassedge/generate-plantuml-action@v1.5
+        with:
+          path: ThreatModeling/plantUML/
+          message: "Render PlantUML files"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Archive resulting files as artifacts
+      - name: Archive Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: PlantUML-artifacts
+          path: ThreatModeling/plantUML/
