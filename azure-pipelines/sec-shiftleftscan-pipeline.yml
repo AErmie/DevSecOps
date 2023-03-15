@@ -43,21 +43,47 @@ stages:
           publishLocation: "Container"
 
   - ${{ if eq(parameters.ShiftLeftCI, true) }}:
-    - job: ShiftLeftCI
-      displayName: ShiftLeft CI
+    - job: windowsci
+      displayName: "ShiftLeft CI on Windows agent"
+      pool:
+        vmImage: windows-latest
       steps:
-        - task: CmdLine@2
-          displayName: Download ShiftLeft CLI
-          inputs:
-            targetType: 'inline'
-            script: |
-              curl https://cdn.shiftleft.io/download/sl > $(Agent.HomeDirectory)/sl && chmod a+rx $(Agent.HomeDirectory)/sl
+      - task: PowerShell@2
+        displayName: Download ShiftLeft cli
+        inputs:
+          targetType: 'inline'
+          script: |
+            Invoke-WebRequest -Uri 'https://cdn.shiftleft.io/download/sl-latest-windows-x64.zip' -OutFile $(Agent.HomeDirectory)\sl.zip
+            Expand-Archive -Path $(Agent.HomeDirectory)\sl.zip -DestinationPath $(Agent.HomeDirectory)\
 
-        - task: CmdLine@2
-          displayName: Analyze with NG SAST
-          inputs:
-            script: |
-              $(Agent.HomeDirectory)\sl.exe analyze --force --app eShopOnWeb --tag branch=$(Build.SourceBranchName) --csharp --cpg ./eShopOnWeb.sln
-            workingDirectory: '$(Build.SourcesDirectory)'
-          env:
-            SHIFTLEFT_ACCESS_TOKEN: $(SHIFTLEFT_ACCESS_TOKEN)
+      - task: CmdLine@2
+        displayName: Analyze with Inspect
+        inputs:
+          script: |
+            $(Agent.HomeDirectory)\sl.exe analyze --force --app eShopOnWeb --tag branch=$(Build.SourceBranchName) --csharp --cpg $(System.DefaultWorkingDirectory)/Application-Source-Code/eShopOnWeb.sln
+          workingDirectory: '$(Build.SourcesDirectory)'
+        env:
+          SHIFTLEFT_ORG_ID: $(SHIFTLEFT_ORG_ID)
+          SHIFTLEFT_ACCESS_TOKEN: $(SHIFTLEFT_ACCESS_TOKEN)
+
+    - job: linuxci
+      displayName: "ShiftLeft CI on Linux agent"
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+      - task: CmdLine@2
+        displayName: Download ShiftLeft cli
+        inputs:
+          targetType: 'inline'
+          script: |
+            curl https://cdn.shiftleft.io/download/sl > $(Agent.HomeDirectory)/sl && chmod a+rx $(Agent.HomeDirectory)/sl
+
+      - task: CmdLine@2
+        displayName: Analyze with Inspect
+        inputs:
+          script: |
+            $(Agent.HomeDirectory)\sl.exe analyze --force --app eShopOnWeb --tag branch=$(Build.SourceBranchName) --csharp --cpg $(System.DefaultWorkingDirectory)/Application-Source-Code/eShopOnWeb.sln
+          workingDirectory: '$(Build.SourcesDirectory)'
+        env:
+          SHIFTLEFT_ORG_ID: $(SHIFTLEFT_ORG_ID)
+          SHIFTLEFT_ACCESS_TOKEN: $(SHIFTLEFT_ACCESS_TOKEN)
