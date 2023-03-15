@@ -31,7 +31,7 @@ stages:
     #     displayName: 'Run App in Docker Container'
       
     - script: |
-        docker image pull node:19
+        docker pull node:19
       displayName: Pull Node Docker Image
 
     - script: | 
