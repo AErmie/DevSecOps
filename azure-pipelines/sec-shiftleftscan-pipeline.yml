@@ -82,7 +82,7 @@ stages:
         displayName: Analyze with Inspect
         inputs:
           script: |
-            $(Agent.HomeDirectory)\sl.exe analyze --force --app eShopOnWeb --tag branch=$(Build.SourceBranchName) --csharp --cpg $(System.DefaultWorkingDirectory)/Application-Source-Code/eShopOnWeb.sln
+            $(Agent.HomeDirectory)/sl.exe analyze --force --app eShopOnWeb --tag branch=$(Build.SourceBranchName) --csharp --cpg $(System.DefaultWorkingDirectory)/Application-Source-Code/eShopOnWeb.sln
           workingDirectory: '$(Build.SourcesDirectory)'
         env:
           SHIFTLEFT_ORG_ID: $(SHIFTLEFT_ORG_ID)
