@@ -65,6 +65,8 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
   - NOTE: Anchore is deprecated in favour of [Grype](https://github.com/anchore/grype)
 - [AquaSec Trivy](azure-pipelines/sec-trivy-pipeline.yml)
 - [Microsoft CredScan](azure-pipelines/msft-credscan-pipeline.yml)
+  - NOTE: CredScan is deprecated (as an individual tool), in favour of the [Microsoft Secure Azure DevOps extension](https://learn.microsoft.com/en-us/azure/defender-for-cloud/azure-devops-extension)
+- [Microsoft Secure Azure DevOps](azure-pipelines/msdevopssec.yml)
 - [OWASP ZAP](azure-pipelines/sec-owasp-pipeline.yml)
 - [Snyk](azure-pipelines/snyk-securityScan-pipeline.yml)
 - [YELP Detect-Secrets](azure-pipelines/sec-secretscan-yelpdetectsecrets.yml)
