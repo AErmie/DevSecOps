@@ -1,0 +1,46 @@
+name: "Python Threat Model (PyTM)"
+
+on:
+  workflow_dispatch: # allows to manually trigger the workflow from the Actions tab
+  push:
+    paths:
+      - 'ThreatModeling/pytm/pytm.py' # useful to filter this job to execute only when the threat model changes
+
+jobs:
+
+  pytm_job:
+    runs-on: ubuntu-latest
+    name: Threat Model Analysis
+    steps:
+      
+      # Checkout the repo
+      - name: Checkout Workspace
+        uses: actions/checkout@v2
+
+      - name: Install GraphViz and PanDoc
+        run: |
+          apt update && apt install graphviz pandoc -y
+
+      - name: Download pytm source code 
+        run: |
+          git clone https://github.com/izar/pytm.git && cd pytm
+          pip3 install -r requirements.txt
+      
+      - name: Generate Data Flow Diagram
+        run: |
+          python ./ThreatModeling/pytm/pytm.py --dfd | dot -Tpng -o sample.png
+
+      - name: Generate List of Threats
+        run: |
+          python ./ThreatModeling/pytm/pytm.py --json sample.json
+
+      - name: Generate Threat Model Reports
+        run: |
+          python ./ThreatModeling/pytm/pytm.py --report docs/basic_template.md | pandoc -f markdown -t html > sample.html
+
+      # Archive resulting files as artifacts
+      - name: Archive Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: pyTM-report
+          path: pytm

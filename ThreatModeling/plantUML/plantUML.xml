@@ -1,0 +1,20 @@
+@startuml
+participant "attacker" as Foo
+actor "user" as Foo1
+entity "browser" as Foo2
+control "Session Validator" as Foo3
+entity "web server" as Foo4
+database "database system" as Foo5
+queue "message queue" as Foo6
+
+Foo -> Foo1 : Send Malicous Link 
+Foo1 -> Foo2 : Click on Malicous Link
+Foo2 -> Foo3 : Execute Transaction (CSRF)
+Foo3 -> Foo4 : Valid Session
+Foo4 -> Foo5 : Create Database Entry
+Foo5 -> Foo6 : Queue Database Operation
+
+Foo2 -> Foo3 : Delete Transaction Logs (CSRF)
+Foo3 -> Foo4 : Valid Session
+Foo4 -> Foo5 : Delete Transaction Logs
+@enduml

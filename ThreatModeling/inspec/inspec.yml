@@ -1,0 +1,13 @@
+name: profile-dependency
+title: Profile with Dependencies
+maintainer: InSpec Authors
+copyright: InSpec Authors
+copyright_email: support@chef.io
+license: Apache-2.0
+summary: InSpec Profile that is only consuming dependencies
+version: 0.2.0
+depends:
+  - name: SSH baseline
+    url: https://github.com/dev-sec/ssh-baseline
+  - name: Linux Baseline
+    supermarket: dev-sec/linux-baseline
