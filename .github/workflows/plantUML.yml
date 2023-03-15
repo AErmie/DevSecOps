@@ -16,12 +16,14 @@ jobs:
       # Checkout the repo
       - name: Checkout Workspace
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
 
       - name: PlantUML
         id: plantuml
         uses: grassedge/generate-plantuml-action@v1.5
         with:
-          path: ThreatModeling/plantUML/
+          path: ThreatModeling/plantUML/plantUML.plantuml
           message: "Render PlantUML files"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
