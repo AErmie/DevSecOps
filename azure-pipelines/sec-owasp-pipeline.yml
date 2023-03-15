@@ -36,7 +36,7 @@ stages:
     #   displayName: Run Docker Container
 
     - bash: | 
-        docker run -d -p 5000:8080 docker.io/library/node:19
+        docker run -d -p 8080:80 docker.io/library/node:19
       displayName: Run Docker Container
 
     - task: owaspzap@1
