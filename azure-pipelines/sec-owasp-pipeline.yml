@@ -4,11 +4,11 @@ trigger:
 pool:
   vmImage: "ubuntu-latest"
 
-variables:
-  pathToDockerFile: 'Dockerfile'
-  ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
-  ACRLoginServer: 'adinermieacr.azurecr.io'
-  ACRRepository: 'eshoponweb'
+# variables:
+#   pathToDockerFile: 'Dockerfile'
+#   ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
+#   ACRLoginServer: 'adinermieacr.azurecr.io'
+#   ACRRepository: 'eshoponweb'
 
 stages:
 - stage: QualityCheck
@@ -17,18 +17,26 @@ stages:
   - job: OWASPJob
     displayName: "OWASP ZAP Job"
     steps:
-    - task: Docker@2
-      displayName: Build Docker Container Image
-      inputs:
-        containerRegistry: $(ACRConnectionName)
-        repository: $(ACRRepository)
-        command: build
-        Dockerfile: $(pathToDockerFile)
-        tags: |
-          $(Build.BuildId)
+    - script: |
+        docker image pull node:19
+      displayName: Pull Node Docker Image
+
+    # - task: Docker@2
+    #   displayName: Build Docker Container Image
+    #   inputs:
+    #     containerRegistry: $(ACRConnectionName)
+    #     repository: $(ACRRepository)
+    #     command: build
+    #     Dockerfile: $(pathToDockerFile)
+    #     tags: |
+    #       $(Build.BuildId)
+
+    # - bash: | 
+    #     docker run -d -p 5000:8080 $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
+    #   displayName: Run Docker Container
 
     - bash: | 
-        docker run -d -p 5000:8080 $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
+        docker run -d -p 8080:80 docker.io/library/node:19
       displayName: Run Docker Container
 
     - task: owaspzap@1

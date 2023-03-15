@@ -18,7 +18,7 @@ stages:
            # Required arguments
            outputfile: $(Build.ArtifactStagingDirectory)\ReleaseNotes.md
            templateLocation: File
-           templatefile: build-handlebars-template.md
+           templatefile: ./azure-pipelines/templates/build-handlebars-template.md
            inlinetemplate: 
            delimiter: ':'
            fieldEquality: =

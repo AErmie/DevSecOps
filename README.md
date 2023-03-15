@@ -1,13 +1,21 @@
-# DevSecOps
+# DevSecOps - An INSECURE Repo
 
 This repo is used for testing DevSecOps practices and tool sets, and is used for demonstration purposes only. If there is a tool you would like to see added, please submit a [Feature Request Issue](https://github.com/AErmie/DevSecOps/issues/new/choose) with the details about the tool.
 
 This repo contains both [Azure Pipeline YAML files](https://github.com/AErmie/DevSecOps/tree/main/azure-pipelines) and [GitHub Actions YAML files](https://github.com/AErmie/DevSecOps/tree/main/.github/workflows), for comparison purposes.
 
-The application code is based on the [Microsoft eShopOnWeb](https://github.com/dotnet-architecture/eShopOnWeb) sample application.
+The application code is based on the [Microsoft eShopOnWeb](https://github.com/dotnet-architecture/eShopOnWeb) sample application. This is self-contained within the `Application-Source-Code` directory.
 
 > **Warning**
 > This repo contains code that is purposefully **vulnerable** and **insecure**. Use at your own risk!
+
+## Directories
+
+There are several directories that contain additional/other sample code, specific to **infrastructure** and **security** pipelines.
+
+For example, the `Infrastructure-Source-Code` directory, contains ARM templates, Bicep templates, and Terraform code, that is not specific to the application source code itself. The `Security-Source-Code` directory, contains files that include credentials and secrets, again, not specific to the application source code itself.
+
+The `Threat-Modeling` directory contains examples of threat-modeling-as-code tools, which is not related to the application source code.
 
 ## Pipelines
 
@@ -26,18 +34,22 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 
 ### Application Pipelines
 
-- [Unit, Integration, Functional Tests](eShopOnWeb-CI.yml)
-- [Build and Publish Docker Container](eShopOnWeb-Docker-CI.yml)
+- [Unit, Integration, Functional Tests](./azure-pipelines/eShopOnWeb-CI.yml)
+- [Build Docker Containers](./azure-pipelines/eShopOnWeb-Docker-CI.yml) (using Docker Compose)
 - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](azure-pipelines/arm-ttk-pipeline.yml)
-- [Azure Bicep](azure-pipelines/azure-bicep-pipeline.yml) (INCOMPLETE)
-- [SonarCloud](azure-pipelines/sonar-cloud-pipeline.yml) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=security_rating)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=bugs)](https://sonarcloud.io/dashboard?id=randomprojectkey) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=randomprojectkey&metric=code_smells)](https://sonarcloud.io/dashboard?id=randomprojectkey)
+- [Azure Bicep](azure-pipelines/azure-bicep-pipeline.yml)
+- [SonarCloud](azure-pipelines/sonar-cloud-pipeline.yml)
 - [WhiteSource](azure-pipelines/whitesource-pipeline.yml)
+  - Note: This pipeline is no longer working since WhiteSource has been acquired by Mend.
 
 ### Data Pipelines
 
-- PENDING EXAMPLES/SAMPLE CODE
+- PENDING EXAMPLES / SAMPLE CODE
+  - If you would like to contribute, and have some example data pipelines (ie. data quality tests, data migrations, ETLs, etc.), please submit a [Feature Request Issue](https://github.com/AErmie/DevSecOps/issues/new/choose) with the details.
 
 ### Infrastructure Pipelines
+
+> Note: The majority of these are based on Terraform code
 
 - [Accurics TerraScan](azure-pipelines/terraform-terrascan-pipeline.yml)
 - [GitHub Super-Linter](azure-pipelines/terraform-githublinter-pipeline.yml)
@@ -50,12 +62,15 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 ### Security Pipelines
 
 - [Anchore](azure-pipelines/anchore-pipeline.yml)
+  - NOTE: Anchore is deprecated in favour of [Grype](https://github.com/anchore/grype)
 - [AquaSec Trivy](azure-pipelines/sec-trivy-pipeline.yml)
 - [Microsoft CredScan](azure-pipelines/msft-credscan-pipeline.yml)
+  - NOTE: CredScan is deprecated (as an individual tool), in favour of the [Microsoft Secure Azure DevOps extension](https://learn.microsoft.com/en-us/azure/defender-for-cloud/azure-devops-extension)
+- [Microsoft Secure Azure DevOps](azure-pipelines/msdevopssec.yml)
 - [OWASP ZAP](azure-pipelines/sec-owasp-pipeline.yml)
 - [Snyk](azure-pipelines/snyk-securityScan-pipeline.yml)
 - [YELP Detect-Secrets](azure-pipelines/sec-secretscan-yelpdetectsecrets.yml)
-- [TruffleHog](azure-pipelines/truffleHog-secretScan-pipeline.yml) (INCOMPLETE)
+- [TruffleHog](azure-pipelines/truffleHog-secretScan-pipeline.yml)
 - [ShiftLeftScan](azure-pipelines/sec-shiftleftscan-pipeline.yml)
 
 ## GitHub Actions (GHA) Workflows
@@ -65,7 +80,8 @@ The following YAML-based GitHub Actions (GHA) Workflows have been created and te
 ### Application Pipelines
 
 - [CodeQL Analysis](.github/workflows/codeql-analysis.yml) [![GitHub CodeQL](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/codeql-analysis-workflow.yml)
-- [Azure Resource Manager (ARM) Template Tool Kit (TTK)](.github/workflows/arm-ttk-workflow.yml) [![ARM TTK](https://github.com/AErmie/DevSecOps/actions/workflows/arm-ttk-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/arm-ttk-workflow.yml)
+- [Azure Resource Manager (ARM) Template Tool Kit (TTK)](.github/workflows/arm-ttk-workflow.yml) (NOT WORKING)
+    - [![ARM TTK](https://github.com/AErmie/DevSecOps/actions/workflows/arm-ttk-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/arm-ttk-workflow.yml)
 - [Codacy](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/codacy-workflow.yml) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/06a8a105132643e0ad4073eec9b85fbd)](https://www.codacy.com/gh/AErmie/DevSecOps/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AErmie/DevSecOps&amp;utm_campaign=Badge_Grade)
 
 ### Data Pipelines

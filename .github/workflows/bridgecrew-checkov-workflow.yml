@@ -14,7 +14,7 @@ jobs:
       id: checkov
       uses: bridgecrewio/checkov-action@master
       with:
-        directory: ./terraform/azure
+        directory: ./Infrastructure-Source-Code/terraform/azure
         # check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
         # skip_check: CKV_AWS_2 # optional: skip a specific check_id. can be comma separated list
         quiet: true # optional: display only failed checks
@@ -36,7 +36,7 @@ jobs:
       uses: bridgecrewio/checkov-action@master
       if: ${{ success() || failure() }}
       with:
-        directory: ./terraform/azure
+        directory: ./Infrastructure-Source-Code/terraform/azure
         quiet: true # optional: display only failed checks
         soft_fail: false # optional: do not return an error code if there are failed checks
         framework: terraform # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
@@ -56,7 +56,7 @@ jobs:
         path: results.sarif
     
     - name: Upload Checkov scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v1
+      uses: github/codeql-action/upload-sarif@v2
       if: ${{ always() }}
       with:
         sarif_file: results.sarif

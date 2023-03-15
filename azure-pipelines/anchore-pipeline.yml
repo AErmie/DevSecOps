@@ -4,55 +4,50 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  pathToDockerFile: 'Dockerfile'
-  ACRConnectionName: 'AzureContainerRegistry-DevSecOps'
-  ACRLoginServer: 'adinermieacr.azurecr.io'
-  ACRRepository: 'eshoponweb'
-
+  WebContainerImageName: eshopwebmvc
+  WebContainerDockerfile: $(System.DefaultWorkingDirectory)/Application-Source-Code/src/Web/Dockerfile
+  APIContainerImageName: eshoppublicapi
+  dockerRegistryEndpoint: 'AzureContainerRegistry-DevSecOps'
 
 stages:
 - stage: QualityCheckStage
   displayName: Quality Check Stage
   jobs:
-    - job: AnchoreJob
-      displayName: Run Anchore Scan
-      steps:
-      - task: Docker@2
-        displayName: Build Docker Container Image
-        inputs:
-          containerRegistry: $(ACRConnectionName)
-          repository: $(ACRRepository)
-          command: build
-          Dockerfile: $(pathToDockerFile)
-          tags: |
-            $(Build.BuildId)
+  - job: AnchoreJob
+    displayName: Run Anchore Scan
+    steps:
+    # - template: templates/docker-compose-build.yml
 
-      - task: Anchore@0
-        displayName: Run Anchore Container Image Scan
-        inputs:
-          image: $(ACRLoginServer)/$(ACRRepository):$(Build.BuildId)
-          # customPolicyPath: '.anchore/policy.json'
-          dockerfile: Dockerfile
-          includeAppPackages: true
-          printVulnerabilityReport: true
-          failBuild: true
-          debug: true
+    - script: |
+        docker image pull node:19
+      displayName: Pull Node Docker Image
 
-      - script: |
-          echo $(policyStatus)
+    - task: Anchore@0
+      displayName: Run Anchore Container Image Scan
+      inputs:
+        image: docker.io/library/node:19
+        # customPolicyPath: '.anchore/policy.json'
+        # dockerfile: $(WebContainerDockerfile)
+        includeAppPackages: true
+        printVulnerabilityReport: true
+        failBuild: true
+        debug: true
 
-          echo $(billOfMaterials)
-          cat $(billOfMaterials)
+    # - script: |
+    #     echo $(policyStatus)
 
-          echo $(vulnerabilities)
-          cat $(vulnerabilities)
-        displayName: Output Scan Results
-        condition: succeededOrFailed()
+    #     echo $(billOfMaterials)
+    #     cat $(billOfMaterials)
 
-      # Publish the Anchore report as an artifact to Azure Pipelines
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish Artifact: Anchore Report'
-        condition: succeededOrFailed()
-        inputs:
-          PathtoPublish: '$(System.DefaultWorkingDirectory)/anchore-reports/'
-          ArtifactName: AnchoreReport
+    #     echo $(vulnerabilities)
+    #     cat $(vulnerabilities)
+    #   displayName: Output Scan Results
+    #   condition: succeededOrFailed()
+
+    # # Publish the Anchore report as an artifact to Azure Pipelines
+    # - task: PublishBuildArtifacts@1
+    #   displayName: 'Publish Artifact: Anchore Report'
+    #   condition: succeededOrFailed()
+    #   inputs:
+    #     PathtoPublish: '$(System.DefaultWorkingDirectory)/anchore-reports/'
+    #     ArtifactName: AnchoreReport

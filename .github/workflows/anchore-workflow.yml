@@ -12,6 +12,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Build the Web container image
+      working-directory: ./Application-Source-Code
       run: docker build . --tag localbuild/webimage:latest --file src/Web/Dockerfile
     
     - name: Scan Web container image
@@ -21,11 +22,9 @@ jobs:
         image: "localbuild/webimage:latest"
         fail-build: true
         severity-cutoff: high
-        acs-report-enable: true
-        debug: false
 
     - name: Upload Anchore Web scan SARIF report
-      uses: github/codeql-action/upload-sarif@v1
+      uses: github/codeql-action/upload-sarif@v2
       if: ${{ success() || failure() }}
       with:
         sarif_file: ${{ steps.anchoreScan.outputs.sarif }}
@@ -37,6 +36,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Build the API container image
+      working-directory: ./Application-Source-Code
       run: docker build . --tag localbuild/apiimage:latest --file src/PublicApi/Dockerfile
     
     - name: Scan API container image
@@ -46,11 +46,9 @@ jobs:
         image: "localbuild/apiimage:latest"
         fail-build: true
         severity-cutoff: high
-        acs-report-enable: true
-        debug: false
 
     - name: Upload Anchore API scan SARIF report
-      uses: github/codeql-action/upload-sarif@v1
+      uses: github/codeql-action/upload-sarif@v2
       if: ${{ success() || failure() }}
       with:
         sarif_file: ${{ steps.anchoreScan.outputs.sarif }}

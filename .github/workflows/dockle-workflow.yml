@@ -13,10 +13,11 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Build the Web container image
+        working-directory: ./Application-Source-Code
         run: docker build . --tag localbuild/webimage:latest --file src/Web/Dockerfile
 
       - name: Run Dockle
-        uses: erzz/dockle-action@v1.1.1
+        uses: erzz/dockle-action@v1
         with:
           image: localbuild/webimage:latest
           report-format: sarif
@@ -26,7 +27,8 @@ jobs:
           dockle-version: latest
 
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         if: ${{ success() }} || ${{ failure() }}
         with:
           sarif_file: dockle-report.sarif
+          category: Dockle

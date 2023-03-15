@@ -13,9 +13,10 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.x
+        dotnet-version: '7.0.x'
 
     - name: Build with dotnet
+      working-directory: ./Application-Source-Code
       run: dotnet build ./eShopOnWeb.sln --configuration Release
 
     - uses: microsoft/RichCodeNavIndexer@v0.1

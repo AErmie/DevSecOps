@@ -3,15 +3,17 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: DevSkim
+name: SEC - DevSkim
+# DevSkim is security linter that highlights common security issues in source code.
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '39 19 * * 6'
+  workflow_dispatch:
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
+  # schedule:
+  #   - cron: '39 19 * * 6'
 
 jobs:
   lint:
@@ -27,8 +29,14 @@ jobs:
 
       - name: Run DevSkim scanner
         uses: microsoft/DevSkim-Action@v1
+        with:
+          directory-to-scan: ./Application-Source-Code/
+          should-scan-archives: false
+          output-filename: devskim-results.sarif
+          # output-directory: path/to/output (appended to $GITHUB_WORKSPACE)
+          # ignore-globs: "**/.git/**,*.txt"
         
       - name: Upload DevSkim scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: devskim-results.sarif

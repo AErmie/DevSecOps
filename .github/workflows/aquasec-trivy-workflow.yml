@@ -13,6 +13,7 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Build the Web container image
+        working-directory: ./Application-Source-Code
         run: docker build . --tag localbuild/webimage:latest --file src/Web/Dockerfile
       
       - name: Run Trivy vulnerability scanner
@@ -40,7 +41,7 @@ jobs:
           output: 'trivy-web-container-results.sarif'
 
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         if: ${{ always() }}
         with:
           sarif_file: 'trivy-web-container-results.sarif'
@@ -53,6 +54,7 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Build the API container image
+        working-directory: ./Application-Source-Code
         run: docker build . --tag localbuild/apiimage:latest --file src/PublicApi/Dockerfile
       
       - name: Run Trivy vulnerability scanner
@@ -68,7 +70,7 @@ jobs:
 
       - name: Generate SARIF Report
         uses: aquasecurity/trivy-action@master
-        if: ${{ success() || failure() }}
+        if: ${{ always() }}
         with:
           scan-type: 'image'
           image-ref: 'localbuild/apiimage:latest'
@@ -80,7 +82,7 @@ jobs:
           output: 'trivy-api-container-results.sarif'
 
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         if: ${{ always() }}
         with:
           sarif_file: 'trivy-api-container-results.sarif'
@@ -96,7 +98,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'config'
-          scan-ref: ./terraform/azure
+          scan-ref: ./Infrastructure-Source-Code/terraform/azure
           hide-progress: false
           format: 'table'
           exit-code: '1'
@@ -105,9 +107,10 @@ jobs:
 
       - name: Generate SARIF Report
         uses: aquasecurity/trivy-action@master
+        if: ${{ always() }}
         with:
           scan-type: 'config'
-          scan-ref: ./terraform/azure
+          scan-ref: ./Infrastructure-Source-Code/terraform/azure
           hide-progress: false
           format: 'sarif'
           exit-code: '1'
@@ -116,7 +119,7 @@ jobs:
           output: 'trivy-iac-results.sarif'
 
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         if: ${{ always() }}
         with:
           sarif_file: 'trivy-iac-results.sarif'

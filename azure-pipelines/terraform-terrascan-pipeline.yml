@@ -13,8 +13,24 @@ stages:
       - script: | 
           mkdir TerraScanReport
           docker pull accurics/terrascan
-          docker run --rm --volume $(System.DefaultWorkingDirectory)/terraform/azure:/iac --workdir /iac accurics/terrascan:latest scan --iac-type terraform --policy-type all --verbose --output xml > $(System.DefaultWorkingDirectory)/TerraScanReport/TerraScan-Report.xml
-          docker run --rm --volume $(System.DefaultWorkingDirectory)/terraform/azure:/iac --workdir /iac accurics/terrascan:latest scan --iac-type terraform --policy-type all --verbose
+          docker run \
+            --rm \
+            --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform/azure:/iac \
+            --workdir /iac \
+            accurics/terrascan:latest scan \
+              --iac-type terraform \
+              --policy-type all \
+              --verbose \
+              --output xml > $(System.DefaultWorkingDirectory)/TerraScanReport/TerraScan-Report.xml
+          
+          docker run \
+            --rm \
+            --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform/azure:/iac \
+            --workdir /iac \
+            accurics/terrascan:latest scan \
+              --iac-type terraform \
+              --policy-type all \
+              --verbose
         displayName: 'Accurics TerraScan Code Analysis'
       
       - script: |

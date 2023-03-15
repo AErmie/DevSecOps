@@ -14,9 +14,20 @@ stages:
       # warn about deprecated syntax, unused declarations, and enforce best practices, naming conventions.
       - script: |
           mkdir TFLintReport
-          docker pull wata727/tflint
-          # docker run --rm --volume $(System.DefaultWorkingDirectory)/terraform:/data -t wata727/tflint --module --format junit > $(System.DefaultWorkingDirectory)/TFLintReport/TFLint-Report.xml
-          docker run -v $(System.DefaultWorkingDirectory)/terraform:/data -t wata727/tflint --module
+          docker pull ghcr.io/terraform-linters/tflint-bundle:latest
+
+          docker run \
+            --rm \
+            --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/data \
+            -t ghcr.io/terraform-linters/tflint-bundle \
+              --module \
+              --format junit > $(System.DefaultWorkingDirectory)/TFLintReport/TFLint-Report.xml
+
+          docker run \
+            --rm \
+            --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/data \
+            -t ghcr.io/terraform-linters/tflint-bundle \
+              --module
         displayName: 'TFLint Static Code Analysis'
         name: TFLintScan
         condition: always()
@@ -36,7 +47,7 @@ stages:
         inputs:
           testResultsFormat: 'JUnit' # Options JUnit, NUnit, VSTest, xUnit, cTest
           testResultsFiles: '**/*TFLint-Report.xml'
-          searchFolder: '$(System.DefaultWorkingDirectory)/CheckovTFLintReportReport'
+          searchFolder: '$(System.DefaultWorkingDirectory)/TFLintReport'
           mergeTestResults: false
           testRunTitle: TFLint Scan
           failTaskOnFailedTests: false
@@ -44,6 +55,6 @@ stages:
 
       # Clean up any of the containers / images that were used for quality checks
       - bash: |
-          docker rmi "wata727/tflint" -f | true
+          docker rmi "ghcr.io/terraform-linters/tflint-bundle" -f | true
         displayName: 'Remove Terraform Quality Check Docker Images'
         condition: always()

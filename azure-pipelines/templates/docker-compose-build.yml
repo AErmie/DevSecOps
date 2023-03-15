@@ -1,0 +1,9 @@
+steps:
+- task: DockerCompose@0
+  displayName: Build services
+  inputs:
+    action: 'Build services'
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'AzureContainerRegistry-DevSecOps'
+    dockerComposeFile: '$(System.DefaultWorkingDirectory)/Application-Source-Code/docker-compose.yml'
+    includeLatestTag: true

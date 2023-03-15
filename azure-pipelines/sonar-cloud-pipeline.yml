@@ -20,27 +20,27 @@ stages:
     displayName: "Sonar Cloud Job"
     steps:
     - task: UseDotNet@2
-      displayName: "Use .NET Core 2.2"
+      displayName: "Use .NET Core 7.0"
       inputs:
         packageType: "sdk"
-        version: "2.2.x"
+        version: "7.0.x"
 
     - task: DotNetCoreCLI@2
       displayName: Restore
       inputs:
         command: "restore"
-        projects: "**/*.csproj"
-        feedsToUse: "config"
-        nugetConfigPath: "NuGet.config"
+        projects: "Application-Source-Code/**/*.csproj"
+        # feedsToUse: "config"
+        # nugetConfigPath: "**/*NuGet.config"
 
     - task: SonarCloudPrepare@1
       displayName: 'Prepare analysis on SonarCloud'
       inputs:
         SonarCloud: 'SonarCloud-DevSecOps'
-        organization: 'adinermie'
+        organization: $(SonarCloud-OrgKey)
         scannerMode: 'MSBuild'
         projectKey: $(SonarCloud-ProjectKey)
-        projectName: 'DevSecOps Demo'
+        projectName: 'DevSecOps'
         extraProperties: |
           sonar.exclusions=**/obj/**,**/*.dll
           sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
@@ -49,7 +49,7 @@ stages:
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
-        projects: "**/*.csproj"
+        projects: "Application-Source-Code/**/*.csproj"
         arguments: "--configuration $(BuildConfiguration)"
 
     - task: SonarCloudAnalyze@1
@@ -64,4 +64,4 @@ stages:
       displayName: SonarCloud Break Build
       inputs:
         SonarCloud: 'SonarCloud-DevSecOps'
-        organization: 'adinermie'
+        organization: $(SonarCloud-OrgKey)

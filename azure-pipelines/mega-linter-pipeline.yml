@@ -3,10 +3,6 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
-# variables:
-#   pathToDockerFile: 'Dockerfile'
-
-
 stages:
 - stage: QualityCheckStage
   displayName: Quality Check Stage
@@ -14,15 +10,30 @@ stages:
   - job: megalinter
     displayName: Mega-Linter
     steps:
+    # Pull MegaLinter docker image
     - script: |
-        docker pull nvuillam/mega-linter:latest
-        docker run --volume $(System.DefaultWorkingDirectory):/tmp/lint nvuillam/mega-linter:latest
-      displayName: 'Code Scan using Mega-Linter'
-      
-    # Publish the Anchore report as an artifact to Azure Pipelines
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: MegaLinter Report'
+        docker pull oxsecurity/megalinter:latest
+      displayName: Pull MegaLinter
+    
+    # Run MegaLinter
+    - script: |
+        docker run -v $(System.DefaultWorkingDirectory)/Application-Source-Code:/tmp/lint \
+          -e GIT_AUTHORIZATION_BEARER=$(System.AccessToken) \
+          -e CI=true \
+          -e TF_BUILD=true \
+          -e SYSTEM_ACCESSTOKEN=$(System.AccessToken) \
+          -e SYSTEM_COLLECTIONURI=$(System.CollectionUri) \
+          -e SYSTEM_PULLREQUEST_PULLREQUESTID=$(System.PullRequest.PullRequestId) \
+          -e SYSTEM_TEAMPROJECT="$(System.TeamProject)" \
+          -e BUILD_BUILD_ID=$(Build.BuildId) \
+          -e BUILD_REPOSITORY_ID=$(Build.Repository.ID) \
+          oxsecurity/megalinter:latest
+      displayName: Run MegaLinter (APP)
+    
+    # Upload MegaLinter reports
+    - task: PublishPipelineArtifact@1
       condition: succeededOrFailed()
+      displayName: Upload MegaLinter reports
       inputs:
-        PathtoPublish: '$(System.DefaultWorkingDirectory)/report/'
-        ArtifactName: MegaLinterReport
+        targetPath: "$(System.DefaultWorkingDirectory)/megalinter-reports/"
+        artifactName: MegaLinterReport

@@ -1,0 +1,28 @@
+trigger: none
+
+pool:
+  vmImage: "ubuntu-latest"
+
+stages:
+- stage: Publish
+  displayName: Publish Container
+  jobs:
+  - job: PublishContainerImage
+    displayName: "Publish Docker Image"
+    steps:
+    - script: |
+        docker images
+      displayName: List Docker Images (PRE)
+
+    - task: DockerCompose@0
+      displayName: Build services
+      inputs:
+        action: 'Build services'
+        containerregistrytype: 'Container Registry'
+        dockerRegistryEndpoint: 'AzureContainerRegistry-DevSecOps'
+        dockerComposeFile: '$(System.DefaultWorkingDirectory)/Application-Source-Code/docker-compose.yml'
+        includeLatestTag: true
+
+    - script: |
+        docker images
+      displayName: List Docker Images (POST)

@@ -20,5 +20,5 @@ jobs:
     - name: Terraform-Compliance
       uses: terraform-compliance/github_action@main
       with:
-        plan: TerraformCompliance-Features/plan.out.json
-        features: ./TerraformCompliance-Features/
+        plan: ./Infrastructure-Source-Code/TerraformCompliance-Features/plan.out.json
+        features: ./Infrastructure-Source-Code/TerraformCompliance-Features/
