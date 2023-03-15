@@ -37,7 +37,7 @@ stages:
           testType: 'container'
           dockerImageName: docker.io/library/node:19
           # dockerfilePath: 'PATHTODOCKERFILE'
-          monitorWhen: 'always'
+          monitorWhen: 'never' # "always", "onIssuesFound", or "never"
           failOnIssues: true
           projectName: 'DevSecOpsDemo'
           organization: 'aermie'
