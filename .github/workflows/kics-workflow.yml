@@ -1,4 +1,4 @@
-name: INFRA - IaC - Checkmarx IaC KICS
+name: INFRA - IaC - KICS
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: "Threagile"
+name: "Threat Model - Threagile"
 
 on:
   workflow_dispatch: # allows to manually trigger the workflow from the Actions tab

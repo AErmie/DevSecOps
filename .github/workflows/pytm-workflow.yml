@@ -1,4 +1,4 @@
-name: "Python Threat Model (PyTM)"
+name: "Threat Model - Python Threat Model (PyTM)"
 
 on:
   workflow_dispatch: # allows to manually trigger the workflow from the Actions tab

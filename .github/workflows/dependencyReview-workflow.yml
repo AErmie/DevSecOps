@@ -1,5 +1,5 @@
 # Documentation: https://github.com/actions/dependency-review-action
-name: 'Dependency Review'
+name: QUAL - Dependency Review
 on: [pull_request]
 
 permissions:

@@ -1,4 +1,4 @@
-name: INFA - IaC - Accurics TerraScan
+name: INFA - IaC - TerraScan
 
 on:
   # Allows you to run this workflow manually from the Actions tab

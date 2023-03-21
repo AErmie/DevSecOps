@@ -1,4 +1,4 @@
-name: "PlantUML"
+name: "Threat Model - PlantUML"
 
 on:
   workflow_dispatch: # allows to manually trigger the workflow from the Actions tab
