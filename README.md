@@ -34,12 +34,12 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 
 ### Application Pipelines
 
-- [Unit, Integration, Functional Tests](./azure-pipelines/eShopOnWeb-CI.yml)
-- [Build Docker Containers](./azure-pipelines/eShopOnWeb-Docker-CI.yml) (using Docker Compose)
-- [Azure Resource Manager (ARM) Template Tool Kit (TTK)](azure-pipelines/arm-ttk-pipeline.yml)
-- [Azure Bicep](azure-pipelines/azure-bicep-pipeline.yml)
-- [SonarCloud](azure-pipelines/sonar-cloud-pipeline.yml)
-- [WhiteSource](azure-pipelines/whitesource-pipeline.yml)
+- [Unit, Integration, Functional Tests](./azure-pipelines/eShop_buildtest-pipeline.yml)
+- [Build Docker Containers](./azure-pipelines/eShop_dockerPublish-pipeline.yml) (using Docker Compose)
+- [Azure Resource Manager (ARM) Template Tool Kit (TTK)](./azure-pipelines/armttk-pipeline.yml)
+- [Azure Bicep](./azure-pipelines/azure_bicep-pipeline.yml)
+- [SonarCloud](./azure-pipelines/sonarCloud-pipeline.yml)
+- [WhiteSource](./azure-pipelines/whitesource-pipeline.yml)
   - Note: This pipeline is no longer working since WhiteSource has been acquired by Mend.
 
 ### Data Pipelines
@@ -51,27 +51,27 @@ The following YAML-based Azure DevOps (ADO) pipelines have been created and test
 
 > Note: The majority of these are based on Terraform code
 
-- [Accurics TerraScan](azure-pipelines/terraform-terrascan-pipeline.yml)
-- [GitHub Super-Linter](azure-pipelines/terraform-githublinter-pipeline.yml)
-- [Checkmarx KICS](azure-pipelines/iac-kicks-pipeline.yml)
-- [Bridgecrew Checkov](azure-pipelines/terraform-checkov-pipeline.yml)
-- [Terraform-Compliance](azure-pipelines/terraform-tfcompliance-pipeline.yml)
-- [TFLint](azure-pipelines/terraform-tflint.yml)
-- [TFSec](azure-pipelines/terraform-tfsec-pipeline.yml)
+- [Accurics TerraScan](./azure-pipelines/terrascan-pipeline.yml)
+- [GitHub Super-Linter](./azure-pipelines/github_superlinter-pipeline.yml)
+- [Checkmarx KICS](./azure-pipelines/kics-pipeline.yml)
+- [Bridgecrew Checkov](./azure-pipelines/checkov-pipeline.yml)
+- [Terraform-Compliance](./azure-pipelines/tfcompliance-pipeline.yml)
+- [TFLint](./azure-pipelines/tflint-pipeline.yml)
+- [TFSec](./azure-pipelines/tfsec-pipeline.yml)
 
 ### Security Pipelines
 
-- [Anchore](azure-pipelines/anchore-pipeline.yml)
+- [Anchore](./azure-pipelines/anchore-pipeline.yml)
   - NOTE: Anchore is deprecated in favour of [Grype](https://github.com/anchore/grype)
-- [AquaSec Trivy](azure-pipelines/sec-trivy-pipeline.yml)
-- [Microsoft CredScan](azure-pipelines/msft-credscan-pipeline.yml)
+- [AquaSec Trivy](./azure-pipelines/trivy-pipeline.yml)
+- [Microsoft CredScan](./azure-pipelines/mscredscan-pipeline.yml)
   - NOTE: CredScan is deprecated (as an individual tool), in favour of the [Microsoft Secure Azure DevOps extension](https://learn.microsoft.com/en-us/azure/defender-for-cloud/azure-devops-extension)
-- [Microsoft Secure Azure DevOps](azure-pipelines/msdevopssec.yml)
-- [OWASP ZAP](azure-pipelines/sec-owasp-pipeline.yml)
-- [Snyk](azure-pipelines/snyk-securityScan-pipeline.yml)
-- [YELP Detect-Secrets](azure-pipelines/sec-secretscan-yelpdetectsecrets.yml)
-- [TruffleHog](azure-pipelines/truffleHog-secretScan-pipeline.yml)
-- [ShiftLeftScan](azure-pipelines/sec-shiftleftscan-pipeline.yml)
+- [Microsoft Secure Azure DevOps](./azure-pipelines/msdevopssec-pipeline.yml)
+- [OWASP ZAP](./azure-pipelines/owaspZAP-pipeline.yml)
+- [Snyk](./azure-pipelines/snyk_securityScan-pipeline.yml)
+- [YELP Detect-Secrets](./azure-pipelines/yelp_detectsecrets-pipeline.yml)
+- [TruffleHog](./azure-pipelines/truffleHog-pipeline.yml)
+- [ShiftLeftScan](./azure-pipelines/shiftleftscan-pipeline.yml)
 
 ## GitHub Actions (GHA) Workflows
 
