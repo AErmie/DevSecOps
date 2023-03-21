@@ -1,4 +1,4 @@
-name: INFRA - IaC - BridgeCrew Checkov
+name: INFRA - IaC - Checkov
 
 on:
   # Allows you to run this workflow manually from the Actions tab
