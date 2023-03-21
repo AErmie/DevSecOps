@@ -79,10 +79,9 @@ The following YAML-based GitHub Actions (GHA) Workflows have been created and te
 
 ### Application Workflows
 
-- [CodeQL Analysis](.github/workflows/codeql_analysis-workflow.yml) [![GitHub CodeQL](https://github.com/AErmie/DevSecOps/actions/workflows/codeql_analysis-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/codeql_analysis-workflow.yml)
+- [CodeQL Analysis](.github/workflows/codeql_analysis-workflow.yml)
 - [Azure Resource Manager (ARM) Template Tool Kit (TTK)](.github/workflows/armttk-workflow.yml) (NOT WORKING)
-    - [![ARM TTK](https://github.com/AErmie/DevSecOps/actions/workflows/armttk-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/armttk-workflow.yml)
-- [Codacy](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/codacy-workflow.yml) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/06a8a105132643e0ad4073eec9b85fbd)](https://www.codacy.com/gh/AErmie/DevSecOps/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AErmie/DevSecOps&amp;utm_campaign=Badge_Grade)
+- [Codacy](https://github.com/AErmie/DevSecOps/blob/main/.github/workflows/codacy-workflow.yml)
 
 ### Data Workflows
 
@@ -91,21 +90,21 @@ The following YAML-based GitHub Actions (GHA) Workflows have been created and te
 
 ### Infrastructure Workflows
 
-- [Accurics TerraScan](.github/workflows/terrascan-workflow.yml) [![Accurics TerraScan](https://github.com/AErmie/DevSecOps/actions/workflows/terrascan-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/terrascan-workflow.yml)
-- [Checkmarx KICS](.github/workflows/kics.yml) [![Checkmarx KICS](https://github.com/AErmie/DevSecOps/actions/workflows/kics-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/kics-workflow.yml)
-- [Bridgecrew Checkov](.github/workflows/checkov-workflow.yml) [![BridgeCrew Checkov](https://github.com/AErmie/DevSecOps/actions/workflows/checkov-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/checkov-workflow.yml)
+- [Accurics TerraScan](.github/workflows/terrascan-workflow.yml)
+- [Checkmarx KICS](.github/workflows/kics.yml)
+- [Bridgecrew Checkov](.github/workflows/checkov-workflow.yml)
 - [GitHub Super-Linter](.github/workflows/github_superlinter-workflow.yml)
-- [TFLint](.github/workflows/tflint-workflow.yml) [![TFLint](https://github.com/AErmie/DevSecOps/actions/workflows/tflint-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/tflint-workflow.yml)
-- [TFSec](.github/workflows/tfsec-workflow.yml) [![TFSec](https://github.com/AErmie/DevSecOps/actions/workflows/tfsec-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/tfsec-workflow.yml)
+- [TFLint](.github/workflows/tflint-workflow.yml)
+- [TFSec](.github/workflows/tfsec-workflow.yml)
 
 ### Security Workflows
 
-- [Anchore](.github/workflows/anchore-workflow.yml) [![Anchore Container Image Scan](https://github.com/AErmie/DevSecOps/actions/workflows/anchore-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/anchore-workflow.yml)
-- [AquaSec Trivy](.github/workflows/trivy-workflow.yml) [![AquaSec Trivy Container Image Scan](https://github.com/AErmie/DevSecOps/actions/workflows/trivy-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/trivy-workflow.yml)
+- [Anchore](.github/workflows/anchore-workflow.yml)
+- [AquaSec Trivy](.github/workflows/trivy-workflow.yml)
 - [Microsoft Security DevOps (MSDO)](.github/workflows/msdevopssec-workflow.yml)
-- [ShiftLeftScan](.github/workflows/shiftleftscan-workflow.yml) [![ShiftLeftSecurity Scan](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/shiftleftscan-workflow.yml)
-- [TruffleHog](.github/workflows/truffleHog-workflow.yml) [![TruffleHog Secrets Scan](https://github.com/AErmie/DevSecOps/actions/workflows/truffleHog-workflow.yml/badge.svg)](https://github.com/AErmie/DevSecOps/actions/workflows/truffleHog-workflow.yml)
-- [YELP Detect-Secrets](.github/workflows/yelp_detectsecrets-workflow.yml) [![YELP Detect-Secrets](https://github.com/AErmie/DevSecOps/actions/workflows/yelp_detectsecrets-workflow.yml/badge.svg?branch=main)](https://github.com/AErmie/DevSecOps/actions/workflows/yelp_detectsecrets-workflow.yml)
+- [ShiftLeftScan](.github/workflows/shiftleftscan-workflow.yml)
+- [TruffleHog](.github/workflows/truffleHog-workflow.yml)
+- [YELP Detect-Secrets](.github/workflows/yelp_detectsecrets-workflow.yml)
 
 ### Threat Modeling Workflows
 
