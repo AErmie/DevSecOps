@@ -13,31 +13,45 @@ stages:
 - stage: QualityCheckStage
   displayName: Quality Check Stage
   jobs:
-    - job: SnykJob
-      displayName: Run Snyk Security Scan
-      steps:
-      # - task: Docker@2
-      #   displayName: Build Container
-      #   inputs:
-      #     containerRegistry: $(ACRConnectionName)
-      #     repository: $(ACRRepository)
-      #     command: build
-      #     Dockerfile: $(pathToDockerFile)
-      #     tags: |
-      #       $(Build.BuildId)
-      
-      - script: |
-          docker image pull docker.io/library/node:19
-        displayName: Pull Node Docker Image
-      
-      - task: SnykSecurityScan@1
-        displayName: Run Snyk Security Scan
-        inputs:
-          serviceConnectionEndpoint: 'Snyk-DevSecOps'
-          testType: 'container'
-          dockerImageName: docker.io/library/node:19
-          # dockerfilePath: 'PATHTODOCKERFILE'
-          monitorWhen: 'never' # "always", "onIssuesFound", or "never"
-          failOnIssues: true
-          projectName: 'DevSecOpsDemo'
-          organization: 'aermie'
+  - job: SnykContainerJob
+    displayName: Run Snyk Container Security Scan
+    steps:
+    # - task: Docker@2
+    #   displayName: Build Container
+    #   inputs:
+    #     containerRegistry: $(ACRConnectionName)
+    #     repository: $(ACRRepository)
+    #     command: build
+    #     Dockerfile: $(pathToDockerFile)
+    #     tags: |
+    #       $(Build.BuildId)
+    
+    - script: |
+        docker image pull docker.io/library/node:19
+      displayName: Pull Node Docker Image
+    
+    - task: SnykSecurityScan@1
+      displayName: Run Snyk Container Security Scan
+      inputs:
+        serviceConnectionEndpoint: 'Snyk-DevSecOps'
+        testType: 'container'
+        dockerImageName: docker.io/library/node:19
+        # dockerfilePath: 'PATHTODOCKERFILE'
+        monitorWhen: 'never' # "always", "onIssuesFound", or "never"
+        failOnIssues: true
+        projectName: 'DevSecOpsDemo'
+        organization: 'aermie'
+  
+  - job: SnykApplicationJob
+    displayName: Run Snyk Application Security Scan
+    steps:
+    - task: SnykSecurityScan@1
+      displayName: Run Snyk Application Security Scan
+      inputs:
+        serviceConnectionEndpoint: 'Snyk-DevSecOps'
+        testType: 'app'
+        targetFile: './Application-Source-Code'
+        monitorWhen: 'always'
+        failOnIssues: true
+        projectName: 'DevSecOps-App'
+        organization: 'aermie'
