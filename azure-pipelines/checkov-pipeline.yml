@@ -20,16 +20,14 @@ stages:
           mkdir CheckovReport
           docker pull bridgecrew/checkov:latest
 
-          docker run --tty \
+          docker run \
             --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/tf \
-            --workdir /tf \
             bridgecrew/checkov \
               --directory /tf \
               --output junitxml > $(System.DefaultWorkingDirectory)/CheckovReport/Checkov-Report.xml
 
-          docker run --tty \
+          docker run \
           --volume $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform:/tf \
-          --workdir /tf \
           bridgecrew/checkov \
             --directory /tf
         displayName: 'Checkov Static Code Analysis'
