@@ -1,5 +1,6 @@
 # NOTE: CredScan is deprecated in favour of the Microsoft Security DevOps extension
 trigger: none
+pr: none
 
 pool:
   vmImage: "windows-latest"
