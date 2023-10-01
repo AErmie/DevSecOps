@@ -1,0 +1,36 @@
+trigger: none
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: AdvancedSecurityScanning
+  displayName: Advanced Security Scanning
+  jobs:
+  - job: AdvancedSecurityScanning
+    displayName: Advanced Security Scanning
+    steps:
+    - task: AdvancedSecurity-Codeql-Init@1
+
+    - task: AdvancedSecurity-Codeql-Autobuild@1
+
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        projects: "Application-Source-Code/**/*.csproj"
+        arguments: "--configuration $(BuildConfiguration)"
+    
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: "restore"
+        projects: "Application-Source-Code/**/*.csproj"
+        # feedsToUse: "config"
+        # nugetConfigPath: "nuget.config"
+
+    - task: AdvancedSecurity-Dependency-Scanning@1
+
+    - task: AdvancedSecurity-Codeql-Analyze@1
+      inputs:
+        querysuite: 'security-and-quality'
