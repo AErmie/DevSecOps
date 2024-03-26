@@ -14,7 +14,7 @@ jobs:
 
     - name: Run Terrascan IaC Scanner
       id: terrascan
-      uses: accurics/terrascan-action@main
+      uses: tenable/terrascan-action@main
       with:
         iac_type: 'terraform' #Required (helm, k8s, kustomize, terraform)
         iac_version: 'v14' #(helm: v3, k8s: v1, kustomize: v3, terraform: v12, v14)
