@@ -3,6 +3,12 @@ run-name: Workflow Logic Test
 
 on:
   workflow_dispatch:
+    inputs:
+      fail-job-2:
+        description: 'Job2 should fail?'
+        type: boolean
+        default: true
+        required: true
 
 permissions:
   contents: read # This is required for actions/checkout
@@ -22,7 +28,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     
-    - name: Fail
+    - name: Fail Job
+      if: ${{ github.event.inputs.fail-job-2 }}
       run: exit 1
 
   job3:
