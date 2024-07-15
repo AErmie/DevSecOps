@@ -7,7 +7,6 @@ on:
       fail-job-2:
         description: 'Job2 should fail?'
         type: boolean
-        default: true
         required: true
 
 permissions:
@@ -29,11 +28,11 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Fail Job = ${{ github.event.inputs.fail-job-2 }}
-      if: ${{ github.event.inputs.fail-job-2 == 'true' }}
+      if: ${{ github.event.inputs.fail-job-2 == true }}
       run: exit 1
   
     - name: Fail Job = ${{ github.event.inputs.fail-job-2 }}
-      if: ${{ ! github.event.inputs.fail-job-2 == 'false' }}
+      if: ${{ ! github.event.inputs.fail-job-2 == false }}
       run: exit 0
 
   job3:
