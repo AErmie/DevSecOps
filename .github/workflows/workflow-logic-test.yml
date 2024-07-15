@@ -21,6 +21,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+    
+    - name: Fail
+      run: exit 1
 
   job3:
     name: Job 3
