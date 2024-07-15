@@ -28,9 +28,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     
-    - name: Fail Job
+    - name: Fail Job = ${{ github.event.inputs.fail-job-2 }}
       if: ${{ github.event.inputs.fail-job-2 }}
       run: exit 1
+  
+    - name: Fail Job = ${{ github.event.inputs.fail-job-2 }}
+      if: ${{ ! github.event.inputs.fail-job-2 }}
+      run: exit 0
 
   job3:
     name: Job 3
